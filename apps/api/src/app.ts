@@ -4,15 +4,18 @@ import { HTTPException } from 'hono/http-exception';
 import { logger } from 'hono/logger';
 
 import { env } from './env.ts';
+import { auth } from './lib/auth.ts';
 import { routes } from './routes/index.ts';
 
-export const app = new Hono();
+export const app = new Hono().basePath('/api');
 
 app.use(logger());
 
 app.use(cors({ origin: env.CLIENT_URL }));
 
-app.route('/api/v1', routes);
+app.all('/auth/*', (c) => auth.handler(c.req.raw));
+
+app.route('/v1', routes);
 
 app.notFound((c) => {
 	const status = 404;
