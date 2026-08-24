@@ -1,0 +1,48 @@
+name: Database Migrations
+
+on:
+  push:
+    branches:
+      - main
+
+    paths:
+      - apps/api/**
+      - packages/**
+      - pnpm-lock.yaml
+      - .github/workflows/migrate-db.yaml
+
+  workflow_dispatch:
+
+concurrency:
+  group: db-migrations-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version:
+          - 24
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Install pnpm and Node.js
+        uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c
+        with:
+          runtime: node@${{ matrix.node-version }}
+          cache: true
+
+      - name: Install dependencies
+        run: pnpm ci
+
+      - name: Build internal packages
+        run: pnpm build --filter=api^...
+
+      - name: Migrate database
+        run: pnpm --filter=api db:migrate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}

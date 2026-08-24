@@ -1,0 +1,24 @@
+{
+	"extends": "./tsconfig.base",
+	"compilerOptions": {
+		// Modules
+		"module": "nodenext",
+		"rootDir": "${configDir}/src",
+
+		// Emit
+		"declarationMap": true,
+		"outDir": "${configDir}/dist",
+		"sourceMap": true,
+
+		// Projects
+		"composite": true,
+		"tsBuildInfoFile": "${configDir}/tsconfig.build.tsbuildinfo"
+	},
+	"include": ["${configDir}/src"],
+	"exclude": [
+		"${configDir}/dist",
+		"${configDir}/node_modules",
+		"${configDir}/**/*.test.ts",
+		"${configDir}/**/*.test.tsx"
+	]
+}

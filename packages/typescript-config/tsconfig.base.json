@@ -1,0 +1,20 @@
+{
+	"compilerOptions": {
+		// Type checking
+		"noUncheckedIndexedAccess": true,
+
+		// Interop constraints
+		"erasableSyntaxOnly": true,
+		"esModuleInterop": true,
+		"verbatimModuleSyntax": true,
+
+		// Language and environment
+		"target": "esnext",
+
+		// Projects
+		"tsBuildInfoFile": "${configDir}/tsconfig.tsbuildinfo",
+
+		// Completeness
+		"skipLibCheck": true
+	}
+}

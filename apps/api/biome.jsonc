@@ -1,0 +1,13 @@
+{
+	"root": false,
+	"$schema": "https://biomejs.dev/schemas/2.5.10/schema.json",
+	"extends": "//",
+	"linter": {
+		"rules": {
+			"correctness": {
+				"noGlobalDirnameFilename": "on",
+				"noProcessGlobal": "on"
+			}
+		}
+	}
+}

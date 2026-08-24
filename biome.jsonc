@@ -1,0 +1,165 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.5.10/schema.json",
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	},
+	"files": {
+		"ignoreUnknown": false
+	},
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab",
+		"lineWidth": 100
+	},
+	"linter": {
+		"enabled": true,
+		"domains": {
+			"project": "all",
+			"types": "all"
+		},
+		"rules": {
+			"preset": "recommended",
+			"complexity": {
+				"preset": "all",
+				"noExcessiveLinesPerFunction": "off"
+			},
+			"correctness": {
+				"noUnresolvedImports": "off",
+				"noUnusedInstantiation": "on"
+			},
+			"style": {
+				"noCommonJs": "on",
+				"noNegationElse": "on",
+				"noNestedTernary": "on",
+				"noParameterAssign": "on",
+				"noSubstr": "on",
+				"noUnusedTemplateLiteral": "on",
+				"noUselessElse": "on",
+				"noYodaExpression": "on",
+				"useAsConstAssertion": "on",
+				"useCollapsedElseIf": "on",
+				"useCollapsedIf": "on",
+				"useConsistentArrayType": "on",
+				"useConsistentArrowReturn": "on",
+				"useConsistentBuiltinInstantiation": "on",
+				"useConsistentMethodSignatures": "on",
+				"useConsistentObjectDefinitions": "on",
+				"useDefaultParameterLast": "on",
+				"useDefaultSwitchClause": "on",
+				"useDestructuring": "on",
+				"useFilenamingConvention": "on",
+				"useForOf": "on",
+				"useGroupedAccessorPairs": "on",
+				"useNamingConvention": "on",
+				"useNumberNamespace": "on",
+				"useNumericSeparators": "on",
+				"useObjectSpread": "on",
+				"useReadonlyClassProperties": "on",
+				"useShorthandAssign": "on",
+				"useSingleVarDeclarator": "on",
+				"useSpreadOverApply": "on",
+				"useTrimStartEnd": "on",
+				"useUnifiedTypeSignatures": "on",
+				"noRestrictedImports": {
+					"level": "on",
+					"options": {
+						"patterns": [
+							{
+								"group": "../**/*",
+								"message": "Avoid relative parent imports. Use `#*` import aliases instead."
+							}
+						]
+					}
+				},
+				"useConsistentTypeDefinitions": {
+					"level": "on",
+					"options": {
+						"style": "type"
+					}
+				}
+			},
+			"suspicious": {
+				"noConstantBinaryExpressions": "on",
+				"noForIn": "on",
+				"noParametersOnlyUsedInRecursion": "on",
+				"noVar": "on",
+				"useAwait": "on"
+			}
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "single"
+		}
+	},
+	"assist": {
+		"enabled": true,
+		"actions": {
+			"source": {
+				"useSortedPackageJson": "on",
+				"organizeImports": {
+					"level": "on",
+					"options": {
+						"sortBareImports": true,
+						"groups": [
+							{ "type": true },
+							":BLANK_LINE:",
+							":NODE:",
+							":BLANK_LINE:",
+							[":PACKAGE_WITH_PROTOCOL:", ":PACKAGE:", "!@repo/**"],
+							":BLANK_LINE:",
+							"@repo/**",
+							":BLANK_LINE:",
+							":ALIAS:",
+							":BLANK_LINE:",
+							{ "kind": "!bare" },
+							":BLANK_LINE:",
+							{ "kind": "bare" }
+						]
+					}
+				}
+			}
+		}
+	},
+	"overrides": [
+		{
+			"includes": ["**/lib/**", "**/*.config.{js,ts}", "**/*.jsonc", "!**/biome.jsonc"],
+			"assist": {
+				"actions": {
+					"source": {
+						"useSortedKeys": {
+							"level": "on",
+							"options": {
+								"groupByNesting": true
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"includes": ["**/env.{js,ts}"],
+			"linter": {
+				"rules": {
+					"style": {
+						"useNamingConvention": {
+							"level": "on",
+							"options": {
+								"conventions": [
+									{
+										"formats": ["camelCase", "CONSTANT_CASE"],
+										"selector": {
+											"kind": "objectLiteralProperty"
+										}
+									}
+								]
+							}
+						}
+					}
+				}
+			}
+		}
+	]
+}

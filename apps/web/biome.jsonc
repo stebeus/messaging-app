@@ -1,0 +1,83 @@
+{
+	"root": false,
+	"$schema": "https://biomejs.dev/schemas/2.5.10/schema.json",
+	"extends": "//",
+	"linter": {
+		"rules": {
+			"correctness": {
+				"noNestedComponentDefinitions": "on"
+			},
+			"nursery": {
+				"useBaseline": "on",
+				"useSortedClasses": "on"
+			},
+			"style": {
+				"noHexColors": "on",
+				"useConsistentCurlyBraces": "on",
+				"useSelfClosingElements": {
+					"level": "on",
+					"fix": "unsafe"
+				}
+			},
+			"suspicious": {
+				"noDuplicatedSpreadProps": "on",
+				"noReactForwardRef": "on"
+			}
+		}
+	},
+	"css": {
+		"formatter": {
+			"quoteStyle": "single"
+		},
+		"parser": {
+			"tailwindDirectives": true
+		}
+	},
+	"html": {
+		"formatter": {
+			"enabled": true
+		}
+	},
+	"assist": {
+		"actions": {
+			"source": {
+				"noDuplicateClasses": "on",
+				"useSortedProperties": "on"
+			}
+		}
+	},
+	"overrides": [
+		{
+			"includes": ["**/*.{jsx,tsx}"],
+			"linter": {
+				"rules": {
+					"style": {
+						"useNamingConvention": {
+							"level": "on",
+							"options": {
+								"conventions": [
+									{
+										"formats": ["camelCase", "PascalCase"],
+										"selector": {
+											"kind": "objectLiteralProperty"
+										}
+									}
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"includes": ["**/*.svg"],
+			"linter": {
+				"rules": {
+					"a11y": {
+						"noSvgWithoutTitle": "off"
+					}
+				}
+			}
+		}
+	]
+}
