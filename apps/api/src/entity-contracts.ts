@@ -65,7 +65,7 @@ export const Message = z.object({
 	id,
 	content: z.string(),
 	...timestamps.shape,
-	senderId: id,
+	senderId: id.optional(),
 	conversationId: id,
 });
 
