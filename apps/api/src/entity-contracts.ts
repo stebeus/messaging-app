@@ -32,7 +32,7 @@ export const Friendship = z.object({
 
 export type Friendship = z.infer<typeof Friendship>;
 
-export type NewFriendship = Pick<Friendship, 'friendId'>;
+export type NewFriendship = Omit<Friendship, 'createdAt'>;
 
 export const ConversationMember = z.object({
 	memberId: id,
@@ -46,7 +46,7 @@ export type ConversationMember = z.infer<typeof ConversationMember>;
 
 export type NewConversationMember = Omit<ConversationMember, 'id' | 'joinedAt' | 'updatedAt'>;
 
-export type ConversationMemberUpdate = Pick<ConversationMember, 'memberId' | 'role'>;
+export type ConversationMemberUpdate = Omit<ConversationMember, 'joinedAt' | 'updatedAt'>;
 
 export const Conversation = z.object({
 	id,
@@ -73,4 +73,4 @@ export type Message = z.infer<typeof Message>;
 
 export type NewMessage = Omit<Message, 'id' | Timestamps>;
 
-export type MessageUpdate = Pick<Message, 'id' | 'content'>;
+export type MessageUpdate = Omit<Message, Timestamps>;
