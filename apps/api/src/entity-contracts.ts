@@ -34,6 +34,19 @@ export type Friendship = z.infer<typeof Friendship>;
 
 export type NewFriendship = Omit<Friendship, 'createdAt'>;
 
+export const Conversation = z.object({
+	id,
+	name: z.string().optional(),
+	type: z.enum(['direct', 'group']).default('direct'),
+	...timestamps.shape,
+});
+
+export type Conversation = z.infer<typeof Conversation>;
+
+export type NewConversation = Omit<Conversation, 'id' | Timestamps>;
+
+export type ConversationUpdate = Omit<Conversation, Timestamps>;
+
 export const ConversationMember = z.object({
 	memberId: id,
 	conversationId: id,
@@ -47,19 +60,6 @@ export type ConversationMember = z.infer<typeof ConversationMember>;
 export type NewConversationMember = Omit<ConversationMember, 'id' | 'joinedAt' | 'updatedAt'>;
 
 export type ConversationMemberUpdate = Omit<ConversationMember, 'joinedAt' | 'updatedAt'>;
-
-export const Conversation = z.object({
-	id,
-	name: z.string().optional(),
-	type: z.enum(['direct', 'group']).default('direct'),
-	...timestamps.shape,
-});
-
-export type Conversation = z.infer<typeof Conversation>;
-
-export type NewConversation = Omit<Conversation, 'id' | Timestamps>;
-
-export type ConversationUpdate = Omit<Conversation, Timestamps>;
 
 export const Message = z.object({
 	id,
