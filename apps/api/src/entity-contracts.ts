@@ -24,10 +24,12 @@ export type NewUser = Omit<User, 'id' | Timestamps>;
 
 export type UserUpdate = Omit<User, Timestamps>;
 
+const { createdAt, updatedAt } = timestamps.shape;
+
 export const Friendship = z.object({
 	userId: id,
 	friendId: id,
-	createdAt: z.date(),
+	createdAt,
 });
 
 export type Friendship = z.infer<typeof Friendship>;
@@ -51,8 +53,8 @@ export const ConversationMember = z.object({
 	memberId: id,
 	conversationId: id,
 	role: z.enum(['member', 'admin', 'owner']).default('member'),
-	joinedAt: z.date(),
-	updatedAt: z.date(),
+	joinedAt: createdAt,
+	updatedAt,
 });
 
 export type ConversationMember = z.infer<typeof ConversationMember>;
