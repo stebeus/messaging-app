@@ -1,7 +1,7 @@
 import { defineRelations } from 'drizzle-orm';
 
 import { users } from '#routes/auth/schema.ts';
-import { messages } from '#routes/users/messages/schema.ts';
+import { messages } from '#routes/messages/schema.ts';
 
 export const relations = defineRelations({ users, messages }, (r) => ({
 	messages: {
