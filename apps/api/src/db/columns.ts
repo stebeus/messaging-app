@@ -9,3 +9,5 @@ export const timestamps = {
 		.$onUpdate(() => new Date())
 		.notNull(),
 };
+
+export type Timestamps = keyof typeof timestamps;
