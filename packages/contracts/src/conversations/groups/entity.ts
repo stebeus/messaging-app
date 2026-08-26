@@ -9,7 +9,7 @@ export const Group = z.object({
 	conversationId: id,
 	name: z.string(),
 	description: z.string(),
-	image: z.httpUrl().normalize(),
+	image: z.httpUrl().normalize().optional(),
 	privacy: z.enum(privacy).default('private'),
 	ownerId: id,
 });

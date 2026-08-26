@@ -7,7 +7,7 @@ export const User = z.object({
 	name: z.string(),
 	email: z.email(),
 	emailVerified: z.boolean().default(false),
-	image: z.httpUrl().normalize(),
+	image: z.httpUrl().normalize().optional(),
 });
 
 export type User = z.infer<typeof User>;
