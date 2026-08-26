@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { Base, id, type Timestamps } from '#utils.js';
+import { Base, base, id, timestamps } from '#utils.js';
 
 export const Message = z.object({
 	...Base.shape,
@@ -9,8 +9,12 @@ export const Message = z.object({
 	conversationId: id,
 });
 
+export const NewMessage = Message.omit(base);
+
+export const MessageUpdate = Message.omit(timestamps);
+
 export type Message = z.infer<typeof Message>;
 
-export type NewMessage = Omit<Message, keyof Base>;
+export type NewMessage = z.infer<typeof NewMessage>;
 
-export type MessageUpdate = Omit<Message, keyof Timestamps>;
+export type MessageUpdate = z.infer<typeof MessageUpdate>;

@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { Base, type Timestamps } from '#utils.js';
+import { Base, base, timestamps } from '#utils.js';
 
 export const User = z.object({
 	...Base.shape,
@@ -10,10 +10,12 @@ export const User = z.object({
 	image: z.httpUrl().normalize().optional(),
 });
 
-export const UserUpdate = User.omit({ id: true, createdAt: true, updatedAt: true });
+export const NewUser = User.omit(base);
+
+export const UserUpdate = User.omit(timestamps);
 
 export type User = z.infer<typeof User>;
 
-export type NewUser = Omit<User, keyof Base>;
+export type NewUser = z.infer<typeof NewUser>;
 
-export type UserUpdate = Omit<User, keyof Timestamps>;
+export type UserUpdate = z.infer<typeof UserUpdate>;

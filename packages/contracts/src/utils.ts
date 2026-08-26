@@ -16,6 +16,6 @@ export const Base = z.object({
 	id,
 });
 
-export type Timestamps = z.infer<typeof Timestamps>;
+export const timestamps = { createdAt: true, updatedAt: true } as const;
 
-export type Base = z.infer<typeof Base>;
+export const base = { ...timestamps, id: true } as const;

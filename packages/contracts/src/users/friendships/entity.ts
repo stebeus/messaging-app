@@ -8,6 +8,8 @@ export const Friendship = z.object({
 	createdAt,
 });
 
+export const NewFriendship = Friendship.omit({ createdAt: true });
+
 export type Friendship = z.infer<typeof Friendship>;
 
-export type NewFriendship = Omit<Friendship, 'createdAt'>;
+export type NewFriendship = z.infer<typeof NewFriendship>;

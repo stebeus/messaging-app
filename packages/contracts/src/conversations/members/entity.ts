@@ -12,6 +12,8 @@ export const Member = z.object({
 	updatedAt,
 });
 
+export const NewMember = Member.omit({ joinedAt: true, updatedAt: true });
+
 export type Member = z.infer<typeof Member>;
 
-export type NewMember = Omit<Member, 'joinedAt' | 'updatedAt'>;
+export type NewMember = z.infer<typeof NewMember>;
