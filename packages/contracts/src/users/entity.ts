@@ -10,6 +10,8 @@ export const User = z.object({
 	image: z.httpUrl().normalize().optional(),
 });
 
+export const UserUpdate = User.omit({ id: true, createdAt: true, updatedAt: true });
+
 export type User = z.infer<typeof User>;
 
 export type NewUser = Omit<User, keyof Base>;
