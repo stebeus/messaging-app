@@ -2,9 +2,9 @@ import * as z from 'zod';
 
 import { id, Timestamps } from '#utils.js';
 
-const privacy = ['private', 'public'] as const;
+export const privacy = ['private', 'public'] as const;
 
-const Group = z.object({
+export const Group = z.object({
 	...Timestamps.shape,
 	conversationId: id,
 	name: z.string(),
