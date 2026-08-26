@@ -2,12 +2,13 @@ import { integer, timestamp } from 'drizzle-orm/pg-core';
 
 export const id = integer().primaryKey().generatedByDefaultAsIdentity();
 
-export const timestamps = {
-	createdAt: timestamp().defaultNow().notNull(),
-	updatedAt: timestamp()
-		.defaultNow()
-		.$onUpdate(() => new Date())
-		.notNull(),
-};
+export const createdAt = timestamp().defaultNow().notNull();
 
-export type Timestamps = keyof typeof timestamps;
+export const updatedAt = timestamp()
+	.defaultNow()
+	.notNull()
+	.$onUpdate(() => new Date());
+
+export const timestamps = { createdAt, updatedAt };
+
+export const base = { ...timestamps, id };
