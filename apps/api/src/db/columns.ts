@@ -1,4 +1,4 @@
-import { integer, timestamp } from 'drizzle-orm/pg-core';
+import { type AnyPgColumn, integer, type ReferenceConfig, timestamp } from 'drizzle-orm/pg-core';
 
 export const id = integer().primaryKey().generatedByDefaultAsIdentity();
 
@@ -12,3 +12,18 @@ export const updatedAt = timestamp()
 export const timestamps = { createdAt, updatedAt };
 
 export const base = { ...timestamps, id };
+
+export const reference = <Column extends AnyPgColumn>(
+	column: () => Column,
+	options?: ReferenceConfig['config'],
+) => integer().references(column, options);
+
+export const emptyReference = <Column extends AnyPgColumn>(
+	column: () => Column,
+	options?: Omit<ReferenceConfig['config'], 'onDelete'>,
+) => reference(column, { onDelete: 'set null', ...options });
+
+export const cascadeReference = <Column extends AnyPgColumn>(
+	column: () => Column,
+	options?: Omit<ReferenceConfig['config'], 'onDelete'>,
+) => reference(column, { onDelete: 'cascade', ...options }).notNull();
