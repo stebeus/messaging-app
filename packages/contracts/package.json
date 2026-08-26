@@ -1,0 +1,28 @@
+{
+	"name": "@repo/contracts",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"imports": {
+		"#*": "./dist/*"
+	},
+	"exports": {
+		"./*": {
+			"types": "./dist/*/index.d.ts",
+			"default": "./dist/*/index.js"
+		}
+	},
+	"scripts": {
+		"build": "tsc -p tsconfig.build.json",
+		"dev": "tsc -p tsconfig.build.json -w",
+		"test": "vitest"
+	},
+	"dependencies": {
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@repo/typescript-config": "workspace:*",
+		"typescript": "catalog:",
+		"vitest": "catalog:"
+	}
+}
