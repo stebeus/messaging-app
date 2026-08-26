@@ -1,21 +1,57 @@
-import type { Timestamps } from '#db/columns.ts';
-import type { users } from '#routes/auth/schema.ts';
+import { index, snakeCase, uniqueIndex } from 'drizzle-orm/pg-core';
 
-import * as z from 'zod';
+import { base, reference } from '#db/columns.ts';
 
-export type User = typeof users.$inferSelect;
+export const users = snakeCase.table('users', (t) => ({
+	...base,
+	name: t.text().notNull(),
+	email: t.text().notNull().unique(),
+	emailVerified: t.boolean().default(false).notNull(),
+	image: t.text(),
+}));
 
-export type NewUser = typeof users.$inferInsert;
+export const sessions = snakeCase.table(
+	'sessions',
+	(t) => ({
+		...base,
+		expiresAt: t.timestamp().notNull(),
+		token: t.text().notNull().unique(),
+		ipAddress: t.text(),
+		userAgent: t.text(),
+		userId: reference(() => users.id, { onDelete: 'cascade' }).notNull(),
+	}),
+	({ userId }) => [index('sessions_userId_idx').on(userId)],
+);
 
-export type UserUpdate = Omit<User, Timestamps>;
+export const accounts = snakeCase.table(
+	'accounts',
+	(t) => ({
+		...base,
+		issuer: t.text().notNull(),
+		accountId: t.text().notNull(),
+		providerId: t.text().notNull(),
+		userId: reference(() => users.id, { onDelete: 'cascade' }).notNull(),
+		accessToken: t.text(),
+		refreshToken: t.text(),
+		idToken: t.text(),
+		accessTokenExpiresAt: t.timestamp(),
+		refreshTokenExpiresAt: t.timestamp(),
+		scope: t.text(),
+		password: t.text(),
+	}),
+	({ issuer, accountId, userId }) => [
+		uniqueIndex('accounts_issuer_accountId_uidx').on(issuer, accountId),
+		index('accounts_userId_idx').on(userId),
+	],
+);
 
-export const userParamSchema = z.object({
-	id: z.coerce.number(),
-});
-
-export const newUserSchema = z.object({
-	name: z.string(),
-	email: z.email(),
-	emailVerified: z.boolean(),
-	image: z.url(),
-});
+export const verifications = snakeCase.table(
+	'verifications',
+	(t) => ({
+		...base,
+		identifier: t.text().notNull(),
+		value: t.text().notNull(),
+		expiresAt: t.timestamp().notNull(),
+	}),
+	({ identifier }) => [index('verifications_identifier_idx').on(identifier)],
+);

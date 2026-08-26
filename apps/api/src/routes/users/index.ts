@@ -1,36 +1,35 @@
 import { Hono } from 'hono';
 
+import { UserParams, UserUpdate } from '@repo/contracts/users';
+
 import { validate } from '#middleware/validator.ts';
 
-import { findFirst, findMany, remove, update } from './repository.ts';
-import { newUserSchema, userParamSchema } from './schema.ts';
+import { friendships } from './friendships/index.ts';
+import { findFirst, findMany, modify, remove } from './repository.ts';
 
 export const users = new Hono();
 
 users.get('/', async (c) => c.json({ data: await findMany() }));
 
-users.get('/:id', validate('param', userParamSchema), async (c) => {
-	const { id } = c.req.valid('param');
-	const data = await findFirst(id);
+users.get('/:userId', validate('param', UserParams), async (c) => {
+	const { userId } = c.req.valid('param');
+	const data = await findFirst(userId);
 	return c.json({ data });
 });
 
-users.patch(
-	'/:id',
-	validate('param', userParamSchema),
-	validate('json', newUserSchema),
-	async (c) => {
-		const { id } = c.req.valid('param');
-		const user = c.req.valid('json');
+users.patch('/:userId', validate('param', UserParams), validate('json', UserUpdate), async (c) => {
+	const { userId } = c.req.valid('param');
+	const body = c.req.valid('json');
 
-		const data = await update({ id, ...user });
+	const data = await modify({ ...body, id: userId });
 
-		return c.json({ data });
-	},
-);
-
-users.delete('/:id', validate('param', userParamSchema), async (c) => {
-	const { id } = c.req.valid('param');
-	const data = await remove(id);
 	return c.json({ data });
 });
+
+users.delete('/:userId', validate('param', UserParams), async (c) => {
+	const { userId } = c.req.valid('param');
+	const data = await remove(userId);
+	return c.json({ data });
+});
+
+users.route('/:userId/friendships', friendships);
