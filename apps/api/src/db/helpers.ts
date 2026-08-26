@@ -14,7 +14,7 @@ export const update = async <Table extends PgTable>(
 	condition: SQL,
 ) => await db.update(table).set(values).where(condition).returning();
 
-export const del = async <Table extends PgTable>(table: Table, condition: SQL) => {
+export const del = async <Table extends PgTable>(table: Table, condition?: SQL) => {
 	const [data] = await db.delete(table).where(condition).returning();
 	return data;
 };
