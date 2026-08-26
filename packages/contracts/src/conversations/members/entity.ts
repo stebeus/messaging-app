@@ -2,10 +2,12 @@ import * as z from 'zod';
 
 import { createdAt, id, updatedAt } from '#utils.js';
 
+const roles = ['member', 'admin', 'owner'] as const;
+
 export const Member = z.object({
 	memberId: id,
 	conversationId: id,
-	role: z.enum(['member', 'admin', 'owner']).default('member'),
+	role: z.enum(roles).default('member'),
 	joinedAt: createdAt,
 	updatedAt,
 });
