@@ -5,7 +5,7 @@ import { createdAt, id, updatedAt } from '#utils.js';
 export const roles = ['member', 'admin', 'owner'] as const;
 
 export const Member = z.object({
-	memberId: id,
+	userId: id,
 	conversationId: id,
 	role: z.enum(roles).default('member'),
 	joinedAt: createdAt,
