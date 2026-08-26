@@ -1,11 +1,11 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 
 import { env } from '#env.ts';
-import { authRelations } from '#routes/auth/schema.ts';
+import { userRelations } from '#routes/users/relations.ts';
 
-import { relations } from './schema.ts';
+import { relations } from './relations.ts';
 
 export const db = drizzle({
 	connection: env.DATABASE_URL,
-	relations: { ...relations, ...authRelations },
+	relations: { ...relations, ...userRelations },
 });
