@@ -2,7 +2,7 @@ import * as z from 'zod';
 
 import { id, Timestamps } from '#utils.js';
 
-export const privacy = ['private', 'public'] as const;
+export const privacies = ['private', 'public'] as const;
 
 export const Group = z.object({
 	...Timestamps.shape,
@@ -10,7 +10,7 @@ export const Group = z.object({
 	name: z.string(),
 	description: z.string().optional(),
 	image: z.httpUrl().normalize().optional(),
-	privacy: z.enum(privacy).default('private'),
+	privacy: z.enum(privacies).default('private'),
 	ownerId: id,
 });
 
