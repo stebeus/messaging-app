@@ -1,4 +1,8 @@
+import type { IntClosedRange } from 'type-fest';
+
 import { STATUS_CODES } from 'node:http';
+
+type Status = IntClosedRange<400, 599>;
 
 type HttpErrorOptions = Partial<{
 	message: string;
@@ -15,8 +19,8 @@ export class HttpError extends Error {
 	readonly cause;
 
 	constructor(
-		status = 500,
-		{ message = STATUS_CODES[status] ?? '', cause }: HttpErrorOptions = {},
+		status: Status = 500,
+		{ message = STATUS_CODES[status] ?? 'Internal Server Error', cause }: HttpErrorOptions = {},
 	) {
 		super(message, { cause });
 
