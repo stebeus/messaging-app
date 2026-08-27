@@ -1,10 +1,11 @@
 import * as z from 'zod';
 
-type ZodObject = Record<string, z.ZodType>;
-
-export const createEnv = <Schema extends ZodObject>(env: unknown, schema: Schema) => {
-	const envSchema = z.object(schema);
-	const { success, error, data } = z.safeParse(envSchema, env);
+export const createEnv = <Schema extends Record<string, z.ZodType>>(
+	env: unknown,
+	schema: Schema,
+) => {
+	const Env = z.object(schema);
+	const { success, error, data } = z.safeParse(Env, env);
 
 	if (!success) throw new Error(z.prettifyError(error));
 
