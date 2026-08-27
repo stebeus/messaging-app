@@ -2,7 +2,7 @@ import type { ErrorRequestHandler, RequestHandler } from 'express';
 
 import { HttpError } from '#utils/errors.ts';
 
-export const handleNotFoundError: RequestHandler = (_req, _res, next) => next(new HttpError(404));
+export const handleNotFound: RequestHandler = (_req, _res, next) => next(new HttpError(404));
 
 export const handleError: ErrorRequestHandler = (error, req, res, next) => {
 	if (res.headersSent) return next(error);
