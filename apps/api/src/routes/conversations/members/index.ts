@@ -12,7 +12,7 @@ export const members = Router();
 members.get('/', async (_req, res) => res.json({ data: await findMany() }));
 
 members.get('/:memberId', validate({ params: MemberParams }), async (_req, res) => {
-	const { memberId } = res.locals.validated.params;
+	const { memberId } = res.locals.params;
 	const data = await findFirst(memberId);
 	return res.json({ data });
 });
@@ -21,7 +21,7 @@ members.post('/', validate({ params: ConversationParams, body: MemberBody }), as
 	const {
 		params: { conversationId },
 		body,
-	} = res.locals.validated;
+	} = res.locals;
 
 	// todo: get user id from auth
 	const data = await create({ ...body, conversationId, userId: 1 });
@@ -36,7 +36,7 @@ members.patch(
 		const {
 			params: { conversationId, memberId },
 			body,
-		} = res.locals.validated;
+		} = res.locals;
 
 		const data = await modify({ ...body, conversationId, userId: memberId });
 
@@ -45,7 +45,7 @@ members.patch(
 );
 
 members.delete('/:memberId', validate({ params: MemberParams }), async (_req, res) => {
-	const { memberId } = res.locals.validated;
+	const { memberId } = res.locals;
 	const data = await remove(memberId);
 	return res.json({ data });
 });
