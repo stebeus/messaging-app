@@ -2,12 +2,15 @@ import { drizzleAdapter } from '@better-auth/drizzle-adapter/relations-v2';
 import { betterAuth } from 'better-auth/minimal';
 
 import { db } from '#db/client.ts';
+import * as schema from '#routes/users/schema.ts';
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
 		provider: 'pg',
+		schema,
 		usePlural: true,
 	}),
+
 	advanced: {
 		database: {
 			generateId: 'serial',
