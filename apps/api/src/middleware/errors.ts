@@ -2,9 +2,6 @@ import type { ErrorRequestHandler, RequestHandler } from 'express';
 
 import { HttpError } from '#utils/errors.ts';
 
-export const handleBadRequestError: ErrorRequestHandler = (cause, _req, _res, next) =>
-	next(new HttpError(400, { cause }));
-
 export const handleNotFoundError: RequestHandler = (_req, _res, next) => next(new HttpError(404));
 
 export const handleError: ErrorRequestHandler = (error, req, res, next) => {

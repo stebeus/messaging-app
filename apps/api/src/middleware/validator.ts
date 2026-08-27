@@ -2,7 +2,7 @@ import type { RequestHandler } from 'express';
 
 import * as z from 'zod';
 
-import { handleBadRequestError } from './errors.ts';
+import { HttpError } from '#utils/errors.ts';
 
 type Schema = 'body' | 'headers' | 'params' | 'query';
 
@@ -15,12 +15,7 @@ export const validate =
 
 		for (const [key, schema] of entries) {
 			const { success, error, data } = await schema.safeParseAsync(req[key]);
-
-			if (!success) {
-				const cause = z.flattenError(error);
-				return handleBadRequestError(cause, req, res, next);
-			}
-
+			if (!success) throw new HttpError(400, { cause: z.flattenError(error) });
 			res.locals[key] = data;
 		}
 
