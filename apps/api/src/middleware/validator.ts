@@ -1,14 +1,28 @@
-import type { ValidationTargets } from 'hono';
-import type * as z from 'zod';
+import type { RequestHandler } from 'express';
 
-import { flattenErrors, sValidator } from '@hono/standard-validator';
+import * as z from 'zod';
 
-import { ApiError } from '#utils/errors.ts';
+import { handleBadRequestError } from './errors.ts';
 
-export const validate = <Target extends keyof ValidationTargets, Schema extends z.ZodType>(
-	target: Target,
-	schema: Schema,
-) =>
-	sValidator(target, schema, (result) => {
-		if (!result.success) throw new ApiError(400, { cause: flattenErrors(result.error) });
-	});
+type Schema = 'body' | 'headers' | 'params' | 'query';
+
+type Schemas = Partial<Record<Schema, z.ZodObject>>;
+
+export const validate =
+	(schemas: Schemas): RequestHandler =>
+	async (req, res, next) => {
+		const entries = Object.entries(schemas) as [Schema, z.ZodObject][];
+
+		for (const [key, schema] of entries) {
+			const { success, error, data } = await schema.safeParseAsync(req[key]);
+
+			if (!success) {
+				const cause = z.flattenError(error);
+				return handleBadRequestError(cause, req, res, next);
+			}
+
+			res.locals[key] = data;
+		}
+
+		next();
+	};

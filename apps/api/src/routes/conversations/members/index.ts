@@ -1,48 +1,51 @@
-import { Hono } from 'hono';
+import { Router } from 'express';
 
 import { ConversationParams } from '@repo/contracts/conversations';
-import { MemberParams, NewMember } from '@repo/contracts/conversations/members';
+import { MemberBody, MemberParams } from '@repo/contracts/conversations/members';
 
 import { validate } from '#middleware/validator.ts';
 
 import { create, findFirst, findMany, modify, remove } from './repository.ts';
 
-export const members = new Hono();
+export const members = Router();
 
-members.get('/', async (c) => c.json({ data: await findMany() }));
+members.get('/', async (_req, res) => res.json({ data: await findMany() }));
 
-members.get('/:memberId', validate('param', MemberParams), async (c) => {
-	const { memberId } = c.req.valid('param');
+members.get('/:memberId', validate({ params: MemberParams }), async (_req, res) => {
+	const { memberId } = res.locals.params;
 	const data = await findFirst(memberId);
-	return c.json({ data });
+	return res.json({ data });
 });
 
-members.post('/', validate('param', ConversationParams), validate('json', NewMember), async (c) => {
-	const { conversationId } = c.req.valid('param');
-	const body = c.req.valid('json');
+members.post('/', validate({ params: ConversationParams, body: MemberBody }), async (_req, res) => {
+	const {
+		params: { conversationId },
+		body,
+	} = res.locals;
 
+	// todo: get user id from auth
 	const data = await create({ ...body, conversationId, userId: 1 });
 
-	return c.json({ data });
+	return res.json({ data });
 });
 
 members.patch(
 	'/:memberId',
-	validate('param', ConversationParams),
-	validate('param', MemberParams),
-	validate('json', NewMember),
-	async (c) => {
-		const { conversationId, memberId } = c.req.valid('param');
-		const body = c.req.valid('json');
+	validate({ params: { ...ConversationParams, ...MemberParams }, body: MemberBody }),
+	async (_req, res) => {
+		const {
+			params: { conversationId, memberId },
+			body,
+		} = res.locals;
 
 		const data = await modify({ ...body, conversationId, userId: memberId });
 
-		return c.json({ data });
+		return res.json({ data });
 	},
 );
 
-members.delete('/:memberId', validate('param', MemberParams), async (c) => {
-	const { memberId } = c.req.valid('param');
+members.delete('/:memberId', validate({ params: MemberParams }), async (_req, res) => {
+	const { memberId } = res.locals;
 	const data = await remove(memberId);
-	return c.json({ data });
+	return res.json({ data });
 });

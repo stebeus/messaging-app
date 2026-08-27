@@ -1,36 +1,41 @@
-import { Hono } from 'hono';
+import { Router } from 'express';
 
 import { ConversationParams } from '@repo/contracts/conversations';
-import { NewGroup } from '@repo/contracts/conversations/groups';
+import { GroupBody } from '@repo/contracts/conversations/groups';
 
 import { validate } from '#middleware/validator.ts';
 
 import { create, findMany, modify, remove } from './repository.ts';
 
-export const groups = new Hono();
+export const groups = Router();
 
-groups.get('/', async (c) => c.json({ data: await findMany() }));
+groups.get('/', async (_req, res) => res.json({ data: await findMany() }));
 
-groups.post('/', validate('param', ConversationParams), validate('json', NewGroup), async (c) => {
-	const { conversationId } = c.req.valid('param');
-	const body = c.req.valid('json');
+groups.post('/', validate({ params: ConversationParams, body: GroupBody }), async (_req, res) => {
+	const {
+		params: { conversationId },
+		body,
+	} = res.locals;
 
+	// todo: get user id from auth
 	const data = await create({ ...body, conversationId, ownerId: 1 });
 
-	return c.json({ data });
+	return res.json({ data });
 });
 
-groups.patch('/', validate('param', ConversationParams), validate('json', NewGroup), async (c) => {
-	const { conversationId } = c.req.valid('param');
-	const body = c.req.valid('json');
+groups.patch('/', validate({ params: ConversationParams, body: GroupBody }), async (_req, res) => {
+	const {
+		params: { conversationId },
+		body,
+	} = res.locals;
 
 	const data = await modify({ ...body, conversationId });
 
-	return c.json({ data });
+	return res.json({ data });
 });
 
-groups.delete('/', validate('param', ConversationParams), async (c) => {
-	const { conversationId } = c.req.valid('param');
+groups.delete('/', validate({ params: ConversationParams }), async (_req, res) => {
+	const { conversationId } = res.locals.params;
 	const data = await remove(conversationId);
-	return c.json({ data });
+	return res.json({ data });
 });

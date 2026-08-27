@@ -1,4 +1,4 @@
-import { Hono } from 'hono';
+import { Router } from 'express';
 
 import { ConversationParams, NewConversation } from '@repo/contracts/conversations';
 
@@ -9,30 +9,36 @@ import { members } from './members/index.ts';
 import { messages } from './messages/index.ts';
 import { create, findFirst, findMany, remove } from './repository.ts';
 
-export const conversations = new Hono();
+export const conversations = Router();
 
-conversations.get('/', async (c) => c.json({ data: await findMany() }));
+conversations.get('/', async (_req, res) => res.json({ data: await findMany() }));
 
-conversations.get('/:memberId', validate('param', ConversationParams), async (c) => {
-	const { conversationId } = c.req.valid('param');
-	const data = await findFirst(conversationId);
-	return c.json({ data });
-});
+conversations.get(
+	'/:conversationId',
+	validate({ params: ConversationParams }),
+	async (_req, res) => {
+		const { conversationId } = res.locals.params;
+		const data = await findFirst(conversationId);
+		return res.json({ data });
+	},
+);
 
-conversations.post('/', validate('json', NewConversation), async (c) => {
-	const body = c.req.valid('json');
+conversations.post('/', validate({ body: NewConversation }), async (_req, res) => {
+	const { body } = res.locals;
 	const data = await create(body);
-	return c.json({ data });
+	return res.json({ data });
 });
 
-conversations.delete('/:memberId', validate('param', ConversationParams), async (c) => {
-	const { conversationId } = c.req.valid('param');
-	const data = await remove(conversationId);
-	return c.json({ data });
-});
+conversations.delete(
+	'/:conversationId',
+	validate({ params: ConversationParams }),
+	async (_req, res) => {
+		const { conversationId } = res.locals.params;
+		const data = await remove(conversationId);
+		return res.json({ data });
+	},
+);
 
-conversations.basePath('/:memberId');
-
-conversations.route('/groups', groups);
-conversations.route('/members', members);
-conversations.route('/messages', messages);
+conversations.use('/:conversationId/groups', groups);
+conversations.use('/:conversationId/members', members);
+conversations.use('/:conversationId/messages', messages);

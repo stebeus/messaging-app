@@ -1,4 +1,4 @@
-import { Hono } from 'hono';
+import { Router } from 'express';
 
 import { UserParams, UserUpdate } from '@repo/contracts/users';
 
@@ -7,29 +7,31 @@ import { validate } from '#middleware/validator.ts';
 import { friendships } from './friendships/index.ts';
 import { findFirst, findMany, modify, remove } from './repository.ts';
 
-export const users = new Hono();
+export const users = Router({ mergeParams: true });
 
-users.get('/', async (c) => c.json({ data: await findMany() }));
+users.get('/', async (_req, res) => res.json({ data: await findMany() }));
 
-users.get('/:userId', validate('param', UserParams), async (c) => {
-	const { userId } = c.req.valid('param');
+users.get('/:userId', validate({ params: UserParams }), async (_req, res) => {
+	const { userId } = res.locals.params;
 	const data = await findFirst(userId);
-	return c.json({ data });
+	return res.json({ data });
 });
 
-users.patch('/:userId', validate('param', UserParams), validate('json', UserUpdate), async (c) => {
-	const { userId } = c.req.valid('param');
-	const body = c.req.valid('json');
+users.patch('/:userId', validate({ params: UserParams, body: UserUpdate }), async (_req, res) => {
+	const {
+		params: { userId },
+		body,
+	} = res.locals;
 
 	const data = await modify({ ...body, id: userId });
 
-	return c.json({ data });
+	return res.json({ data });
 });
 
-users.delete('/:userId', validate('param', UserParams), async (c) => {
-	const { userId } = c.req.valid('param');
+users.delete('/:userId', validate({ params: UserParams }), async (_req, res) => {
+	const { userId } = res.locals.params;
 	const data = await remove(userId);
-	return c.json({ data });
+	return res.json({ data });
 });
 
-users.route('/:userId/friendships', friendships);
+users.use('/:userId/friendships', friendships);

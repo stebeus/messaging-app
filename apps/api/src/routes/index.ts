@@ -1,9 +1,9 @@
-import { Hono } from 'hono';
+import { Router } from 'express';
 
 import { conversations } from './conversations/index.ts';
 import { users } from './users/index.ts';
 
-export const routes = new Hono();
+export const routes = Router();
 
-routes.route('/conversations', conversations);
-routes.route('/users', users);
+routes.use('/conversations', conversations);
+routes.use('/users', users);

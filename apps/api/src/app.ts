@@ -1,32 +1,24 @@
-import { Hono } from 'hono';
-import { cors } from 'hono/cors';
-import { HTTPException } from 'hono/http-exception';
-import { logger } from 'hono/logger';
+import { toNodeHandler } from 'better-auth/node';
+import cors from 'cors';
+import express from 'express';
 
 import { env } from './env.ts';
-import { auth } from './lib/auth.ts';
+import { auth, pino } from './lib/index.ts';
+import { handleError, handleNotFoundError } from './middleware/errors.ts';
 import { routes } from './routes/index.ts';
 
-export const app = new Hono().basePath('/api');
+export const app = express();
 
-app.use(logger());
+app.use(pino);
 
-app.use(cors({ origin: env.CLIENT_URL }));
+app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
 
-app.all('/auth/*', (c) => auth.handler(c.req.raw));
+app.all('/api/auth/*splat', toNodeHandler(auth));
 
-app.route('/v1', routes);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.notFound((c) => {
-	const status = 404;
-	return c.json({ error: { status, message: 'Not Found' } }, status);
-});
+app.use('/api/v1', routes);
 
-app.onError((error, c) => {
-	if (error instanceof HTTPException) return c.json({ error }, error.status);
-
-	const status = 500;
-
-	console.error(error);
-	return c.json({ error: { status, message: 'Internal Server Error' } }, status);
-});
+app.use(handleNotFoundError);
+app.use(handleError);

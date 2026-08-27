@@ -1,24 +1,26 @@
-import type { ContentfulStatusCode } from 'hono/utils/http-status';
-
 import { STATUS_CODES } from 'node:http';
 
-import { HTTPException } from 'hono/http-exception';
-
-type ApiErrorOptions = Partial<{
-	res: Response;
+type HttpErrorOptions = Partial<{
 	message: string;
 	cause: unknown;
 }>;
 
-export class ApiError extends HTTPException {
+export class HttpError extends Error {
+	static isHttpError(value: unknown) {
+		return value instanceof HttpError;
+	}
+
+	readonly status;
 	readonly message;
 	readonly cause;
 
 	constructor(
-		status: ContentfulStatusCode = 500,
-		{ res, message = STATUS_CODES[status] ?? '', cause }: ApiErrorOptions = {},
+		status = 500,
+		{ message = STATUS_CODES[status] ?? '', cause }: HttpErrorOptions = {},
 	) {
-		super(status, { res });
+		super(message, { cause });
+
+		this.status = status;
 		this.message = message;
 		this.cause = cause;
 	}

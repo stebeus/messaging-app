@@ -1,52 +1,55 @@
-import { Hono } from 'hono';
+import { Router } from 'express';
 
 import { ConversationParams } from '@repo/contracts/conversations';
-import { MessageParams, MessageUpdate } from '@repo/contracts/conversations/messages';
+import { MessageBody, MessageParams } from '@repo/contracts/conversations/messages';
 
 import { validate } from '#middleware/validator.ts';
 
 import { create, findFirst, findMany, modify, remove } from './repository.ts';
 
-export const messages = new Hono();
+export const messages = Router({ mergeParams: true });
 
-messages.get('/', async (c) => c.json({ data: await findMany() }));
+messages.get('/', async (_req, res) => res.json({ data: await findMany() }));
 
-messages.get('/:memberId', validate('param', MessageParams), async (c) => {
-	const { messageId } = c.req.valid('param');
+messages.get('/:messageId', validate({ params: MessageParams }), async (_req, res) => {
+	const { messageId } = res.locals.params;
 	const data = await findFirst(messageId);
-	return c.json({ data });
+	return res.json({ data });
 });
 
 messages.post(
 	'/',
-	validate('param', ConversationParams),
-	validate('json', MessageUpdate),
-	async (c) => {
-		const { conversationId } = c.req.valid('param');
-		const body = c.req.valid('json');
+	validate({ params: ConversationParams, body: MessageBody }),
+	async (_req, res) => {
+		const {
+			params: { conversationId },
+			body,
+		} = res.locals;
 
-		const data = await create({ ...body, conversationId, senderId: 1 });
+		// todo: get user id from auth
+		const data = await create({ ...body, conversationId, senderId: 2 });
 
-		return c.json({ data });
+		return res.json({ data });
 	},
 );
 
 messages.patch(
-	'/:memberId',
-	validate('param', MessageParams),
-	validate('json', MessageUpdate),
-	async (c) => {
-		const { messageId } = c.req.valid('param');
-		const body = c.req.valid('json');
+	'/:messageId',
+	validate({ params: MessageParams, body: MessageBody }),
+	async (_req, res) => {
+		const {
+			params: { messageId },
+			body,
+		} = res.locals;
 
 		const data = await modify({ ...body, id: messageId });
 
-		return c.json({ data });
+		return res.json({ data });
 	},
 );
 
-messages.delete('/:memberId', validate('param', MessageParams), async (c) => {
-	const { messageId } = c.req.valid('param');
+messages.delete('/:messageId', validate({ params: MessageParams }), async (_req, res) => {
+	const { messageId } = res.locals.params;
 	const data = await remove(messageId);
-	return c.json({ data });
+	return res.json({ data });
 });
