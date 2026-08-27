@@ -15,7 +15,7 @@ friendships.get(
 	'/:friendId',
 	validate({ params: { ...UserParams, ...FriendshipParams } }),
 	async (_req, res) => {
-		const { params } = res.locals.validated;
+		const { params } = res.locals;
 		const data = await findFirst(params);
 		return res.json({ data });
 	},
@@ -25,7 +25,7 @@ friendships.post(
 	'/:friendId',
 	validate({ params: { ...UserParams, ...FriendshipParams } }),
 	async (_req, res) => {
-		const { params } = res.locals.validated;
+		const { params } = res.locals;
 		const data = await create(params);
 		return res.json({ data });
 	},
@@ -35,7 +35,7 @@ friendships.delete(
 	'/:friendId',
 	validate({ params: { ...UserParams, ...FriendshipParams } }),
 	async (_req, res) => {
-		const { params } = res.locals.validated;
+		const { params } = res.locals;
 		const data = await remove(params);
 		return res.json({ data });
 	},
