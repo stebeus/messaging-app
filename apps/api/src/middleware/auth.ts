@@ -9,7 +9,7 @@ export const authorize: RequestHandler = async (req, res, next) => {
 	const session = await auth.api.getSession({ headers: fromNodeHeaders(req.headers) });
 	if (session == null) throw new HttpError(401);
 
-	res.locals.auth = { ...session };
+	res.locals.auth = session;
 
 	next();
 };
