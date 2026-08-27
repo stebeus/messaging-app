@@ -16,7 +16,7 @@ export const validate =
 		for (const [key, schema] of entries) {
 			const { success, error, data } = await schema.safeParseAsync(req[key]);
 			if (!success) throw new HttpError(400, { cause: z.flattenError(error) });
-			res.locals[key] = data;
+			res.locals.validated[key] = data;
 		}
 
 		next();

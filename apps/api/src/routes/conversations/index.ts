@@ -17,14 +17,14 @@ conversations.get(
 	'/:conversationId',
 	validate({ params: ConversationParams }),
 	async (_req, res) => {
-		const { conversationId } = res.locals.params;
+		const { conversationId } = res.locals.validated.params;
 		const data = await findFirst(conversationId);
 		return res.json({ data });
 	},
 );
 
 conversations.post('/', validate({ body: NewConversation }), async (_req, res) => {
-	const { body } = res.locals;
+	const { body } = res.locals.validated;
 	const data = await create(body);
 	return res.json({ data });
 });
@@ -33,7 +33,7 @@ conversations.delete(
 	'/:conversationId',
 	validate({ params: ConversationParams }),
 	async (_req, res) => {
-		const { conversationId } = res.locals.params;
+		const { conversationId } = res.locals.validated.params;
 		const data = await remove(conversationId);
 		return res.json({ data });
 	},

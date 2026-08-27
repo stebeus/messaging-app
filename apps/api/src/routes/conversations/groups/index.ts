@@ -15,7 +15,7 @@ groups.post('/', validate({ params: ConversationParams, body: GroupBody }), asyn
 	const {
 		params: { conversationId },
 		body,
-	} = res.locals;
+	} = res.locals.validated;
 
 	// todo: get user id from auth
 	const data = await create({ ...body, conversationId, ownerId: 1 });
@@ -27,7 +27,7 @@ groups.patch('/', validate({ params: ConversationParams, body: GroupBody }), asy
 	const {
 		params: { conversationId },
 		body,
-	} = res.locals;
+	} = res.locals.validated;
 
 	const data = await modify({ ...body, conversationId });
 
@@ -35,7 +35,7 @@ groups.patch('/', validate({ params: ConversationParams, body: GroupBody }), asy
 });
 
 groups.delete('/', validate({ params: ConversationParams }), async (_req, res) => {
-	const { conversationId } = res.locals.params;
+	const { conversationId } = res.locals.validated.params;
 	const data = await remove(conversationId);
 	return res.json({ data });
 });

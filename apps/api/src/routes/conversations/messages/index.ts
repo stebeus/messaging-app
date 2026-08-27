@@ -12,7 +12,7 @@ export const messages = Router({ mergeParams: true });
 messages.get('/', async (_req, res) => res.json({ data: await findMany() }));
 
 messages.get('/:messageId', validate({ params: MessageParams }), async (_req, res) => {
-	const { messageId } = res.locals.params;
+	const { messageId } = res.locals.validated.params;
 	const data = await findFirst(messageId);
 	return res.json({ data });
 });
@@ -24,7 +24,7 @@ messages.post(
 		const {
 			params: { conversationId },
 			body,
-		} = res.locals;
+		} = res.locals.validated;
 
 		// todo: get user id from auth
 		const data = await create({ ...body, conversationId, senderId: 2 });
@@ -40,7 +40,7 @@ messages.patch(
 		const {
 			params: { messageId },
 			body,
-		} = res.locals;
+		} = res.locals.validated;
 
 		const data = await modify({ ...body, id: messageId });
 
@@ -49,7 +49,7 @@ messages.patch(
 );
 
 messages.delete('/:messageId', validate({ params: MessageParams }), async (_req, res) => {
-	const { messageId } = res.locals.params;
+	const { messageId } = res.locals.validated.params;
 	const data = await remove(messageId);
 	return res.json({ data });
 });

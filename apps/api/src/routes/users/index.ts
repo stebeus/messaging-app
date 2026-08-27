@@ -12,7 +12,7 @@ export const users = Router({ mergeParams: true });
 users.get('/', async (_req, res) => res.json({ data: await findMany() }));
 
 users.get('/:userId', validate({ params: UserParams }), async (_req, res) => {
-	const { userId } = res.locals.params;
+	const { userId } = res.locals.validated.params;
 	const data = await findFirst(userId);
 	return res.json({ data });
 });
@@ -21,7 +21,7 @@ users.patch('/:userId', validate({ params: UserParams, body: UserUpdate }), asyn
 	const {
 		params: { userId },
 		body,
-	} = res.locals;
+	} = res.locals.validated;
 
 	const data = await modify({ ...body, id: userId });
 
@@ -29,7 +29,7 @@ users.patch('/:userId', validate({ params: UserParams, body: UserUpdate }), asyn
 });
 
 users.delete('/:userId', validate({ params: UserParams }), async (_req, res) => {
-	const { userId } = res.locals.params;
+	const { userId } = res.locals.validated.params;
 	const data = await remove(userId);
 	return res.json({ data });
 });
