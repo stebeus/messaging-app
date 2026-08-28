@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { UserParams, UserUpdate } from '@repo/contracts/users';
+import { PatchUserBody, UserParams } from '@repo/contracts/users';
 
 import { validate } from '#middleware/validator.ts';
 
@@ -17,16 +17,20 @@ users.get('/:userId', validate({ params: UserParams }), async (_req, res) => {
 	return res.json({ data });
 });
 
-users.patch('/:userId', validate({ params: UserParams, body: UserUpdate }), async (_req, res) => {
-	const {
-		params: { userId },
-		body,
-	} = res.locals.validated;
+users.patch(
+	'/:userId',
+	validate({ params: UserParams, body: PatchUserBody }),
+	async (_req, res) => {
+		const {
+			params: { userId },
+			body,
+		} = res.locals.validated;
 
-	const data = await modify({ ...body, id: userId });
+		const data = await modify({ ...body, id: userId });
 
-	return res.json({ data });
-});
+		return res.json({ data });
+	},
+);
 
 users.delete('/:userId', validate({ params: UserParams }), async (_req, res) => {
 	const { userId } = res.locals.params;
