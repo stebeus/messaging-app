@@ -24,7 +24,7 @@ users.patch(
 		const {
 			params: { userId },
 			body,
-		} = res.locals.validated;
+		} = res.locals;
 
 		const data = await modify({ ...body, id: userId });
 
