@@ -2,15 +2,19 @@ import { index, snakeCase, uniqueIndex } from 'drizzle-orm/pg-core';
 
 import { base, reference } from '#db/columns.ts';
 
-export const users = snakeCase.table('users', (t) => ({
+export const authSchema = snakeCase.schema('auth');
+
+export const users = authSchema.table('users', (t) => ({
 	...base,
 	name: t.text().notNull(),
 	email: t.text().notNull().unique(),
 	emailVerified: t.boolean().default(false).notNull(),
 	image: t.text(),
+	username: t.text().unique(),
+	displayUsername: t.text(),
 }));
 
-export const sessions = snakeCase.table(
+export const sessions = authSchema.table(
 	'sessions',
 	(t) => ({
 		...base,
@@ -23,7 +27,7 @@ export const sessions = snakeCase.table(
 	({ userId }) => [index('sessions_userId_idx').on(userId)],
 );
 
-export const accounts = snakeCase.table(
+export const accounts = authSchema.table(
 	'accounts',
 	(t) => ({
 		...base,
@@ -45,7 +49,7 @@ export const accounts = snakeCase.table(
 	],
 );
 
-export const verifications = snakeCase.table(
+export const verifications = authSchema.table(
 	'verifications',
 	(t) => ({
 		...base,
