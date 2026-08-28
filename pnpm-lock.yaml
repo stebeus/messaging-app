@@ -394,9 +394,6 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
-      type-fest:
-        specifier: 'catalog:'
-        version: 5.8.0
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
