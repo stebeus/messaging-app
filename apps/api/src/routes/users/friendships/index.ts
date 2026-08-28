@@ -1,5 +1,6 @@
 import { Router } from 'express';
 
+import { UserParams } from '@repo/contracts/users';
 import { FriendshipParams } from '@repo/contracts/users/friendships';
 
 import { validate } from '#middleware/validator.ts';
@@ -8,7 +9,11 @@ import { create, findFirst, findMany, remove } from './repository.ts';
 
 export const friendships = Router({ mergeParams: true });
 
-friendships.get('/', async (_req, res) => res.json({ data: await findMany() }));
+friendships.get('/', validate({ params: UserParams }), async (_req, res) => {
+	const { userId } = res.locals.params;
+	const data = await findMany(userId);
+	return res.json({ data });
+});
 
 friendships.get('/:friendId', validate({ params: FriendshipParams }), async (_req, res) => {
 	const { params } = res.locals;

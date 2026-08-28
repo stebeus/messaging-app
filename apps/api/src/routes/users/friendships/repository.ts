@@ -12,7 +12,8 @@ export const create = async ({ userId, friendId }: NewFriendship) =>
 		friendId: Math.max(userId, friendId),
 	});
 
-export const findMany = async () => await db.query.friendships.findMany();
+export const findMany = async (userId: number) =>
+	await db.query.friendships.findMany({ where: { userId } });
 
 export const findFirst = async (friendship: NewFriendship) =>
 	await db.query.friendships.findFirst({ where: friendship });
