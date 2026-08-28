@@ -6,7 +6,11 @@ import { db, del, insert } from '#db/index.ts';
 
 import { friendships } from './schema.ts';
 
-export const create = async (friendship: NewFriendship) => await insert(friendships, friendship);
+export const create = async ({ userId, friendId }: NewFriendship) =>
+	await insert(friendships, {
+		userId: Math.min(userId, friendId),
+		friendId: Math.max(userId, friendId),
+	});
 
 export const findMany = async () => await db.query.friendships.findMany();
 
