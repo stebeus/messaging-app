@@ -6,7 +6,7 @@ import { validate } from '#middleware/validator.ts';
 
 import { create, findFirst, findMany, remove } from './repository.ts';
 
-export const friendships = Router();
+export const friendships = Router({ mergeParams: true });
 
 friendships.get('/', async (_req, res) => res.json({ data: await findMany() }));
 
