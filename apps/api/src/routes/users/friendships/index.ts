@@ -1,6 +1,5 @@
 import { Router } from 'express';
 
-import { UserParams } from '@repo/contracts/users';
 import { FriendshipParams } from '@repo/contracts/users/friendships';
 
 import { validate } from '#middleware/validator.ts';
@@ -11,32 +10,20 @@ export const friendships = Router();
 
 friendships.get('/', async (_req, res) => res.json({ data: await findMany() }));
 
-friendships.get(
-	'/:friendId',
-	validate({ params: { ...UserParams, ...FriendshipParams } }),
-	async (_req, res) => {
-		const { params } = res.locals;
-		const data = await findFirst(params);
-		return res.json({ data });
-	},
-);
+friendships.get('/:friendId', validate({ params: FriendshipParams }), async (_req, res) => {
+	const { params } = res.locals;
+	const data = await findFirst(params);
+	return res.json({ data });
+});
 
-friendships.post(
-	'/:friendId',
-	validate({ params: { ...UserParams, ...FriendshipParams } }),
-	async (_req, res) => {
-		const { params } = res.locals;
-		const data = await create(params);
-		return res.json({ data });
-	},
-);
+friendships.post('/:friendId', validate({ params: FriendshipParams }), async (_req, res) => {
+	const { params } = res.locals;
+	const data = await create(params);
+	return res.json({ data });
+});
 
-friendships.delete(
-	'/:friendId',
-	validate({ params: { ...UserParams, ...FriendshipParams } }),
-	async (_req, res) => {
-		const { params } = res.locals;
-		const data = await remove(params);
-		return res.json({ data });
-	},
-);
+friendships.delete('/:friendId', validate({ params: FriendshipParams }), async (_req, res) => {
+	const { params } = res.locals;
+	const data = await remove(params);
+	return res.json({ data });
+});
