@@ -1,4 +1,4 @@
-import z from 'zod';
+import * as z from 'zod';
 
 import { id } from '#shared/fields.js';
 import { Query } from '#shared/index.js';
