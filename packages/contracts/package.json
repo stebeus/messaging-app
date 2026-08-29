@@ -8,8 +8,8 @@
 	},
 	"exports": {
 		"./*": {
-			"types": "./dist/modules/*/index.d.ts",
-			"default": "./dist/modules/*/index.js"
+			"types": "./dist/features/*/index.d.ts",
+			"default": "./dist/features/*/index.js"
 		},
 		"./shared": {
 			"types": "./dist/shared/index.d.ts",
