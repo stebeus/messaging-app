@@ -6,7 +6,7 @@ import { createEnv } from './index.js';
 const schema = {
 	environment: z.string(),
 	port: z.coerce.number(),
-};
+} as const;
 
 describe('createEnv', () => {
 	describe('Given invalid environment variables', () => {
@@ -22,7 +22,7 @@ describe('createEnv', () => {
 
 	it('creates type-safe environment variables', () => {
 		// Arrange
-		const mockEnv = { environment: 'test', port: '3000' };
+		const mockEnv = { environment: 'test', port: '3000' } as const;
 
 		// Act
 		const env = createEnv(mockEnv, schema);
