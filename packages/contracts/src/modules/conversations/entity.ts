@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { Base, base } from '#utils.js';
+import { Base, base } from '#shared/fields.js';
 
 export const conversationTypes = ['direct', 'group'] as const;
 

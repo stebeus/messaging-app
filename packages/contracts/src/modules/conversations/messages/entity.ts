@@ -1,17 +1,17 @@
 import * as z from 'zod';
 
-import { Base, base, id, timestamps } from '#utils.js';
+import { Base, base, id, timestamps } from '#shared/fields.js';
 
 export const Message = z.object({
 	...Base.shape,
-	content: z.string(),
-	senderId: id.optional(),
+	senderId: id,
 	conversationId: id,
+	content: z.string(),
 });
 
 export const NewMessage = Message.omit(base);
 
-export const MessageUpdate = Message.omit(timestamps);
+export const MessageUpdate = Message.omit(timestamps).partial().required({ id: true });
 
 export type Message = z.infer<typeof Message>;
 
