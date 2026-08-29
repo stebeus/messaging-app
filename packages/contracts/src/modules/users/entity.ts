@@ -4,6 +4,7 @@ import { Base, base, timestamps } from '#shared/fields.js';
 
 export const User = z.object({
 	...Base.shape,
+	name: z.string().nullable(),
 	username: z.string(),
 	displayName: z.string().nullable(),
 	email: z.email(),
