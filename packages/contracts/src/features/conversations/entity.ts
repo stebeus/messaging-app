@@ -1,15 +1,16 @@
 import * as z from 'zod';
 
-import { Base, base } from '#shared/fields.js';
+import { createdAt, id } from '#shared/fields.js';
 
 export const conversationTypes = ['direct', 'group'] as const;
 
 export const Conversation = z.object({
-	...Base.shape,
+	id,
 	type: z.enum(conversationTypes).default('direct'),
+	createdAt,
 });
 
-export const NewConversation = Conversation.omit(base);
+export const NewConversation = Conversation.pick({ type: true });
 
 export type Conversation = z.infer<typeof Conversation>;
 
