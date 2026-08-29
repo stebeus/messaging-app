@@ -15,8 +15,12 @@ export const NewFriendship = Friendship.omit(timestamps);
 
 export const FriendshipUpdate = Friendship.omit(timestamps).partial({ status: true });
 
+export const FriendshipDeletion = Friendship.pick({ userAId: true, userBId: true });
+
 export type Friendship = z.infer<typeof Friendship>;
 
 export type NewFriendship = z.infer<typeof NewFriendship>;
 
 export type FriendshipUpdate = z.infer<typeof FriendshipUpdate>;
+
+export type FriendshipDeletion = z.infer<typeof FriendshipDeletion>;
