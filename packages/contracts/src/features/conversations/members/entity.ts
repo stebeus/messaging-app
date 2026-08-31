@@ -18,8 +18,12 @@ export const NewMember = Member.omit(timestamps);
 
 export const MemberUpdate = Member.omit(timestamps).partial({ role: true });
 
+export const MemberDeletion = Member.pick({ userId: true, conversationId: true });
+
 export type Member = z.infer<typeof Member>;
 
 export type NewMember = z.infer<typeof NewMember>;
 
 export type MemberUpdate = z.infer<typeof MemberUpdate>;
+
+export type MemberDeletion = z.infer<typeof MemberDeletion>;
