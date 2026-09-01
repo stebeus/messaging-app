@@ -81,7 +81,15 @@
 				"useNamingConvention": {
 					"level": "on",
 					"options": {
-						"strictCase": false
+						"strictCase": false,
+						"conventions": [
+							{
+								"formats": ["camelCase", "CONSTANT_CASE", "PascalCase", "snake_case"],
+								"selector": {
+									"kind": "objectLiteralProperty"
+								}
+							}
+						]
 					}
 				}
 			},
@@ -138,28 +146,6 @@
 							"level": "on",
 							"options": {
 								"groupByNesting": true
-							}
-						}
-					}
-				}
-			}
-		},
-		{
-			"includes": ["**/env.{js,ts}"],
-			"linter": {
-				"rules": {
-					"style": {
-						"useNamingConvention": {
-							"level": "on",
-							"options": {
-								"conventions": [
-									{
-										"formats": ["camelCase", "CONSTANT_CASE"],
-										"selector": {
-											"kind": "objectLiteralProperty"
-										}
-									}
-								]
 							}
 						}
 					}
