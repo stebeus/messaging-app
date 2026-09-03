@@ -1,0 +1,7 @@
+{
+	"extends": "@repo/typescript-config/tsconfig.app",
+	"compilerOptions": {
+		"module": "nodenext",
+		"types": ["node"]
+	}
+}
