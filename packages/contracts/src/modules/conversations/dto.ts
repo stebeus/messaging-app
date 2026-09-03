@@ -1,9 +1,9 @@
 import * as z from 'zod';
 
-import { id } from '#shared/fields.js';
+import { id } from '#shared/entities.js';
 
-export const DirectMessageParams = z.object({
+export const DirectMessageParameters = z.object({
 	dmId: id,
 });
 
-export type DirectMessageParams = z.infer<typeof DirectMessageParams>;
+export type DirectMessageParameters = z.infer<typeof DirectMessageParameters>;

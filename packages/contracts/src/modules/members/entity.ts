@@ -1,6 +1,8 @@
 import * as z from 'zod';
 
-import { createdAt, id, updatedAt } from '#shared/fields.js';
+import { createdAt, id, updatedAt } from '#shared/entities.js';
+
+const timestamps = { joinedAt: true, updatedAt: true } as const;
 
 export const roles = ['member', 'admin', 'owner'] as const;
 
@@ -12,18 +14,12 @@ export const Member = z.object({
 	updatedAt,
 });
 
-const timestamps = { joinedAt: true, updatedAt: true } as const;
-
-export const NewMember = Member.omit(timestamps);
+export const NewMember = Member.omit(timestamps).partial({ role: true });
 
 export const MemberUpdate = Member.omit(timestamps).partial({ role: true });
-
-export const MemberDeletion = Member.pick({ userId: true, conversationId: true });
 
 export type Member = z.infer<typeof Member>;
 
 export type NewMember = z.infer<typeof NewMember>;
 
 export type MemberUpdate = z.infer<typeof MemberUpdate>;
-
-export type MemberDeletion = z.infer<typeof MemberDeletion>;

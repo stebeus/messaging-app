@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { createdAt, id } from '#shared/fields.js';
+import { createdAt, id } from '#shared/entities.js';
 
 export const conversationTypes = ['direct', 'group'] as const;
 
@@ -10,7 +10,7 @@ export const Conversation = z.object({
 	createdAt,
 });
 
-export const NewConversation = Conversation.pick({ type: true });
+export const NewConversation = Conversation.pick({ type: true }).partial();
 
 export type Conversation = z.infer<typeof Conversation>;
 

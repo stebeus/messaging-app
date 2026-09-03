@@ -1,9 +1,8 @@
 import * as z from 'zod';
 
-import { id } from '#shared/fields.js';
-import { Query, sorts } from '#shared/index.js';
+import { id, Query, sorts } from '#shared/index.js';
 
-export const UserParams = z.object({
+export const UserParameters = z.object({
 	userId: id,
 });
 
@@ -16,6 +15,6 @@ export const UserQuery = z
 	})
 	.partial();
 
-export type UserParams = z.infer<typeof UserParams>;
+export type UserParameters = z.infer<typeof UserParameters>;
 
 export type UserQuery = z.infer<typeof UserQuery>;

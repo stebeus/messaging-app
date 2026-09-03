@@ -1,10 +1,10 @@
 import * as z from 'zod';
 
-import { id } from '#shared/fields.js';
+import { id } from '#shared/entities.js';
 
 import { GroupUpdate, NewGroup } from './entity.js';
 
-export const GroupParams = z.object({
+export const GroupParameters = z.object({
 	groupId: id,
 });
 
@@ -12,7 +12,7 @@ export const CreateGroupBody = NewGroup.omit({ conversationId: true, ownerId: tr
 
 export const UpdateGroupBody = GroupUpdate.omit({ conversationId: true });
 
-export type GroupParams = z.infer<typeof GroupParams>;
+export type GroupParameters = z.infer<typeof GroupParameters>;
 
 export type CreateGroupBody = z.infer<typeof CreateGroupBody>;
 

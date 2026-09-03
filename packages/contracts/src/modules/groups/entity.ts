@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { id, Timestamps, timestamps } from '#shared/fields.js';
+import { id, Timestamps, timestamps } from '#shared/entities.js';
 
 export const visibilities = ['private', 'public'] as const;
 
@@ -14,7 +14,7 @@ export const Group = z.object({
 	visibility: z.enum(visibilities).default('private'),
 });
 
-export const NewGroup = Group.omit(timestamps);
+export const NewGroup = Group.omit(timestamps).partial({ visibility: true });
 
 export const GroupUpdate = Group.omit(timestamps).partial().required({ conversationId: true });
 

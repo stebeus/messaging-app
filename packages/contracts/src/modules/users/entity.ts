@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { Base, base, timestamps } from '#shared/fields.js';
+import { Base, base, timestamps } from '#shared/entities.js';
 
 export const User = z.object({
 	...Base.shape,
@@ -13,7 +13,7 @@ export const User = z.object({
 	avatar: z.httpUrl().normalize().nullable(),
 });
 
-export const NewUser = User.omit(base);
+export const NewUser = User.omit(base).partial({ emailIsVerified: true });
 
 export const UserUpdate = User.omit(timestamps).partial().required({ id: true });
 
