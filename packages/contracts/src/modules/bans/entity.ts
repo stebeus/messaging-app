@@ -12,10 +12,6 @@ export const Ban = z.object({
 
 export const NewBan = Ban.omit(timestamps);
 
-export const BanUpdate = Ban.omit(timestamps);
-
 export type Ban = z.infer<typeof Ban>;
 
 export type NewBan = z.infer<typeof NewBan>;
-
-export type BanUpdate = z.infer<typeof BanUpdate>;

@@ -13,10 +13,6 @@ export const Friendship = z.object({
 
 export const NewFriendship = Friendship.omit(timestamps);
 
-export const FriendshipUpdate = Friendship.omit(timestamps);
-
 export type Friendship = z.infer<typeof Friendship>;
 
 export type NewFriendship = z.infer<typeof NewFriendship>;
-
-export type FriendshipUpdate = z.infer<typeof FriendshipUpdate>;
