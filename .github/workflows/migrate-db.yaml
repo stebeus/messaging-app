@@ -1,4 +1,4 @@
-name: Database Migrations
+name: Migrate Database
 
 on:
   push:
@@ -6,10 +6,10 @@ on:
       - main
 
     paths:
+      - .github/workflows/migrate-db.yaml
       - apps/api/**
       - packages/**
       - pnpm-lock.yaml
-      - .github/workflows/migrate-db.yaml
 
   workflow_dispatch:
 
@@ -24,17 +24,18 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 24
+          - 26
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install pnpm and Node.js
-        uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c
+        uses: pnpm/setup@v2
         with:
-          runtime: node@${{ matrix.node-version }}
           cache: true
+          runtime: node@${{ matrix.node }}
+          working-directory: api
 
       - name: Install dependencies
         run: pnpm ci
