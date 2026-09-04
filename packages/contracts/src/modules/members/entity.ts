@@ -9,14 +9,19 @@ export const roles = ['member', 'admin', 'owner'] as const;
 export const Member = z.object({
 	userId: id,
 	conversationId: id,
-	role: z.enum(roles).default('member'),
+	role: z.enum(roles).default('member').optional(),
 	joinedAt: createdAt,
 	updatedAt,
 });
 
-export const NewMember = Member.omit(timestamps).partial({ role: true });
+export const NewMember = Member.omit(timestamps);
 
-export const MemberUpdate = Member.omit(timestamps).partial({ role: true });
+export const MemberUpdate = z
+	.object({
+		...Member.shape,
+		role: z.enum(roles).exclude(['owner']).default('member').optional(),
+	})
+	.omit(timestamps);
 
 export type Member = z.infer<typeof Member>;
 

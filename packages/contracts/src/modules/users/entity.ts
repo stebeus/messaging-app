@@ -8,12 +8,12 @@ export const User = z.object({
 	username: z.string(),
 	displayName: z.string().nullable(),
 	email: z.email(),
-	emailIsVerified: z.boolean().default(false),
+	emailIsVerified: z.boolean().default(false).optional(),
 	password: z.string(),
 	avatar: z.httpUrl().normalize().nullable(),
 });
 
-export const NewUser = User.omit(base).partial({ emailIsVerified: true });
+export const NewUser = User.omit(base);
 
 export const UserUpdate = User.omit(timestamps).partial().required({ id: true });
 

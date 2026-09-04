@@ -8,12 +8,12 @@ export const Friendship = z.object({
 	...Timestamps.shape,
 	user1Id: id,
 	user2Id: id,
-	status: z.enum(statuses).default('pending'),
+	status: z.enum(statuses).default('pending').optional(),
 });
 
-export const NewFriendship = Friendship.omit(timestamps).partial({ status: true });
+export const NewFriendship = Friendship.omit(timestamps);
 
-export const FriendshipUpdate = Friendship.omit(timestamps).partial({ status: true });
+export const FriendshipUpdate = Friendship.omit(timestamps);
 
 export type Friendship = z.infer<typeof Friendship>;
 

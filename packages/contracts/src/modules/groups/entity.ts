@@ -11,10 +11,10 @@ export const Group = z.object({
 	name: z.string(),
 	description: z.string().nullable(),
 	avatar: z.httpUrl().normalize().nullable(),
-	visibility: z.enum(visibilities).default('private'),
+	visibility: z.enum(visibilities).default('private').optional(),
 });
 
-export const NewGroup = Group.omit(timestamps).partial({ visibility: true });
+export const NewGroup = Group.omit(timestamps).partial();
 
 export const GroupUpdate = Group.omit(timestamps).partial().required({ conversationId: true });
 
