@@ -31,6 +31,11 @@ export class HttpError extends HTTPException {
 		this.cause = cause;
 	}
 }
+export class BadRequestError extends HttpError {
+	constructor(options?: HttpErrorOptions) {
+		super(400, options);
+	}
+}
 
 export class UnauthorizedError extends HttpError {
 	constructor(options?: HttpErrorOptions) {
