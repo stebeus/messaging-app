@@ -10,6 +10,10 @@ type HttpErrorOptions = Partial<{
 	cause: unknown;
 }>;
 
+type NotFoundErrorOptions = Omit<HttpErrorOptions, 'message'> & {
+	resource?: string;
+};
+
 export class HttpError extends HTTPException {
 	static isHttpError(value: unknown) {
 		return value instanceof HTTPException;
@@ -35,7 +39,7 @@ export class ForbiddenError extends HttpError {
 }
 
 export class NotFoundError extends HttpError {
-	constructor(options?: HttpErrorOptions) {
-		super(404, options);
+	constructor({ resource, ...options }: NotFoundErrorOptions = {}) {
+		super(404, { message: `${resource} Not Found`, ...options });
 	}
 }
