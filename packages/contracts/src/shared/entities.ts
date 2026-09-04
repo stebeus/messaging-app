@@ -10,14 +10,9 @@ export const timestamps = { createdAt: true, updatedAt: true } as const;
 
 export const base = { ...timestamps, id: true } as const;
 
-export const Id = z.object({
-	id,
-});
+export const Id = z.object({ id });
 
-export const Timestamps = z.object({
-	createdAt,
-	updatedAt,
-});
+export const Timestamps = z.object({ createdAt, updatedAt });
 
 export const Base = z.object({
 	...Id.shape,
