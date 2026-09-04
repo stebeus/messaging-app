@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-export const id = z.coerce.number().int().positive();
+export const id = z.string().regex(/^[1-9]\d*$/);
 
 export const createdAt = z.date();
 
