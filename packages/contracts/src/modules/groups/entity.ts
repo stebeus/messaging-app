@@ -14,7 +14,7 @@ export const Group = z.object({
 	visibility: z.enum(visibilities).default('private').optional(),
 });
 
-export const NewGroup = Group.omit(timestamps).partial();
+export const NewGroup = Group.omit(timestamps);
 
 export const GroupUpdate = Group.omit(timestamps).partial().required({ conversationId: true });
 

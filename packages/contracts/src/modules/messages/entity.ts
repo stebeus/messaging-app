@@ -11,7 +11,7 @@ export const Message = z.object({
 
 export const NewMessage = Message.omit(base);
 
-export const MessageUpdate = Message.omit(timestamps).partial().required({ id: true });
+export const MessageUpdate = Message.omit(timestamps).partial({ content: true });
 
 export type Message = z.infer<typeof Message>;
 
