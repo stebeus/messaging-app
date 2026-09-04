@@ -32,6 +32,12 @@ export class HttpError extends HTTPException {
 	}
 }
 
+export class UnauthorizedError extends HttpError {
+	constructor(options?: HttpErrorOptions) {
+		super(401, options);
+	}
+}
+
 export class ForbiddenError extends HttpError {
 	constructor(options?: HttpErrorOptions) {
 		super(403, options);
