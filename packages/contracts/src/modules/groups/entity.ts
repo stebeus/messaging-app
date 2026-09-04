@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { id, Timestamps, timestamps } from '#shared/entities.js';
+import { id, Timestamps, timestamps } from '#helpers/entities.js';
 
 export const visibilities = ['private', 'public'] as const;
 

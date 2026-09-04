@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { createdAt, id } from '#shared/entities.js';
+import { createdAt, id } from '#helpers/entities.js';
 
 export const conversationTypes = ['direct', 'group'] as const;
 

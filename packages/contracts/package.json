@@ -11,9 +11,9 @@
 			"types": "./dist/modules/*/index.d.ts",
 			"default": "./dist/modules/*/index.js"
 		},
-		"./shared": {
-			"types": "./dist/shared/index.d.ts",
-			"default": "./dist/shared/index.js"
+		"./helpers": {
+			"types": "./dist/helpers/index.d.ts",
+			"default": "./dist/helpers/index.js"
 		}
 	},
 	"scripts": {

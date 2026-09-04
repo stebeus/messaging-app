@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { id } from '#shared/entities.js';
+import { id } from '#helpers/entities.js';
 
 import { MessageUpdate, NewMessage } from './entity.js';
 
