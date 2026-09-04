@@ -9,7 +9,7 @@
 		"test": "turbo run test"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.5.11",
+		"@biomejs/biome": "^2.5.12",
 		"turbo": "^2.10.12"
 	},
 	"engines": {

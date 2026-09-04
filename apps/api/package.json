@@ -31,7 +31,7 @@
 	},
 	"devDependencies": {
 		"@repo/typescript-config": "workspace:*",
-		"@types/node": "^26.4.0",
+		"@types/node": "^26.4.1",
 		"drizzle-kit": "1.0.0-rc.4",
 		"typescript": "catalog:",
 		"vitest": "catalog:"
