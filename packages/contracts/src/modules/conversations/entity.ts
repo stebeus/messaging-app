@@ -14,6 +14,4 @@ export const NewConversation = Conversation.pick({ type: true });
 
 export type Conversation = z.infer<typeof Conversation>;
 
-export type ConversationSelection = z.input<typeof Conversation>;
-
 export type NewConversation = z.input<typeof NewConversation>;

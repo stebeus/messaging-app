@@ -15,6 +15,4 @@ export const NewFriendship = Friendship.omit(timestamps);
 
 export type Friendship = z.infer<typeof Friendship>;
 
-export type FriendshipSelection = z.input<typeof Friendship>;
-
 export type NewFriendship = z.input<typeof NewFriendship>;

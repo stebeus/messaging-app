@@ -20,8 +20,6 @@ export const GroupUpdate = Group.omit(timestamps).partial().required({ conversat
 
 export type Group = z.infer<typeof Group>;
 
-export type GroupSelection = z.input<typeof Group>;
-
 export type NewGroup = z.input<typeof NewGroup>;
 
 export type GroupUpdate = z.infer<typeof GroupUpdate>;

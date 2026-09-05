@@ -22,8 +22,6 @@ export const MemberUpdate = z
 
 export type Member = z.infer<typeof Member>;
 
-export type MemberSelection = z.input<typeof Member>;
-
 export type NewMember = z.input<typeof NewMember>;
 
 export type MemberUpdate = z.infer<typeof MemberUpdate>;

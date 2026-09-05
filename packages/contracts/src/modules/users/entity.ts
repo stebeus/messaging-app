@@ -23,8 +23,6 @@ export const UserUpdate = UserCredentials.omit(timestamps).partial().required({ 
 
 export type User = z.infer<typeof User>;
 
-export type UserSelection = z.input<typeof User>;
-
 export type NewUser = z.input<typeof NewUser>;
 
 export type UserUpdate = z.infer<typeof UserUpdate>;
