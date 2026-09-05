@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { Base, base, id, timestamps } from '#helpers/entities.js';
+import { Base, base, id, timestamps } from '#shared/entities.js';
 
 export const Message = z.object({
 	...Base.shape,

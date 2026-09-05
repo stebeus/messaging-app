@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { id, Query, sorts } from '#helpers/index.js';
+import { id, Query, sorts } from '#shared/index.js';
 
 export const UserParameters = z.object({
 	userId: id,

@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { id } from '#helpers/entities.js';
+import { id } from '#shared/entities.js';
 
 import { GroupUpdate, NewGroup } from './entity.js';
 

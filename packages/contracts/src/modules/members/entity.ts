@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { createdAt, id, updatedAt } from '#helpers/entities.js';
+import { createdAt, id, updatedAt } from '#shared/entities.js';
 
 const timestamps = { joinedAt: true, updatedAt: true } as const;
 

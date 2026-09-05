@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { id } from '#helpers/entities.js';
+import { id } from '#shared/entities.js';
 
 export const ConversationParameters = z.object({
 	conversationId: id,
