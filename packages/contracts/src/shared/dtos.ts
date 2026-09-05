@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-export const sorts = ['createdAt'] as const;
+export const sorts = ['createdAt', 'updatedAt'] as const;
 
 export const orders = ['asc', 'desc'] as const;
 
