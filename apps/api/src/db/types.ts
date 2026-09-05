@@ -1,11 +1,9 @@
 import type { db } from './client.ts';
 
-type TransactionHandler = Parameters<typeof db.transaction>[0];
+type Database = typeof db;
+
+type TransactionHandler = Parameters<Database['transaction']>[0];
 
 type Transaction = Parameters<TransactionHandler>[0];
 
-type DatabaseClient = typeof db | Transaction;
-
-export type DatabaseContext<Context> = Context & {
-	client?: DatabaseClient;
-};
+export type DatabaseClient = Database | Transaction;
