@@ -17,7 +17,7 @@ export const timestamps = { createdAt, updatedAt } as const;
 
 export const base = { ...timestamps, id } as const;
 
-export const reference = <Column extends p.AnyPgColumn>(
-	column: () => Column,
+export const reference = <PrimaryKey extends p.AnyPgColumn>(
+	primaryKey: () => PrimaryKey,
 	options?: p.ReferenceConfig['config'],
-) => p.bigint({ mode }).references(column, options);
+) => p.bigint({ mode }).references(primaryKey, options);
