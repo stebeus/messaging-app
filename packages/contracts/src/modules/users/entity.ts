@@ -4,7 +4,7 @@ import { Base, base, timestamps } from '#shared/entities.js';
 
 export const User = z.object({
 	...Base.shape,
-	name: z.string().nullable(),
+	name: z.string(),
 	username: z.string(),
 	displayName: z.string().nullable(),
 	email: z.email(),
