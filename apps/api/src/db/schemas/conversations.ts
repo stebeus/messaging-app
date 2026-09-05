@@ -11,13 +11,15 @@ const { type } = Conversation.shape;
 const { visibility } = Group.shape;
 const { role } = Member.shape;
 
-export const conversations = snakeCase.table('conversations', (t) => ({
+export const conversationSchema = snakeCase.schema('conversation');
+
+export const conversations = conversationSchema.table('conversations', (t) => ({
 	id,
 	type: t.text({ enum: conversationTypes }).default(type.def.defaultValue).notNull(),
 	createdAt,
 }));
 
-export const groups = snakeCase.table('groups', (t) => ({
+export const groups = conversationSchema.table('groups', (t) => ({
 	...timestamps,
 	conversationId: reference(() => users.id, { onDelete: 'cascade' }).notNull(),
 	ownerId: reference(() => conversations.id, { onDelete: 'cascade' }).notNull(),
@@ -27,7 +29,7 @@ export const groups = snakeCase.table('groups', (t) => ({
 	visibility: t.text({ enum: visibilities }).default(visibility.def.defaultValue).notNull(),
 }));
 
-export const members = snakeCase.table(
+export const members = conversationSchema.table(
 	'members',
 	(t) => ({
 		...timestamps,
@@ -38,7 +40,7 @@ export const members = snakeCase.table(
 	(t) => [unique().on(t.userId, t.conversationId)],
 );
 
-export const messages = snakeCase.table('messages', (t) => ({
+export const messages = conversationSchema.table('messages', (t) => ({
 	...base,
 	senderId: reference(() => users.id, { onDelete: 'cascade' }).notNull(),
 	conversationId: reference(() => conversations.id, { onDelete: 'cascade' }).notNull(),
