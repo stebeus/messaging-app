@@ -10,21 +10,21 @@ export const timestamps = { createdAt: true, updatedAt: true } as const;
 
 export const base = { ...timestamps, id: true } as const;
 
-export const Id = z.object({
-	id,
-});
-
 export const Timestamps = z.object({
 	createdAt,
 	updatedAt,
 });
 
 export const Base = z.object({
-	...Id.shape,
 	...Timestamps.shape,
+	id,
 });
 
-export type Id = z.infer<typeof Id>;
+export type Id = z.infer<typeof id>;
+
+export type IdParameters = {
+	id: Id;
+};
 
 export type Base = z.infer<typeof Base>;
 
