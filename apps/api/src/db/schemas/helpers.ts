@@ -1,10 +1,10 @@
-import * as pg from 'drizzle-orm/pg-core';
+import * as p from 'drizzle-orm/pg-core';
 
-export const id = pg.integer().primaryKey().generatedAlwaysAsIdentity();
+export const id = p.integer().primaryKey().generatedAlwaysAsIdentity();
 
-export const createdAt = pg.timestamp().defaultNow().notNull();
+export const createdAt = p.timestamp().defaultNow().notNull();
 
-export const updatedAt = pg
+export const updatedAt = p
 	.timestamp()
 	.defaultNow()
 	.notNull()
@@ -14,7 +14,7 @@ export const timestamps = { createdAt, updatedAt } as const;
 
 export const base = { ...timestamps, id } as const;
 
-export const reference = <Column extends pg.AnyPgColumn>(
+export const reference = <Column extends p.AnyPgColumn>(
 	column: () => Column,
-	options?: pg.ReferenceConfig['config'],
-) => pg.integer().references(column, options);
+	options?: p.ReferenceConfig['config'],
+) => p.integer().references(column, options);
