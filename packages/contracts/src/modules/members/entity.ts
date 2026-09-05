@@ -9,7 +9,7 @@ export const roles = ['member', 'admin', 'owner'] as const;
 export const Member = z.object({
 	userId: id,
 	conversationId: id,
-	role: z.enum(roles).default('member').optional(),
+	role: z.enum(roles).default('member'),
 	joinedAt: createdAt,
 	updatedAt,
 });
@@ -25,6 +25,8 @@ export const MemberUpdate = z
 
 export type Member = z.infer<typeof Member>;
 
-export type NewMember = z.infer<typeof NewMember>;
+export type MemberSelection = z.input<typeof Member>;
+
+export type NewMember = z.input<typeof NewMember>;
 
 export type MemberUpdate = z.infer<typeof MemberUpdate>;

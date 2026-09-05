@@ -11,7 +11,7 @@ export const Group = z.object({
 	name: z.string(),
 	description: z.string().nullable(),
 	avatar: z.httpUrl().normalize().nullable(),
-	visibility: z.enum(visibilities).default('private').optional(),
+	visibility: z.enum(visibilities).default('private'),
 });
 
 export const NewGroup = Group.omit(timestamps);
@@ -20,6 +20,8 @@ export const GroupUpdate = Group.omit(timestamps).partial().required({ conversat
 
 export type Group = z.infer<typeof Group>;
 
-export type NewGroup = z.infer<typeof NewGroup>;
+export type GroupSelection = z.input<typeof Group>;
+
+export type NewGroup = z.input<typeof NewGroup>;
 
 export type GroupUpdate = z.infer<typeof GroupUpdate>;

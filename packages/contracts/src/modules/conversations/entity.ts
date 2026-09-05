@@ -10,8 +10,10 @@ export const Conversation = z.object({
 	createdAt,
 });
 
-export const NewConversation = Conversation.pick({ type: true }).partial();
+export const NewConversation = Conversation.pick({ type: true });
 
 export type Conversation = z.infer<typeof Conversation>;
 
-export type NewConversation = z.infer<typeof NewConversation>;
+export type ConversationSelection = z.input<typeof Conversation>;
+
+export type NewConversation = z.input<typeof NewConversation>;

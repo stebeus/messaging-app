@@ -8,7 +8,7 @@ export const User = z.object({
 	username: z.string(),
 	displayName: z.string().nullable(),
 	email: z.email(),
-	emailIsVerified: z.boolean().default(false).optional(),
+	emailIsVerified: z.boolean().default(false),
 	avatar: z.httpUrl().normalize().nullable(),
 });
 
@@ -23,6 +23,8 @@ export const UserUpdate = UserCredentials.omit(timestamps).partial().required({ 
 
 export type User = z.infer<typeof User>;
 
-export type NewUser = z.infer<typeof NewUser>;
+export type UserSelection = z.input<typeof User>;
+
+export type NewUser = z.input<typeof NewUser>;
 
 export type UserUpdate = z.infer<typeof UserUpdate>;
