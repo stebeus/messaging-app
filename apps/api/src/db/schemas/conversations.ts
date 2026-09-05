@@ -29,6 +29,16 @@ export const groups = conversationSchema.table('groups', (t) => ({
 	visibility: t.text({ enum: visibilities }).default(visibility.def.defaultValue).notNull(),
 }));
 
+export const bans = conversationSchema.table(
+	'bans',
+	{
+		...timestamps,
+		userId: reference(() => users.id, { onDelete: 'cascade' }).notNull(),
+		groupId: reference(() => conversations.id, { onDelete: 'cascade' }).notNull(),
+	},
+	(t) => [unique().on(t.userId, t.groupId)],
+);
+
 export const members = conversationSchema.table(
 	'members',
 	(t) => ({

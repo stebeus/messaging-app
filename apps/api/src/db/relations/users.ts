@@ -1,9 +1,9 @@
 import { defineRelationsPart } from 'drizzle-orm';
 
-import { accounts, friendships, groups, sessions, users } from '#db/schemas/index.ts';
+import { accounts, bans, friendships, groups, sessions, users } from '#db/schemas/index.ts';
 
 export const userRelations = defineRelationsPart(
-	{ users, sessions, accounts, friendships, groups },
+	{ users, sessions, accounts, bans, friendships, groups },
 	(r) => ({
 		users: {
 			sessions: r.many.sessions({
@@ -13,6 +13,10 @@ export const userRelations = defineRelationsPart(
 			accounts: r.many.accounts({
 				from: r.users.id,
 				to: r.accounts.userId,
+			}),
+			bans: r.many.bans({
+				from: r.users.id,
+				to: r.bans.userId,
 			}),
 			friendships: r.many.friendships({
 				from: r.users.id,

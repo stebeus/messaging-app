@@ -26,6 +26,20 @@ export const relations = defineRelations(schema, (r) => ({
 			from: r.groups.ownerId,
 			to: r.users.id,
 		}),
+		bans: r.many.bans({
+			from: r.groups.conversationId,
+			to: r.bans.groupId,
+		}),
+	},
+	bans: {
+		user: r.one.users({
+			from: r.bans.userId,
+			to: r.users.id,
+		}),
+		group: r.one.groups({
+			from: r.bans.groupId,
+			to: r.groups.conversationId,
+		}),
 	},
 	members: {
 		conversation: r.one.conversations({
