@@ -28,7 +28,7 @@ export const groups = snakeCase.table('groups', (t) => ({
 }));
 
 export const members = snakeCase.table(
-	'conversation_members',
+	'members',
 	(t) => ({
 		userId: reference(() => users.id, { onDelete: 'cascade' }).notNull(),
 		conversationId: reference(() => conversations.id, { onDelete: 'cascade' }).notNull(),
