@@ -1,8 +1,8 @@
-import { defineRelations } from 'drizzle-orm';
+import { defineRelationsPart } from 'drizzle-orm';
 
 import * as schema from '#db/schemas/index.ts';
 
-export const relations = defineRelations(schema, (r) => ({
+export const conversationRelations = defineRelationsPart(schema, (r) => ({
 	conversations: {
 		group: r.one.groups({
 			from: r.conversations.id,
