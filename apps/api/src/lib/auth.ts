@@ -3,7 +3,7 @@ import { betterAuth } from 'better-auth/minimal';
 import { username } from 'better-auth/plugins';
 
 import { db } from '#db/client.ts';
-import * as schema from '#db/schema/auth.ts';
+import * as schema from '#db/schemas/auth.ts';
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {

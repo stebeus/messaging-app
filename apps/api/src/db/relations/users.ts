@@ -1,6 +1,6 @@
 import { defineRelationsPart } from 'drizzle-orm';
 
-import { accounts, friendships, groups, sessions, users } from '#db/schema/index.ts';
+import { accounts, friendships, groups, sessions, users } from '#db/schemas/index.ts';
 
 export const userRelations = defineRelationsPart(
 	{ users, sessions, accounts, friendships, groups },
