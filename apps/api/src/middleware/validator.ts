@@ -3,12 +3,12 @@ import type * as z from 'zod';
 
 import { flattenErrors, sValidator } from '@hono/standard-validator';
 
-import { HttpError } from '#utils/errors.ts';
+import { BadRequestError } from '#utils/errors.ts';
 
 export const validate = <Target extends keyof ValidationTargets, Schema extends z.ZodType>(
 	target: Target,
 	schema: Schema,
 ) =>
 	sValidator(target, schema, (result) => {
-		if (!result.success) throw new HttpError(400, { cause: flattenErrors(result.error) });
+		if (!result.success) throw new BadRequestError({ cause: flattenErrors(result.error) });
 	});
