@@ -1,13 +1,14 @@
 import * as p from 'drizzle-orm/pg-core';
 
 const mode = 'string';
+const withTimezone = true;
 
 export const id = p.bigint({ mode }).primaryKey().generatedAlwaysAsIdentity();
 
-export const createdAt = p.timestamp().defaultNow().notNull();
+export const createdAt = p.timestamp({ withTimezone }).defaultNow().notNull();
 
 export const updatedAt = p
-	.timestamp()
+	.timestamp({ withTimezone })
 	.defaultNow()
 	.notNull()
 	.$onUpdate(() => new Date());
