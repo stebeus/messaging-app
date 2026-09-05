@@ -1,4 +1,3 @@
-import type { Timestamps } from '@repo/contracts/shared';
 import type { RelationsFieldFilter } from 'drizzle-orm';
 import type { db } from './client.ts';
 
@@ -14,6 +13,8 @@ export type DatabaseContext<Context> = Context & {
 	tx?: DatabaseClient;
 };
 
-type TimestampFilters = Record<keyof Timestamps, RelationsFieldFilter<Date>>;
+type SelectionFilter<Value> = RelationsFieldFilter<NonNullable<Value>>;
 
-export type Selection<Entity> = Partial<Omit<Entity, keyof Timestamps> & TimestampFilters>;
+export type Selection<Entity> = {
+	readonly [Key in keyof Entity]?: SelectionFilter<Entity[Key]>;
+};
