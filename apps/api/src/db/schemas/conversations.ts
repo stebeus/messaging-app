@@ -5,7 +5,7 @@ import { Group, visibilities } from '@repo/contracts/groups';
 import { Member, roles } from '@repo/contracts/members';
 
 import { users } from './auth.ts';
-import { base, createdAt, id, reference, timestamps, updatedAt } from './helpers.ts';
+import { base, createdAt, id, reference, timestamps } from './helpers.ts';
 
 const { type } = Conversation.shape;
 const { visibility } = Group.shape;
@@ -30,11 +30,10 @@ export const groups = snakeCase.table('groups', (t) => ({
 export const members = snakeCase.table(
 	'members',
 	(t) => ({
+		...timestamps,
 		userId: reference(() => users.id, { onDelete: 'cascade' }).notNull(),
 		conversationId: reference(() => conversations.id, { onDelete: 'cascade' }).notNull(),
 		role: t.text({ enum: roles }).default(role.def.defaultValue).notNull(),
-		joinedAt: createdAt,
-		updatedAt,
 	}),
 	(t) => [unique().on(t.userId, t.conversationId)],
 );

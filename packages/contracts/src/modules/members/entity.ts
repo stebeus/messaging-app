@@ -1,17 +1,14 @@
 import * as z from 'zod';
 
-import { createdAt, id, updatedAt } from '#shared/entities.js';
-
-const timestamps = { joinedAt: true, updatedAt: true } as const;
+import { id, Timestamps, timestamps } from '#shared/entities.js';
 
 export const roles = ['member', 'admin', 'owner'] as const;
 
 export const Member = z.object({
+	...Timestamps.shape,
 	userId: id,
 	conversationId: id,
 	role: z.enum(roles).default('member'),
-	joinedAt: createdAt,
-	updatedAt,
 });
 
 export const NewMember = Member.omit(timestamps);
