@@ -9,13 +9,17 @@ export const User = z.object({
 	displayName: z.string().nullable(),
 	email: z.email(),
 	emailIsVerified: z.boolean().default(false).optional(),
-	password: z.string(),
 	avatar: z.httpUrl().normalize().nullable(),
 });
 
-export const NewUser = User.omit(base);
+const UserCredentials = z.object({
+	...User.shape,
+	password: z.string(),
+});
 
-export const UserUpdate = User.omit(timestamps).partial().required({ id: true });
+export const NewUser = UserCredentials.omit(base);
+
+export const UserUpdate = UserCredentials.omit(timestamps).partial().required({ id: true });
 
 export type User = z.infer<typeof User>;
 
