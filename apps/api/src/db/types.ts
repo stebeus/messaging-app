@@ -16,5 +16,5 @@ export type DatabaseContext<Context> = Context & {
 type SelectionFilter<Value> = RelationsFieldFilter<NonNullable<Value>>;
 
 export type Selection<Entity> = {
-	readonly [Key in keyof Entity]?: SelectionFilter<Entity[Key]>;
+	[Key in keyof Entity]?: SelectionFilter<Entity[Key]>;
 };
