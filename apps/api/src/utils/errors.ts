@@ -11,7 +11,7 @@ type HttpErrorOptions = Partial<{
 }>;
 
 type NotFoundErrorOptions = Omit<HttpErrorOptions, 'message'> & {
-	resource?: string;
+	resource?: Capitalize<string>;
 };
 
 export class HttpError extends HTTPException {
