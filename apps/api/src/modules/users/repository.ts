@@ -3,7 +3,7 @@ import type { UserQueryParameters } from './types.ts';
 
 import { contains, type DatabaseContext, db, orderBy } from '#db/index.ts';
 
-const userRelations = { friendships: true, groups: true } as const;
+import { userRelations } from './helpers.ts';
 
 export const find = async ({
 	query: { q, sort, order },
