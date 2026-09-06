@@ -1,19 +1,18 @@
-import type { Id } from '@repo/contracts/shared';
-import type { UserQueryParameters } from './types.ts';
+import type { UserQueryParameters, UserSelection } from './types.ts';
 
-import { contains, type DatabaseContext, db, orderBy } from '#db/index.ts';
+import { type DatabaseContext, db, orderBy } from '#db/index.ts';
 
-import { userRelations } from './helpers.ts';
+import { containsDisplayName, userRelations } from './helpers.ts';
 
 export const find = async ({
 	query: { q, sort, order },
-	client = db,
+	tx = db,
 }: DatabaseContext<UserQueryParameters>) =>
-	await client.query.users.findMany({
-		where: { displayName: contains(q) },
+	await tx.query.users.findMany({
+		where: containsDisplayName(q),
 		with: userRelations,
 		...orderBy(sort, order),
 	});
 
-export const findOne = async ({ id, client = db }: DatabaseContext<Id>) =>
-	await client.query.users.findFirst({ where: { id }, with: userRelations });
+export const findOne = async ({ tx = db, ...values }: DatabaseContext<UserSelection>) =>
+	await tx.query.users.findFirst({ where: values, with: userRelations });
