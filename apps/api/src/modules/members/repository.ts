@@ -7,8 +7,10 @@ import {
 	db,
 	InsertionError,
 	members,
+	orderBy,
 	UpdateError,
 } from '#db/index.ts';
+import { containsDisplayName, type UserQueryParameters } from '#modules/users/index.ts';
 
 import { isMember, memberRelations } from './helpers.ts';
 
@@ -17,6 +19,16 @@ export const create = async ({ tx = db, ...values }: DatabaseContext<NewMember>)
 	if (data == null) throw new InsertionError('Member', values);
 	return data;
 };
+
+export const find = async ({
+	query: { q, sort, order },
+	tx = db,
+}: DatabaseContext<UserQueryParameters>) =>
+	await tx.query.members.findMany({
+		where: { user: containsDisplayName(q) },
+		with: memberRelations,
+		...orderBy(sort, order),
+	});
 
 export const findOne = async ({ tx = db, ...values }: DatabaseContext<MemberSelection>) =>
 	await tx.query.members.findFirst({ where: values, with: memberRelations });
