@@ -1,5 +1,5 @@
 import type { MemberUpdate, NewMember } from '@repo/contracts/members';
-import type { MemberParameters } from './types.ts';
+import type { MemberParameters, MemberSelection } from './types.ts';
 
 import {
 	type DatabaseContext,
@@ -18,7 +18,7 @@ export const create = async ({ tx = db, ...values }: DatabaseContext<NewMember>)
 	return data;
 };
 
-export const findOne = async ({ tx = db, ...values }: DatabaseContext<MemberParameters>) =>
+export const findOne = async ({ tx = db, ...values }: DatabaseContext<MemberSelection>) =>
 	await tx.query.members.findFirst({ where: values, with: { user: true } });
 
 export const update = async ({ role, tx = db, ...values }: DatabaseContext<MemberUpdate>) => {
