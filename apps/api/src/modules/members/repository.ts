@@ -35,7 +35,7 @@ export const findOne = async ({ tx = db, ...values }: DatabaseContext<MemberSele
 
 export const update = async ({ role, tx = db, ...values }: DatabaseContext<MemberUpdate>) => {
 	const [data] = await tx.update(members).set({ role }).where(isMember(values)).returning();
-	if (data == null) throw new UpdateError('Member', values);
+	if (data == null) throw new UpdateError('Member', { ...values, role });
 	return data;
 };
 
