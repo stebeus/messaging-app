@@ -1,9 +1,9 @@
-import type { RawParticipatedConversation } from '#routes/conversations/types.ts';
-import type { RawFriendshipParameters } from '#routes/friendships/types.ts';
-import type { RawUserParameters } from '#routes/users/types.ts';
+import type { RawParticipatedConversation } from '#modules/conversations/types.ts';
+import type { RawFriendshipParameters } from '#modules/friendships/types.ts';
+import type { RawUserParameters } from '#modules/users/types.ts';
 
 import { type DatabaseContext, parseId } from '#db/index.ts';
-import { parseFriendshipId } from '#routes/friendships/helpers.ts';
+import { parseFriendshipId } from '#modules/friendships/helpers.ts';
 import { NotFoundError } from '#utils/errors.ts';
 
 import * as dmRepository from './repository.ts';

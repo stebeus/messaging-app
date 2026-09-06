@@ -4,7 +4,7 @@ import { logger } from 'hono/logger';
 
 import { env } from './env.ts';
 import { auth } from './lib/auth.ts';
-import { routes } from './routes/index.ts';
+import { routes } from './routes.ts';
 import { HttpError, NotFoundError } from './utils/errors.ts';
 
 export const app = new Hono().basePath('/api');

@@ -1,4 +1,4 @@
-import { conversationRelations, memberOf } from '#routes/conversations/helpers.ts';
+import { conversationRelations, memberOf } from '#modules/conversations/helpers.ts';
 
 export const groupRelations = {
 	conversation: { with: conversationRelations },

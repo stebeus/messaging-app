@@ -1,7 +1,7 @@
 import type { GroupUpdate, NewGroup } from '@repo/contracts/groups';
 import type { Id } from '@repo/contracts/shared';
 import type { UserParameters } from '@repo/contracts/users';
-import type { ParticipatedConversation } from '#routes/conversations/types.ts';
+import type { ParticipatedConversation } from '#modules/conversations/types.ts';
 import type { QueryParameters } from '#types.ts';
 
 import { eq } from 'drizzle-orm';

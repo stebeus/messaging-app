@@ -1,12 +1,12 @@
-import type { RawFriendshipParameters } from '#routes/friendships/types.ts';
-import type { RawUserParameters } from '#routes/users/types.ts';
+import type { RawFriendshipParameters } from '#modules/friendships/types.ts';
+import type { RawUserParameters } from '#modules/users/types.ts';
 
 import { type DatabaseContext, db } from '#db/index.ts';
-import * as conversationRepository from '#routes/conversations/repository.ts';
-import { parseFriendshipId } from '#routes/friendships/helpers.ts';
-import * as friendshipRepository from '#routes/friendships/repository.ts';
-import * as friendshipService from '#routes/friendships/services.ts';
-import * as memberRepository from '#routes/members/repository.ts';
+import * as conversationRepository from '#modules/conversations/repository.ts';
+import { parseFriendshipId } from '#modules/friendships/helpers.ts';
+import * as friendshipRepository from '#modules/friendships/repository.ts';
+import * as friendshipService from '#modules/friendships/services.ts';
+import * as memberRepository from '#modules/members/repository.ts';
 
 type SenderParameters = {
 	senderId: string;

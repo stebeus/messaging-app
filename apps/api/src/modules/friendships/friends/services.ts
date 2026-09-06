@@ -1,11 +1,11 @@
 import type { FriendParameters } from '@repo/contracts/friendships';
-import type { RawUserParameters } from '#routes/users/types.ts';
+import type { RawUserParameters } from '#modules/users/types.ts';
 
 import { type DatabaseContext, db } from '#db/index.ts';
-import * as dmService from '#routes/conversations/dms/services.ts';
-import * as conversationRepository from '#routes/conversations/repository.ts';
-import * as friendshipRepository from '#routes/friendships/repository.ts';
-import * as friendshipService from '#routes/friendships/services.ts';
+import * as dmService from '#modules/conversations/dms/services.ts';
+import * as conversationRepository from '#modules/conversations/repository.ts';
+import * as friendshipRepository from '#modules/friendships/repository.ts';
+import * as friendshipService from '#modules/friendships/services.ts';
 
 type RawFriendParameters = RawUserParameters & FriendParameters;
 

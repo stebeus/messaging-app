@@ -1,11 +1,11 @@
 import type { CreateGroupBody, UpdateGroupBody } from '@repo/contracts/groups';
 import type { Id } from '@repo/contracts/shared';
-import type { RawParticipatedConversation } from '#routes/conversations/types.ts';
-import type { RawUserParameters } from '#routes/users/types.ts';
+import type { RawParticipatedConversation } from '#modules/conversations/types.ts';
+import type { RawUserParameters } from '#modules/users/types.ts';
 
 import { db, parseId } from '#db/index.ts';
-import * as conversationRepository from '#routes/conversations/repository.ts';
-import * as memberRepository from '#routes/members/repository.ts';
+import * as conversationRepository from '#modules/conversations/repository.ts';
+import * as memberRepository from '#modules/members/repository.ts';
 import { ForbiddenError, NotFoundError } from '#utils/errors.ts';
 
 import * as groupRepository from './repository.ts';

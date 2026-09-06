@@ -3,9 +3,9 @@ import type {
 	MessageParameters,
 	UpdateMessageBody,
 } from '@repo/contracts/messages';
-import type { ConversationParameters } from '#routes/conversations/types.ts';
-import type { ManagementParameters } from '#routes/members/types.ts';
-import type { RawUserParameters } from '#routes/users/types.ts';
+import type { ConversationParameters } from '#modules/conversations/types.ts';
+import type { ManagementParameters } from '#modules/members/types.ts';
+import type { RawUserParameters } from '#modules/users/types.ts';
 
 export type SentMessageParameters = RawUserParameters & MessageParameters;
 

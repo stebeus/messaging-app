@@ -1,5 +1,5 @@
 import type { Friendship } from '@repo/contracts/friendships';
-import type { RawUserParameters } from '#routes/users/types.ts';
+import type { RawUserParameters } from '#modules/users/types.ts';
 import type { RawFriendshipParameters } from './types.ts';
 
 import { type DatabaseContext, parseId } from '#db/index.ts';

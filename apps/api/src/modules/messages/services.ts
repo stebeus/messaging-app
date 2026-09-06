@@ -8,7 +8,7 @@ import type {
 } from './types.ts';
 
 import { parseId } from '#db/helpers.ts';
-import * as memberService from '#routes/members/services.ts';
+import * as memberService from '#modules/members/services.ts';
 import { ForbiddenError, NotFoundError } from '#utils/errors.ts';
 
 import * as messageRepository from './repository.ts';

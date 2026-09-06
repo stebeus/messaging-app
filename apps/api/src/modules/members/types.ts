@@ -1,6 +1,6 @@
 import type { GroupParameters } from '@repo/contracts/groups';
 import type { Member } from '@repo/contracts/members';
-import type { RawUserParameters, UserId } from '#routes/users/types.ts';
+import type { RawUserParameters, UserId } from '#modules/users/types.ts';
 
 export type RawMemberParameters = RawUserParameters & GroupParameters;
 
