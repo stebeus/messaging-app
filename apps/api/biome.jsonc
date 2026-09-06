@@ -6,21 +6,6 @@
 			"correctness": {
 				"noGlobalDirnameFilename": "on",
 				"noProcessGlobal": "on"
-			},
-			"style": {
-				"useNamingConvention": {
-					"level": "on",
-					"options": {
-						"conventions": [
-							{
-								"formats": ["camelCase", "PascalCase"],
-								"selector": {
-									"kind": "typeProperty"
-								}
-							}
-						]
-					}
-				}
 			}
 		}
 	}
