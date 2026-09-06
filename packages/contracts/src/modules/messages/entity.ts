@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { Base, base, id, timestamps } from '#shared/entities.js';
+import { Base, base, id } from '#shared/entities.js';
 
 export const Message = z.object({
 	...Base.shape,
@@ -11,7 +11,7 @@ export const Message = z.object({
 
 export const NewMessage = Message.omit(base);
 
-export const MessageUpdate = Message.omit(timestamps).partial({ content: true });
+export const MessageUpdate = Message.pick({ id: true, content: true }).partial({ content: true });
 
 export type Message = z.infer<typeof Message>;
 
