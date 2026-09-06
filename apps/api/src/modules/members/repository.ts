@@ -1,29 +1,25 @@
-import type { Member, MemberUpdate, NewMember } from '@repo/contracts/members';
+import type { MemberUpdate, NewMember } from '@repo/contracts/members';
+import type { MemberParameters } from './types.ts';
 
-import { and, eq } from 'drizzle-orm';
+import { type DatabaseContext, db, InsertionError, members } from '#db/index.ts';
 
-import { CreationError, type DatabaseContext, db, members } from '#db/index.ts';
+import { isMember } from './helpers.ts';
 
-type MemberParameters = Pick<Member, 'userId' | 'conversationId'>;
-
-const isMember = ({ userId, conversationId }: MemberParameters) =>
-	and(eq(members.userId, userId), eq(members.conversationId, conversationId));
-
-export const create = async ({ client = db, ...member }: DatabaseContext<NewMember>) => {
+export const create = async ({ tx = db, ...member }: DatabaseContext<NewMember>) => {
 	const [data] = await db.insert(members).values(member).returning();
-	if (data == null) throw new CreationError('member');
+	if (data == null) throw new InsertionError('Member', member);
 	return data;
 };
 
-export const findOne = async ({ client = db, ...member }: DatabaseContext<MemberParameters>) =>
-	await client.query.members.findFirst({ where: member, with: { user: true } });
+export const findOne = async ({ tx = db, ...member }: DatabaseContext<MemberParameters>) =>
+	await tx.query.members.findFirst({ where: member, with: { user: true } });
 
-export const update = async ({ role, client = db, ...member }: DatabaseContext<MemberUpdate>) => {
-	const [data] = await client.update(members).set({ role }).where(isMember(member)).returning();
+export const update = async ({ role, tx = db, ...member }: DatabaseContext<MemberUpdate>) => {
+	const [data] = await tx.update(members).set({ role }).where(isMember(member)).returning();
 	return data;
 };
 
-export const destroy = async ({ client = db, ...member }: DatabaseContext<MemberParameters>) => {
-	const [data] = await client.delete(members).where(isMember(member)).returning();
+export const destroy = async ({ tx = db, ...member }: DatabaseContext<MemberParameters>) => {
+	const [data] = await tx.delete(members).where(isMember(member)).returning();
 	return data;
 };
