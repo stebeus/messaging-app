@@ -1,51 +1,45 @@
-import type { Member } from '@repo/contracts/members';
+import type { DatabaseContext } from '#db/types.ts';
 import type {
 	MemberManagementParameters,
-	RawMemberParameters,
+	MemberParameters,
 	RoleManagementParameters,
 } from './types.ts';
 
-import { parseId } from '#db/helpers.ts';
 import { ForbiddenError, NotFoundError } from '#utils/errors.ts';
 
+import { canManage } from './helpers.ts';
 import * as memberRepository from './repository.ts';
 
-const getOne = async ({ userId, groupId }: RawMemberParameters) => {
-	const parsedUserId = parseId(userId);
-	const member = await memberRepository.findOne({ userId: parsedUserId, conversationId: groupId });
-
-	if (member == null) throw new NotFoundError({ message: 'Member Not Found' });
-
+const getOne = async (params: DatabaseContext<MemberParameters>) => {
+	const member = await memberRepository.findOne(params);
+	if (member == null) throw new NotFoundError({ resource: 'Member' });
 	return member;
-};
-
-const canManage = (actor: Member, target: Member) =>
-	actor.role !== 'member' && target.role === 'member';
-
-export const joinGroup = async ({ userId, groupId }: RawMemberParameters) => {
-	const parsedUserId = parseId(userId);
-	return await memberRepository.create({ userId: parsedUserId, conversationId: groupId });
 };
 
 export const authorizeManagement = async ({
 	actorId,
 	targetId,
 	groupId,
-}: MemberManagementParameters) => {
-	const actor = await getOne({ userId: actorId, groupId });
-	const target = await getOne({ userId: targetId, groupId });
+	tx,
+}: DatabaseContext<MemberManagementParameters>) => {
+	const actor = await getOne({ userId: actorId, conversationId: groupId, tx });
+	const target = await getOne({ userId: targetId, conversationId: groupId, tx });
 
 	if (!canManage(actor, target)) throw new ForbiddenError();
 
 	return target;
 };
 
-export const changeRole = async ({ groupId, role, ...params }: RoleManagementParameters) => {
+export const changeRole = async ({
+	groupId,
+	role,
+	...params
+}: DatabaseContext<RoleManagementParameters>) => {
 	const { userId } = await authorizeManagement({ ...params, groupId });
 	return await memberRepository.update({ userId, conversationId: groupId, role });
 };
 
-export const kick = async ({ groupId, ...params }: MemberManagementParameters) => {
+export const kick = async ({ groupId, ...params }: DatabaseContext<MemberManagementParameters>) => {
 	const { userId } = await authorizeManagement({ ...params, groupId });
-	return await memberRepository.update({ userId, conversationId: groupId });
+	return await memberRepository.destroy({ userId, conversationId: groupId });
 };
