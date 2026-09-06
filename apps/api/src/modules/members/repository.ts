@@ -5,21 +5,21 @@ import { type DatabaseContext, db, InsertionError, members } from '#db/index.ts'
 
 import { isMember } from './helpers.ts';
 
-export const create = async ({ tx = db, ...member }: DatabaseContext<NewMember>) => {
-	const [data] = await db.insert(members).values(member).returning();
-	if (data == null) throw new InsertionError('Member', member);
+export const create = async ({ tx = db, ...values }: DatabaseContext<NewMember>) => {
+	const [data] = await db.insert(members).values(values).returning();
+	if (data == null) throw new InsertionError('Member', values);
 	return data;
 };
 
-export const findOne = async ({ tx = db, ...member }: DatabaseContext<MemberParameters>) =>
-	await tx.query.members.findFirst({ where: member, with: { user: true } });
+export const findOne = async ({ tx = db, ...values }: DatabaseContext<MemberParameters>) =>
+	await tx.query.members.findFirst({ where: values, with: { user: true } });
 
-export const update = async ({ role, tx = db, ...member }: DatabaseContext<MemberUpdate>) => {
-	const [data] = await tx.update(members).set({ role }).where(isMember(member)).returning();
+export const update = async ({ role, tx = db, ...values }: DatabaseContext<MemberUpdate>) => {
+	const [data] = await tx.update(members).set({ role }).where(isMember(values)).returning();
 	return data;
 };
 
-export const destroy = async ({ tx = db, ...member }: DatabaseContext<MemberParameters>) => {
-	const [data] = await tx.delete(members).where(isMember(member)).returning();
+export const destroy = async ({ tx = db, ...values }: DatabaseContext<MemberParameters>) => {
+	const [data] = await tx.delete(members).where(isMember(values)).returning();
 	return data;
 };
