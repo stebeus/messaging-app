@@ -6,6 +6,6 @@ import * as userRepository from './repository.ts';
 
 export const getOne = async ({ userId }: UserParameters) => {
 	const user = await userRepository.findOne({ id: userId });
-	if (user == null) throw new NotFoundError({ message: 'User Not found' });
+	if (user == null) throw new NotFoundError({ resource: 'User' });
 	return user;
 };
