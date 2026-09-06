@@ -10,7 +10,7 @@ import {
 	UpdateError,
 } from '#db/index.ts';
 
-import { isMember } from './helpers.ts';
+import { isMember, memberRelations } from './helpers.ts';
 
 export const create = async ({ tx = db, ...values }: DatabaseContext<NewMember>) => {
 	const [data] = await db.insert(members).values(values).returning();
@@ -19,7 +19,7 @@ export const create = async ({ tx = db, ...values }: DatabaseContext<NewMember>)
 };
 
 export const findOne = async ({ tx = db, ...values }: DatabaseContext<MemberSelection>) =>
-	await tx.query.members.findFirst({ where: values, with: { user: true } });
+	await tx.query.members.findFirst({ where: values, with: memberRelations });
 
 export const update = async ({ role, tx = db, ...values }: DatabaseContext<MemberUpdate>) => {
 	const [data] = await tx.update(members).set({ role }).where(isMember(values)).returning();
