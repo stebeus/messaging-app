@@ -13,7 +13,10 @@ export const friendRequests = snakeCase.table(
 	},
 	(t) => [
 		check('no_self_friend_request', ne(t.requesterId, t.recipientId)),
-		uniqueIndex().on(least(t.requesterId, t.recipientId), greatest(t.requesterId, t.recipientId)),
+		uniqueIndex('friend_request_idx').on(
+			least(t.requesterId, t.recipientId),
+			greatest(t.requesterId, t.recipientId),
+		),
 	],
 );
 
@@ -26,6 +29,6 @@ export const friendships = snakeCase.table(
 	},
 	(t) => [
 		check('no_self_friendship', ne(t.user1Id, t.user2Id)),
-		uniqueIndex().on(least(t.user1Id, t.user2Id), greatest(t.user1Id, t.user2Id)),
+		uniqueIndex('friendship_idx').on(least(t.user1Id, t.user2Id), greatest(t.user1Id, t.user2Id)),
 	],
 );
