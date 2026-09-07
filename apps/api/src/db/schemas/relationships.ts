@@ -1,5 +1,5 @@
-import { ne } from 'drizzle-orm';
-import { check, snakeCase, uniqueIndex } from 'drizzle-orm/pg-core';
+import { gt, ne } from 'drizzle-orm';
+import { check, snakeCase, unique, uniqueIndex } from 'drizzle-orm/pg-core';
 
 import { users } from './auth.ts';
 import { createdAt, greatest, least, reference } from './helpers.ts';
@@ -29,6 +29,7 @@ export const friendships = snakeCase.table(
 	},
 	(t) => [
 		check('no_self_friendship', ne(t.user1Id, t.user2Id)),
-		uniqueIndex('friendship_idx').on(least(t.user1Id, t.user2Id), greatest(t.user1Id, t.user2Id)),
+		check('friend_order', gt(t.user1Id, t.user2Id)),
+		unique().on(t.user1Id, t.user2Id),
 	],
 );
