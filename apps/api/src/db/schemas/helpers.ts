@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm';
 import * as p from 'drizzle-orm/pg-core';
 
 const mode = 'string';
@@ -16,6 +17,8 @@ export const updatedAt = p
 export const timestamps = { createdAt, updatedAt } as const;
 
 export const base = { ...timestamps, id } as const;
+
+export const greatest = (first: unknown, second: unknown) => sql`least(${first}, ${second})`;
 
 export const reference = <PrimaryKey extends p.AnyPgColumn>(
 	primaryKey: () => PrimaryKey,
