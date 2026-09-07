@@ -47,7 +47,7 @@ export const userRelations = defineRelationsPart(
 				from: r.users.id,
 				to: r.groups.ownerId,
 			}),
-			members: r.many.members({
+			memberships: r.many.members({
 				from: r.users.id,
 				to: r.members.userId,
 			}),
