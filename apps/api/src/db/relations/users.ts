@@ -35,11 +35,11 @@ export const userRelations = defineRelationsPart(
 				from: r.users.id,
 				to: r.friendRequests.recipientId,
 			}),
-			user1Friends: r.many.friendships({
+			friendshipsAsUser1: r.many.friendships({
 				from: r.users.id,
 				to: r.friendships.user1Id,
 			}),
-			user2Friends: r.many.friendships({
+			friendshipsAsUser2: r.many.friendships({
 				from: r.users.id,
 				to: r.friendships.user2Id,
 			}),
