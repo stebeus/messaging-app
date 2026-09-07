@@ -1,17 +1,14 @@
 import * as z from 'zod';
 
-import { id, Timestamps, timestamps } from '#shared/entities.js';
-
-export const statuses = ['pending', 'accepted'] as const;
+import { createdAt, id } from '#shared/entities.js';
 
 export const Friendship = z.object({
-	...Timestamps.shape,
 	user1Id: id,
 	user2Id: id,
-	status: z.enum(statuses).default('pending'),
+	createdAt
 });
 
-export const NewFriendship = Friendship.omit(timestamps);
+export const NewFriendship = Friendship.omit({ createdAt: true });
 
 export type Friendship = z.infer<typeof Friendship>;
 
