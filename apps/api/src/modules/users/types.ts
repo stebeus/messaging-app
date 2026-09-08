@@ -4,4 +4,4 @@ import type { QueryParameters } from '#types.ts';
 
 export type UserSelection = Selection<User>;
 
-export type UserQueryParameters = QueryParameters<UserQuery>;
+export type UsersSelection = QueryParameters<UserQuery>;
