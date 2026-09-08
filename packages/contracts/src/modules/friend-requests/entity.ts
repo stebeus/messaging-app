@@ -5,7 +5,7 @@ import { createdAt, id } from '#shared/entities.js';
 export const FriendRequest = z.object({
 	requesterId: id,
 	recipientId: id,
-	createdAt
+	createdAt,
 });
 
 export const NewFriendRequest = FriendRequest.omit({ createdAt: true });
