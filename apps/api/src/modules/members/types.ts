@@ -17,6 +17,8 @@ export type MemberManagementParameters = ManagementParameters & {
 
 export type Role = Member['role'];
 
+export type RoleHierarchy = Record<Role, number>;
+
 export type ManageableRole = Exclude<Role, 'owner'>;
 
 export type RoleManagementParameters = MemberManagementParameters & {
