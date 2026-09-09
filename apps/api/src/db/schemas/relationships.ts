@@ -4,7 +4,9 @@ import { check, snakeCase, unique, uniqueIndex } from 'drizzle-orm/pg-core';
 import { users } from './auth.ts';
 import { createdAt, greatest, least, reference } from './helpers.ts';
 
-export const friendRequests = snakeCase.table(
+export const relationshipSchema = snakeCase.schema('relationship');
+
+export const friendRequests = relationshipSchema.table(
 	'friend_requests',
 	{
 		requesterId: reference(() => users.id, { onDelete: 'cascade' }).notNull(),
@@ -20,7 +22,7 @@ export const friendRequests = snakeCase.table(
 	],
 );
 
-export const friendships = snakeCase.table(
+export const friendships = relationshipSchema.table(
 	'friendships',
 	{
 		user1Id: reference(() => users.id, { onDelete: 'cascade' }).notNull(),
