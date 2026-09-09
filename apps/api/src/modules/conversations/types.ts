@@ -1,12 +1,9 @@
-import type { Conversation } from '@repo/contracts/conversations';
-import type { Id } from '@repo/contracts/shared';
-import type { UserParameters } from '@repo/contracts/users';
-import type { RawUserParameters } from '#modules/users/types.ts';
+import type { Conversation, NewConversation } from '@repo/contracts/conversations';
+import type { NewMember } from '@repo/contracts/members';
+import type { Selection } from '#db/types.ts';
 
-export type ParticipatedConversation = Id & UserParameters;
+export type ConversationSelection = Selection<Conversation>;
 
-export type RawParticipatedConversation = Id & RawUserParameters;
-
-export type ConversationParameters = {
-	conversationId: Conversation['id'];
+export type CreateConversationParameters = NewConversation & {
+	members: NewMember[];
 };

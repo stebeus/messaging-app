@@ -1,24 +1,31 @@
+import type { IdParameters } from '@repo/contracts/shared';
 import type { UserParameters } from '@repo/contracts/users';
-import type { ParticipatedConversation } from '#modules/conversations/types.ts';
-import type { FriendshipParameters } from '#modules/friendships/types.ts';
+import type { FriendshipParameters } from '#modules/relationships/friendships/types.ts';
+import type { FindUserParameters } from '#modules/users/types.ts';
 
-import { type DatabaseContext, db } from '#db/index.ts';
+import { type DatabaseContext, db, orderBy } from '#db/index.ts';
 import { conversationRelations, memberOf } from '#modules/conversations/helpers.ts';
+import { containsDisplayName } from '#modules/users/helpers.ts';
 
 const type = 'direct';
 
-export const find = async ({ userId, client = db }: DatabaseContext<UserParameters>) =>
-	await client.query.conversations.findMany({
-		where: { ...memberOf(userId), type },
+export const find = async ({
+	userId,
+	query: { q, sort, order },
+	tx = db,
+}: DatabaseContext<FindUserParameters>) =>
+	await tx.query.conversations.findMany({
+		where: { member: { userId, user: containsDisplayName(q) }, type },
 		with: conversationRelations,
+		...orderBy(sort, order),
 	});
 
 export const findOne = async ({
 	id,
 	userId,
-	client = db,
-}: DatabaseContext<ParticipatedConversation>) =>
-	await client.query.conversations.findFirst({
+	tx = db,
+}: DatabaseContext<IdParameters & UserParameters>) =>
+	await tx.query.conversations.findFirst({
 		where: { ...memberOf(userId), id, type },
 		with: conversationRelations,
 	});
@@ -26,8 +33,8 @@ export const findOne = async ({
 export const findOneByFriendship = async ({
 	user1Id,
 	user2Id,
-	client = db,
+	tx = db,
 }: DatabaseContext<FriendshipParameters>) =>
-	await client.query.conversations.findFirst({
-		where: { members: { AND: [{ userId: user1Id }, { userId: user2Id }], type } },
+	await tx.query.conversations.findFirst({
+		where: { members: { AND: [{ userId: user1Id }, { userId: user2Id }] }, type },
 	});

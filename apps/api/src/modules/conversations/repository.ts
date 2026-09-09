@@ -1,20 +1,24 @@
 import type { NewConversation } from '@repo/contracts/conversations';
-import type { Id } from '@repo/contracts/shared';
+import type { IdParameters } from '@repo/contracts/shared';
 
 import { eq } from 'drizzle-orm';
 
-import { CreationError, conversations, type DatabaseContext, db } from '#db/index.ts';
+import {
+	conversations,
+	type DatabaseContext,
+	DeletionError,
+	db,
+	InsertionError,
+} from '#db/index.ts';
 
-export const create = async ({
-	client = db,
-	...conversation
-}: DatabaseContext<NewConversation>) => {
-	const [data] = await client.insert(conversations).values(conversation).returning();
-	if (data == null) throw new CreationError('conversation');
+export const create = async ({ tx = db, ...values }: DatabaseContext<NewConversation>) => {
+	const [data] = await tx.insert(conversations).values(values).returning();
+	if (data == null) throw new InsertionError('Conversation', values);
 	return data;
 };
 
-export const destroy = async ({ id, client = db }: DatabaseContext<Id>) => {
-	const [data] = await client.delete(conversations).where(eq(conversations.id, id)).returning();
+export const destroy = async ({ id, tx = db }: DatabaseContext<IdParameters>) => {
+	const [data] = await tx.delete(conversations).where(eq(conversations.id, id)).returning();
+	if (data == null) throw new DeletionError('Conversation', { id });
 	return data;
 };

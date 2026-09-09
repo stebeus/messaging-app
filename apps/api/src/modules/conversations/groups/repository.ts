@@ -1,57 +1,77 @@
 import type { GroupUpdate, NewGroup } from '@repo/contracts/groups';
-import type { Id } from '@repo/contracts/shared';
-import type { UserParameters } from '@repo/contracts/users';
-import type { ParticipatedConversation } from '#modules/conversations/types.ts';
-import type { QueryParameters } from '#types.ts';
+import type {
+	GroupSelection,
+	GroupsSelection,
+	ParticipatedGroup,
+	ParticipatedGroupsSelection,
+} from './types.ts';
 
 import { eq } from 'drizzle-orm';
 
-import { CreationError, contains, type DatabaseContext, db, groups, orderBy } from '#db/index.ts';
+import {
+	type DatabaseContext,
+	db,
+	groups,
+	InsertionError,
+	orderBy,
+	UpdateError,
+} from '#db/index.ts';
 
-import { groupRelations, groupSearchRelations, memberOfGroup } from './helpers.ts';
+import { containsName, groupRelations, groupSearchRelations, memberOfGroup } from './helpers.ts';
 
-export const create = async ({ client = db, ...group }: DatabaseContext<NewGroup>) => {
-	const [data] = await client.insert(groups).values(group).returning();
-	if (data == null) throw new CreationError('group');
+export const create = async ({ tx = db, ...values }: DatabaseContext<NewGroup>) => {
+	const [data] = await tx.insert(groups).values(values).returning();
+	if (data == null) throw new InsertionError('Group', values);
 	return data;
 };
 
 export const find = async ({
+	userId,
 	query: { q, sort, order },
-	client = db,
-}: DatabaseContext<QueryParameters>) =>
-	await client.query.groups.findMany({
-		where: { name: contains(q) },
+	tx = db,
+}: DatabaseContext<GroupsSelection>) =>
+	await tx.query.groups.findMany({
+		where: { ...containsName(q), NOT: { bans: { userId } } },
 		with: groupSearchRelations,
 		...orderBy(sort, order),
 	});
 
-export const findOne = async ({ id, client = db }: DatabaseContext<Id>) =>
-	await client.query.groups.findFirst({ where: { conversationId: id }, with: groupRelations });
+export const findOne = async ({ tx = db, ...values }: DatabaseContext<GroupSelection>) =>
+	await tx.query.groups.findFirst({ where: values, with: groupRelations });
 
-export const findByMembership = async ({ userId, client = db }: DatabaseContext<UserParameters>) =>
-	await client.query.groups.findMany({ where: memberOfGroup(userId), with: groupRelations });
+export const findByMembership = async ({
+	userId,
+	query: { q, sort, order },
+	tx = db,
+}: DatabaseContext<ParticipatedGroupsSelection>) =>
+	await tx.query.groups.findMany({
+		where: { ...memberOfGroup(userId), ...containsName(q) },
+		with: groupRelations,
+		...orderBy(sort, order),
+	});
 
 export const findOneByMembership = async ({
-	id,
+	groupId,
 	userId,
-	client = db,
-}: DatabaseContext<ParticipatedConversation>) =>
-	await client.query.groups.findFirst({
-		where: { ...memberOfGroup(userId), conversationId: id },
+	tx = db,
+}: DatabaseContext<ParticipatedGroup>) =>
+	await tx.query.groups.findFirst({
+		where: { ...memberOfGroup(userId), conversationId: groupId },
 		with: groupRelations,
 	});
 
 export const update = async ({
 	conversationId,
-	client = db,
-	...group
+	tx = db,
+	...values
 }: DatabaseContext<GroupUpdate>) => {
-	const [data] = await client
+	const [data] = await tx
 		.update(groups)
-		.set(group)
+		.set(values)
 		.where(eq(groups.conversationId, conversationId))
 		.returning();
+
+	if (data == null) throw new UpdateError('Group', { ...values, conversationId });
 
 	return data;
 };
