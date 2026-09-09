@@ -1,44 +1,40 @@
 import type { MessageParameters } from '@repo/contracts/messages';
 import type {
 	EditManagedMessageParameters,
-	EditSentMessageParameters,
+	EditMessageParameters,
 	MessageManagementParameters,
 	SendMessageParameters,
-	SentMessageParameters,
+	SentMessage,
 } from './types.ts';
 
-import { parseId } from '#db/helpers.ts';
 import * as memberService from '#modules/members/services.ts';
 import { ForbiddenError, NotFoundError } from '#utils/errors.ts';
 
 import * as messageRepository from './repository.ts';
 
-export const getOne = async ({ messageId }: MessageParameters) => {
+const getOne = async ({ messageId }: MessageParameters) => {
 	const message = await messageRepository.findOne({ id: messageId });
-	if (message == null) throw new NotFoundError({ message: 'Message Not Found' });
+	if (message == null) throw new NotFoundError({ resource: 'Message' });
 	return message;
 };
 
-const getOneBySender = async ({ messageId, userId }: SentMessageParameters) => {
+const getOneBySender = async ({ messageId, userId }: SentMessage) => {
 	const message = await getOne({ messageId });
-	const parsedUserId = parseId(userId);
-
-	if (message.senderId !== parsedUserId) throw new ForbiddenError();
-
+	if (message.senderId !== userId) throw new ForbiddenError();
 	return message;
 };
 
-export const send = async ({ conversationId, userId, content }: SendMessageParameters) => {
-	const parsedUserId = parseId(userId);
-	return await messageRepository.create({ conversationId, senderId: parsedUserId, content });
+export const send = async ({ content, ...params }: SendMessageParameters) => {
+	const { conversationId, userId } = await memberService.getOne(params);
+	return await messageRepository.create({ conversationId, senderId: userId, content });
 };
 
-export const edit = async ({ content, ...params }: EditSentMessageParameters) => {
+export const edit = async ({ content, ...params }: EditMessageParameters) => {
 	const { id } = await getOneBySender(params);
 	return await messageRepository.update({ id, content });
 };
 
-export const destroy = async (params: SentMessageParameters) => {
+export const destroy = async (params: SentMessage) => {
 	const { id } = await getOneBySender(params);
 	return await messageRepository.destroy({ id });
 };
