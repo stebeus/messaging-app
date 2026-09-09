@@ -11,14 +11,16 @@ import {
 	InsertionError,
 } from '#db/index.ts';
 
-export const create = async ({ tx = db, ...values }: DatabaseContext<NewConversation>) => {
+const create = async ({ tx = db, ...values }: DatabaseContext<NewConversation>) => {
 	const [data] = await tx.insert(conversations).values(values).returning();
 	if (data == null) throw new InsertionError('Conversation', values);
 	return data;
 };
 
-export const destroy = async ({ id, tx = db }: DatabaseContext<IdParameters>) => {
+const destroy = async ({ id, tx = db }: DatabaseContext<IdParameters>) => {
 	const [data] = await tx.delete(conversations).where(eq(conversations.id, id)).returning();
 	if (data == null) throw new DeletionError('Conversation', { id });
 	return data;
 };
+
+export const conversationRepository = { create, destroy } as const;

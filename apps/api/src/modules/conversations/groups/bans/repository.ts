@@ -14,27 +14,26 @@ import { containsDisplayName } from '#modules/users/helpers.ts';
 
 import { banRelations, isBan } from './helpers.ts';
 
-export const create = async ({ tx = db, ...values }: DatabaseContext<NewBan>) => {
+const create = async ({ tx = db, ...values }: DatabaseContext<NewBan>) => {
 	const [data] = await tx.insert(bans).values(values).returning();
 	if (data == null) throw new InsertionError('Ban', values);
 	return data;
 };
 
-export const find = async ({
-	query: { q, sort, order },
-	tx = db,
-}: DatabaseContext<UsersSelection>) =>
+const find = async ({ query: { q, sort, order }, tx = db }: DatabaseContext<UsersSelection>) =>
 	await tx.query.bans.findMany({
 		where: { user: containsDisplayName(q) },
 		with: banRelations,
 		...orderBy(sort, order),
 	});
 
-export const findOne = async ({ tx = db, ...values }: DatabaseContext<BanSelection>) =>
+const findOne = async ({ tx = db, ...values }: DatabaseContext<BanSelection>) =>
 	await tx.query.bans.findFirst({ where: values, with: banRelations });
 
-export const destroy = async ({ tx = db, ...values }: DatabaseContext<BanParameters>) => {
+const destroy = async ({ tx = db, ...values }: DatabaseContext<BanParameters>) => {
 	const [data] = await tx.delete(bans).where(isBan(values)).returning();
 	if (data == null) throw new DeletionError('Ban', values);
 	return data;
 };
+
+export const banRepository = { create, find, findOne, destroy } as const;

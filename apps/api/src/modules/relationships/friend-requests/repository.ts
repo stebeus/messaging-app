@@ -17,13 +17,13 @@ import { filterUser } from '#modules/relationships/helpers.ts';
 
 import { isFriendRequest } from './helpers.ts';
 
-export const create = async ({ tx = db, ...values }: DatabaseContext<NewFriendRequest>) => {
+const create = async ({ tx = db, ...values }: DatabaseContext<NewFriendRequest>) => {
 	const [data] = await tx.insert(friendRequests).values(values).returning();
 	if (data == null) throw new InsertionError('Friend Request', values);
 	return data;
 };
 
-export const find = async ({
+const find = async ({
 	requesterId,
 	recipientId,
 	query: { q, sort, order },
@@ -38,14 +38,16 @@ export const find = async ({
 	});
 };
 
-export const findOne = async ({ tx = db, ...values }: DatabaseContext<FriendRequestSelection>) =>
+const findOne = async ({ tx = db, ...values }: DatabaseContext<FriendRequestSelection>) =>
 	await tx.query.friendRequests.findFirst({
 		where: values,
 		with: { requester: true, recipient: true },
 	});
 
-export const destroy = async ({ tx = db, ...values }: DatabaseContext<FriendRequestParameters>) => {
+const destroy = async ({ tx = db, ...values }: DatabaseContext<FriendRequestParameters>) => {
 	const [data] = await tx.delete(friendRequests).where(isFriendRequest(values)).returning();
 	if (data == null) throw new DeletionError('Friend Request', values);
 	return data;
 };
+
+export const friendRequestRepository = { create, find, findOne, destroy } as const;

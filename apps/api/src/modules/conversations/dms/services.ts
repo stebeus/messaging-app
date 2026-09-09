@@ -3,12 +3,12 @@ import type { FriendshipParameters } from '#modules/relationships/friendships/ty
 import type { ParticipatedDirectMessage } from './types.ts';
 
 import { type DatabaseContext, db } from '#db/index.ts';
-import * as conversationRepository from '#modules/conversations/repository.ts';
-import * as memberRepository from '#modules/members/repository.ts';
+import { conversationRepository } from '#modules/conversations/repository.ts';
+import { memberRepository } from '#modules/members/repository.ts';
 import { orderFriendshipIds } from '#modules/relationships/friendships/helpers.ts';
 import { NotFoundError } from '#utils/errors.ts';
 
-import * as dmRepository from './repository.ts';
+import { dmRepository } from './repository.ts';
 
 const getOneByFriendship = async ({ tx, ...friendship }: DatabaseContext<FriendshipParameters>) => {
 	const friendshipId = orderFriendshipIds(friendship);
@@ -19,7 +19,7 @@ const getOneByFriendship = async ({ tx, ...friendship }: DatabaseContext<Friends
 	return dm;
 };
 
-export const create = async ({ tx = db, ...params }: DatabaseContext<FriendshipParameters>) =>
+const create = async ({ tx = db, ...params }: DatabaseContext<FriendshipParameters>) =>
 	await tx.transaction(async (tx) => {
 		const dm = await conversationRepository.create({ tx });
 
@@ -31,16 +31,15 @@ export const create = async ({ tx = db, ...params }: DatabaseContext<FriendshipP
 		return { ...dm, members } as const;
 	});
 
-export const getOne = async ({ dmId, userId }: ParticipatedDirectMessage) => {
+const getOne = async ({ dmId, userId }: ParticipatedDirectMessage) => {
 	const dm = await dmRepository.findOne({ id: dmId, userId });
 	if (dm == null) throw new NotFoundError({ resource: 'Direct Message' });
 	return dm;
 };
 
-export const destroyByFriendship = async ({
-	tx,
-	...params
-}: DatabaseContext<FriendshipParameters>) => {
+const destroyByFriendship = async ({ tx, ...params }: DatabaseContext<FriendshipParameters>) => {
 	const { id } = await getOneByFriendship({ ...params, tx });
 	return conversationRepository.destroy({ id, tx });
 };
+
+export const dmService = { create, getOne, destroyByFriendship } as const;

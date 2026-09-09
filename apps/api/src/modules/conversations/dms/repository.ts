@@ -9,7 +9,7 @@ import { containsDisplayName } from '#modules/users/helpers.ts';
 
 const type = 'direct';
 
-export const find = async ({
+const find = async ({
 	userId,
 	query: { q, sort, order },
 	tx = db,
@@ -20,17 +20,13 @@ export const find = async ({
 		...orderBy(sort, order),
 	});
 
-export const findOne = async ({
-	id,
-	userId,
-	tx = db,
-}: DatabaseContext<IdParameters & UserParameters>) =>
+const findOne = async ({ id, userId, tx = db }: DatabaseContext<IdParameters & UserParameters>) =>
 	await tx.query.conversations.findFirst({
 		where: { ...memberOf(userId), id, type },
 		with: conversationRelations,
 	});
 
-export const findOneByFriendship = async ({
+const findOneByFriendship = async ({
 	user1Id,
 	user2Id,
 	tx = db,
@@ -38,3 +34,5 @@ export const findOneByFriendship = async ({
 	await tx.query.conversations.findFirst({
 		where: { members: { AND: [{ userId: user1Id }, { userId: user2Id }] }, type },
 	});
+
+export const dmRepository = { find, findOne, findOneByFriendship } as const;

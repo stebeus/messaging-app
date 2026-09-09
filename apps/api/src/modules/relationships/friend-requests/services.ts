@@ -1,11 +1,11 @@
 import type { FriendRequestParameters } from './types.ts';
 
 import { type DatabaseContext, db } from '#db/index.ts';
-import * as dmService from '#modules/conversations/dms/services.ts';
-import * as friendshipService from '#modules/relationships/friendships/services.ts';
+import { dmService } from '#modules/conversations/dms/services.ts';
+import { friendshipService } from '#modules/relationships/friendships/services.ts';
 import { NotFoundError } from '#utils/errors.ts';
 
-import * as friendRequestRepository from './repository.ts';
+import { friendRequestRepository } from './repository.ts';
 
 const getOne = async (params: DatabaseContext<FriendRequestParameters>) => {
 	const friendRequest = await friendRequestRepository.findOne(params);
@@ -13,7 +13,7 @@ const getOne = async (params: DatabaseContext<FriendRequestParameters>) => {
 	return friendRequest;
 };
 
-export const accept = async (params: FriendRequestParameters) =>
+const accept = async (params: FriendRequestParameters) =>
 	db.transaction(async (tx) => {
 		const { requesterId, recipientId } = await getOne({ ...params, tx });
 
@@ -23,7 +23,9 @@ export const accept = async (params: FriendRequestParameters) =>
 		return await friendshipService.create({ user1Id: requesterId, user2Id: recipientId, tx });
 	});
 
-export const cancel = async (params: FriendRequestParameters) => {
+const cancel = async (params: FriendRequestParameters) => {
 	const { requesterId, recipientId } = await getOne(params);
 	return await friendRequestRepository.destroy({ requesterId, recipientId });
 };
+
+export const friendRequestService = { accept, cancel } as const;

@@ -19,13 +19,13 @@ import {
 
 import { containsName, groupRelations, groupSearchRelations, memberOfGroup } from './helpers.ts';
 
-export const create = async ({ tx = db, ...values }: DatabaseContext<NewGroup>) => {
+const create = async ({ tx = db, ...values }: DatabaseContext<NewGroup>) => {
 	const [data] = await tx.insert(groups).values(values).returning();
 	if (data == null) throw new InsertionError('Group', values);
 	return data;
 };
 
-export const find = async ({
+const find = async ({
 	userId,
 	query: { q, sort, order },
 	tx = db,
@@ -36,10 +36,10 @@ export const find = async ({
 		...orderBy(sort, order),
 	});
 
-export const findOne = async ({ tx = db, ...values }: DatabaseContext<GroupSelection>) =>
+const findOne = async ({ tx = db, ...values }: DatabaseContext<GroupSelection>) =>
 	await tx.query.groups.findFirst({ where: values, with: groupRelations });
 
-export const findByMembership = async ({
+const findByMembership = async ({
 	userId,
 	query: { q, sort, order },
 	tx = db,
@@ -50,7 +50,7 @@ export const findByMembership = async ({
 		...orderBy(sort, order),
 	});
 
-export const findOneByMembership = async ({
+const findOneByMembership = async ({
 	groupId,
 	userId,
 	tx = db,
@@ -60,11 +60,7 @@ export const findOneByMembership = async ({
 		with: groupRelations,
 	});
 
-export const update = async ({
-	conversationId,
-	tx = db,
-	...values
-}: DatabaseContext<GroupUpdate>) => {
+const update = async ({ conversationId, tx = db, ...values }: DatabaseContext<GroupUpdate>) => {
 	const [data] = await tx
 		.update(groups)
 		.set(values)
@@ -75,3 +71,12 @@ export const update = async ({
 
 	return data;
 };
+
+export const groupRepository = {
+	create,
+	find,
+	findOne,
+	findByMembership,
+	findOneByMembership,
+	update,
+} as const;

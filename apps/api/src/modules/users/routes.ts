@@ -4,8 +4,8 @@ import { UserParameters, UserQuery } from '@repo/contracts/users';
 
 import { validate } from '#middleware/validator.ts';
 
-import * as userRepository from './repository.ts';
-import * as userService from './services.ts';
+import { userRepository } from './repository.ts';
+import { userService } from './services.ts';
 
 export const users = new Hono();
 
