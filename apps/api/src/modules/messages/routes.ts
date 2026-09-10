@@ -11,7 +11,7 @@ import { messageService } from './services.ts';
 export const messages = new Hono();
 
 messages.get(
-	'/:conversationId/messages',
+	'/conversations/:conversationId/messages',
 	validate('param', ConversationParameters),
 	validate('query', Query),
 	requireAuth,
@@ -27,7 +27,7 @@ messages.get(
 );
 
 messages.post(
-	'/:conversationId/messages',
+	'/conversations/:conversationId/messages',
 	validate('param', ConversationParameters),
 	validate('json', CreateMessageBody),
 	requireAuth,
@@ -43,7 +43,7 @@ messages.post(
 );
 
 messages.patch(
-	'/:messageId',
+	'/messages/:messageId',
 	validate('param', MessageParameters),
 	validate('json', UpdateMessageBody),
 	requireAuth,
@@ -58,11 +58,16 @@ messages.patch(
 	},
 );
 
-messages.delete('/:messageId', validate('param', MessageParameters), requireAuth, async (c) => {
-	const { messageId } = c.req.valid('param');
-	const { user } = c.var.auth;
+messages.delete(
+	'/messages/:messageId',
+	validate('param', MessageParameters),
+	requireAuth,
+	async (c) => {
+		const { messageId } = c.req.valid('param');
+		const { user } = c.var.auth;
 
-	const data = await messageService.destroy({ messageId, userId: user.id });
+		const data = await messageService.destroy({ messageId, userId: user.id });
 
-	return c.json({ data });
-});
+		return c.json({ data });
+	},
+);

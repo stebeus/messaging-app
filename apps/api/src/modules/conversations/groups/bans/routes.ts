@@ -9,7 +9,7 @@ import { memberService } from '#modules/members/services.ts';
 
 import { banRepository } from './repository.ts';
 
-export const bans = new Hono().basePath('/:groupId');
+export const bans = new Hono().basePath('/:groupId/bans');
 
 bans.get(
 	'/',

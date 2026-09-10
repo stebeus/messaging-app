@@ -8,7 +8,7 @@ import { requireAuth, validate } from '#middleware/index.ts';
 
 import { memberService } from './services.ts';
 
-export const members = new Hono().basePath('/:groupId');
+export const members = new Hono().basePath('/:groupId/members');
 
 members.get(
 	'/',
