@@ -3,6 +3,7 @@ import type {
 	Management,
 	MemberManagement,
 	MemberParameters,
+	MemberSearchParameters,
 	RoleManagement,
 } from './types.ts';
 
@@ -29,6 +30,11 @@ const requireMembership = async (params: DatabaseContext<MemberParameters>) => {
 	const member = await memberRepository.findOne(params);
 	if (member == null) throw new ForbiddenError();
 	return member;
+};
+
+const search = async ({ userId, groupId, query }: MemberSearchParameters) => {
+	const { conversationId } = await requireMembership({ userId, conversationId: groupId });
+	return memberRepository.find({ conversationId, query });
 };
 
 const authorizeManagement = async ({ actorId, groupId, tx }: DatabaseContext<Management>) => {
@@ -76,6 +82,7 @@ export const memberService = {
 	joinGroup,
 	getOne,
 	requireMembership,
+	search,
 	authorizeMemberManagement,
 	changeRole,
 	kick,
