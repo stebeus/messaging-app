@@ -1,6 +1,6 @@
 import type { Id } from '@repo/contracts/shared';
 import type { DatabaseContext } from '#db/types.ts';
-import type { FriendshipParameters } from '#modules/relationships/friendships/types.ts';
+import type { FriendshipParameters } from '#modules/friendships/types.ts';
 import type { ParticipatedDirectMessage } from './types.ts';
 
 import { conversationRepository } from '#modules/conversations/repository.ts';

@@ -1,5 +1,5 @@
 import type { ConversationParameters } from '#modules/conversations/types.ts';
-import type { FriendshipParameters } from '#modules/relationships/friendships/types.ts';
+import type { FriendshipParameters } from '#modules/friendships/types.ts';
 
 import { type DatabaseContext, db, orderBy } from '#db/index.ts';
 import { conversationRelations, memberOf } from '#modules/conversations/helpers.ts';

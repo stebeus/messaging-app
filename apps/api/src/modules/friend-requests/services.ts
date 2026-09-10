@@ -2,7 +2,7 @@ import type { FriendRequestParameters } from './types.ts';
 
 import { type DatabaseContext, db } from '#db/index.ts';
 import { dmService } from '#modules/conversations/dms/services.ts';
-import { friendshipService } from '#modules/relationships/friendships/services.ts';
+import { friendshipService } from '#modules/friendships/services.ts';
 import { NotFoundError } from '#utils/errors.ts';
 
 import { friendRequestRepository } from './repository.ts';
