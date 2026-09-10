@@ -26,8 +26,8 @@ const getOne = async ({ dmId, userId }: ParticipatedDirectMessage) => {
 	return dm;
 };
 
-const getOneByFriendship = async ({ tx, ...params }: DatabaseContext<FriendshipParameters>) => {
-	const dm = await dmRepository.findOneByFriendship({ ...params, tx });
+const getOneByFriendship = async (params: DatabaseContext<FriendshipParameters>) => {
+	const dm = await dmRepository.findOneByFriendship(params);
 	if (dm == null) throw new NotFoundError({ resource: 'Friend Direct Message' });
 	return dm;
 };
