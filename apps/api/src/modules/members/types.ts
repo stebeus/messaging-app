@@ -12,6 +12,8 @@ export type GroupMemberParameters = UserParameters & GroupParameters;
 
 export type MembersSelection = ScopedQueryParameters<ConversationParameters, UserQuery>;
 
+export type MemberSearchParameters = ScopedQueryParameters<GroupParameters, UserQuery>;
+
 export type MemberSelection = Selection<Member>;
 
 export type Role = Member['role'];
