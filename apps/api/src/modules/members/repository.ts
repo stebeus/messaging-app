@@ -1,5 +1,4 @@
 import type { MemberUpdate, NewMember } from '@repo/contracts/members';
-import type { UsersSelection } from '#modules/users/types.ts';
 import type { MemberParameters, MemberSelection } from './types.ts';
 
 import {
@@ -11,7 +10,7 @@ import {
 	orderBy,
 	UpdateError,
 } from '#db/index.ts';
-import { containsDisplayName } from '#modules/users/helpers.ts';
+import { containsDisplayName, type UsersSelection } from '#modules/users/index.ts';
 
 import { isMember, memberRelations } from './helpers.ts';
 
