@@ -34,4 +34,4 @@ const unfriend = async (params: FriendshipParameters) =>
 		return await friendshipRepository.destroy({ user1Id, user2Id, tx });
 	});
 
-export const friendshipService = { create, find, unfriend } as const;
+export const friendshipService = { create, find, getOne, unfriend } as const;
