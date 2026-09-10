@@ -8,7 +8,9 @@ export const GroupParameters = z.object({
 	groupId: id,
 });
 
-export const CreateGroupBody = NewGroup.omit({ conversationId: true, ownerId: true });
+export const CreateGroupBody = NewGroup.omit({ conversationId: true, ownerId: true })
+	.partial()
+	.required({ name: true });
 
 export const UpdateGroupBody = GroupUpdate.omit({ conversationId: true });
 
