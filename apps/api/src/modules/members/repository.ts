@@ -1,5 +1,5 @@
 import type { MemberUpdate, NewMember } from '@repo/contracts/members';
-import type { MemberParameters, MemberSelection } from './types.ts';
+import type { MemberParameters, MemberSelection, MembersSelection } from './types.ts';
 
 import {
 	type DatabaseContext,
@@ -10,7 +10,7 @@ import {
 	orderBy,
 	UpdateError,
 } from '#db/index.ts';
-import { containsDisplayName, type UsersSelection } from '#modules/users/index.ts';
+import { containsDisplayName } from '#modules/users/helpers.ts';
 
 import { isMember, memberRelations } from './helpers.ts';
 
@@ -20,9 +20,13 @@ const create = async ({ tx = db, ...values }: DatabaseContext<NewMember>) => {
 	return data;
 };
 
-const find = async ({ query: { q, sort, order }, tx = db }: DatabaseContext<UsersSelection>) =>
+const find = async ({
+	conversationId,
+	query: { q, sort, order },
+	tx = db,
+}: DatabaseContext<MembersSelection>) =>
 	await tx.query.members.findMany({
-		where: { user: containsDisplayName(q) },
+		where: { conversationId, user: containsDisplayName(q) },
 		with: memberRelations,
 		...orderBy(sort, order),
 	});
