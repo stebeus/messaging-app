@@ -10,7 +10,7 @@ import { friendRequestRepository } from './repository.ts';
 
 const send = async ({ requesterId, recipientId }: FriendRequestParameters) => {
 	const { id } = await userService.getOne({ userId: recipientId });
-	const friendship = await friendshipService.getOne({ user1Id: requesterId, user2Id: id });
+	const friendship = await friendshipService.findOne({ user1Id: requesterId, user2Id: id });
 
 	if (friendship != null) throw new ConflictError();
 

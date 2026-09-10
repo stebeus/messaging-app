@@ -18,12 +18,14 @@ const find = async (params: UserSearchParameters) => {
 	return friendships.map(mergeFriend);
 };
 
-const getOne = async ({ tx, ...params }: DatabaseContext<FriendshipParameters>) => {
+const findOne = async ({ tx, ...params }: DatabaseContext<FriendshipParameters>) => {
 	const friendshipIds = orderFriendshipIds(params);
-	const friendship = await friendshipRepository.findOne({ ...friendshipIds, tx });
+	return await friendshipRepository.findOne({ ...friendshipIds, tx });
+};
 
+const getOne = async (params: DatabaseContext<FriendshipParameters>) => {
+	const friendship = await findOne(params);
 	if (friendship == null) throw new NotFoundError({ resource: 'Friendship' });
-
 	return friendship;
 };
 
@@ -34,4 +36,4 @@ const unfriend = async (params: FriendshipParameters) =>
 		return await friendshipRepository.destroy({ user1Id, user2Id, tx });
 	});
 
-export const friendshipService = { create, find, getOne, unfriend } as const;
+export const friendshipService = { create, find, findOne, getOne, unfriend } as const;
