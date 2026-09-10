@@ -7,7 +7,7 @@ import { UserQuery } from '@repo/contracts/users';
 import { requireAuth, validate } from '#middleware/index.ts';
 import { memberService } from '#modules/members/services.ts';
 
-import { banService } from './services.ts';
+import { banRepository } from './repository.ts';
 
 export const bans = new Hono().basePath('/:groupId');
 
@@ -18,10 +18,9 @@ bans.get(
 	requireAuth,
 	async (c) => {
 		const { groupId } = c.req.valid('param');
-		const { user } = c.var.auth;
 		const query = c.req.valid('query');
 
-		const data = await banService.find({ groupId, userId: user.id, query });
+		const data = await banRepository.find({ groupId, query });
 
 		return c.json({ data });
 	},
