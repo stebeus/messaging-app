@@ -15,7 +15,7 @@ import { canManage, canManageMember } from './helpers.ts';
 import { memberRepository } from './repository.ts';
 
 const joinGroup = async ({ userId, groupId }: GroupMemberParameters) => {
-	const ban = await banService.getOne({ userId, groupId });
+	const ban = await banRepository.findOne({ userId, groupId });
 	if (ban != null) throw new ForbiddenError();
 	return await memberRepository.create({ userId, conversationId: groupId });
 };
