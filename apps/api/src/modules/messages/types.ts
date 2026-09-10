@@ -7,7 +7,7 @@ import type {
 } from '@repo/contracts/messages';
 import type { UserParameters } from '@repo/contracts/users';
 import type { Selection } from '#db/types.ts';
-import type { ManagementParameters } from '#modules/members/types.ts';
+import type { Management } from '#modules/members/types.ts';
 import type { QueryParameters } from '#types.ts';
 
 export type MessagesSelection = ConversationParameters & QueryParameters;
@@ -20,6 +20,6 @@ export type SendMessageParameters = ConversationParameters & UserParameters & Cr
 
 export type EditMessageParameters = SentMessage & UpdateMessageBody;
 
-export type MessageManagementParameters = ManagementParameters & MessageParameters;
+export type MessageManagement = Management & MessageParameters;
 
-export type EditManagedMessageParameters = MessageManagementParameters & UpdateMessageBody;
+export type EditManagedMessageParameters = MessageManagement & UpdateMessageBody;
