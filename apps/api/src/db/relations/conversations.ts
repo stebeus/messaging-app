@@ -45,7 +45,7 @@ export const conversationRelations = defineRelationsPart(
 		},
 		members: {
 			conversation: r.one.conversations({
-				from: r.messages.conversationId,
+				from: r.members.conversationId,
 				to: r.conversations.id,
 			}),
 			user: r.one.users({
