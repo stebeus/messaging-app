@@ -2,7 +2,7 @@ import type { FriendRequestParameters } from './types.ts';
 
 import { type DatabaseContext, db } from '#db/index.ts';
 import { dmService } from '#modules/conversations/dms/services.ts';
-import { friendshipService } from '#modules/friendships/services.ts';
+import { type FriendshipParameters, friendshipService } from '#modules/friendships/index.ts';
 import { NotFoundError } from '#utils/errors.ts';
 
 import { friendRequestRepository } from './repository.ts';
@@ -23,8 +23,8 @@ const accept = async (params: FriendRequestParameters) =>
 		return await friendshipService.create({ user1Id: requesterId, user2Id: recipientId, tx });
 	});
 
-const cancel = async (params: FriendRequestParameters) => {
-	const { requesterId, recipientId } = await getOne(params);
+const cancel = async ({ user1Id, user2Id }: FriendshipParameters) => {
+	const { requesterId, recipientId } = await getOne({ requesterId: user1Id, recipientId: user2Id });
 	return await friendRequestRepository.destroy({ requesterId, recipientId });
 };
 
