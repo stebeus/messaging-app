@@ -25,14 +25,14 @@ const getOne = async ({ groupId, ...params }: DatabaseContext<GroupMemberParamet
 	return member;
 };
 
-const requireMembership = async (params: MemberParameters) => {
+const requireMembership = async (params: DatabaseContext<MemberParameters>) => {
 	const member = await memberRepository.findOne(params);
 	if (member == null) throw new ForbiddenError();
 	return member;
 };
 
-const authorizeManagement = async ({ actorId, ...params }: DatabaseContext<Management>) => {
-	const actor = await getOne({ ...params, userId: actorId });
+const authorizeManagement = async ({ actorId, groupId, tx }: DatabaseContext<Management>) => {
+	const actor = await requireMembership({ userId: actorId, conversationId: groupId, tx });
 	if (!canManage(actor)) throw new ForbiddenError();
 	return actor;
 };
