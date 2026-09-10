@@ -3,6 +3,7 @@ import type {
 	EditManagedMessageParameters,
 	EditMessageParameters,
 	MessageManagement,
+	MessageSearchParameters,
 	SendMessageParameters,
 	SentMessage,
 } from './types.ts';
@@ -15,6 +16,11 @@ import { messageRepository } from './repository.ts';
 const send = async ({ content, ...params }: SendMessageParameters) => {
 	const { conversationId, userId } = await memberService.requireMembership(params);
 	return await messageRepository.create({ conversationId, senderId: userId, content });
+};
+
+const search = async ({ query, ...params }: MessageSearchParameters) => {
+	const { conversationId } = await memberService.requireMembership(params);
+	return messageRepository.find({ conversationId, query });
 };
 
 const getOne = async ({ messageId }: MessageParameters) => {
@@ -57,6 +63,7 @@ const destroyWithPermission = async ({ messageId, ...params }: MessageManagement
 
 export const messageService = {
 	send,
+	search,
 	edit,
 	destroy,
 	editWithPermission,
