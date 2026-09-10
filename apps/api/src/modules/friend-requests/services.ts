@@ -13,9 +13,14 @@ const send = async ({ requesterId, recipientId }: FriendRequestParameters) => {
 	return await friendRequestRepository.create({ requesterId, recipientId: id });
 };
 
-const getOne = async (params: DatabaseContext<FriendRequestParameters>) => {
-	const friendRequest = await friendRequestRepository.findOne(params);
+const getOne = async ({ requesterId, recipientId }: DatabaseContext<FriendRequestParameters>) => {
+	const friendRequest = await friendRequestRepository.findOne({
+		user1Id: requesterId,
+		user2Id: recipientId,
+	});
+
 	if (friendRequest == null) throw new NotFoundError({ resource: 'Friend Request' });
+
 	return friendRequest;
 };
 

@@ -1,5 +1,6 @@
 import type { NewFriendRequest } from '@repo/contracts/friend-requests';
-import type { FriendRequestParameters, FriendRequestSelection } from './types.ts';
+import type { FriendshipParameters } from '#modules/friendships/types.ts';
+import type { FriendRequestParameters } from './types.ts';
 
 import {
 	type DatabaseContext,
@@ -33,9 +34,14 @@ const find = async ({
 	});
 };
 
-const findOne = async ({ tx = db, ...values }: DatabaseContext<FriendRequestSelection>) =>
+const findOne = async ({ user1Id, user2Id, tx = db }: DatabaseContext<FriendshipParameters>) =>
 	await tx.query.friendRequests.findFirst({
-		where: values,
+		where: {
+			OR: [
+				{ requesterId: user1Id, recipientId: user2Id },
+				{ requesterId: user2Id, recipientId: user1Id },
+			],
+		},
 		with: { requester: true, recipient: true },
 	});
 
