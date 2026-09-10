@@ -1,5 +1,5 @@
 import type { NewBan } from '@repo/contracts/bans';
-import type { BanParameters, BanSelection } from './types.ts';
+import type { BanParameters, BanSelection, BansSelection } from './types.ts';
 
 import {
 	bans,
@@ -9,7 +9,7 @@ import {
 	InsertionError,
 	orderBy,
 } from '#db/index.ts';
-import { containsDisplayName, type UsersSelection } from '#modules/users/index.ts';
+import { containsDisplayName } from '#modules/users/helpers.ts';
 
 import { banRelations, isBan } from './helpers.ts';
 
@@ -19,9 +19,13 @@ const create = async ({ tx = db, ...values }: DatabaseContext<NewBan>) => {
 	return data;
 };
 
-const find = async ({ query: { q, sort, order }, tx = db }: DatabaseContext<UsersSelection>) =>
+const find = async ({
+	groupId,
+	query: { q, sort, order },
+	tx = db,
+}: DatabaseContext<BansSelection>) =>
 	await tx.query.bans.findMany({
-		where: { user: containsDisplayName(q) },
+		where: { groupId, user: containsDisplayName(q) },
 		with: banRelations,
 		...orderBy(sort, order),
 	});
