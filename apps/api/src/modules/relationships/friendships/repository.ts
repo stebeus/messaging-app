@@ -1,5 +1,5 @@
 import type { NewFriendship } from '@repo/contracts/friendships';
-import type { FriendshipParameters, FriendshipSelection, FriendshipsSelection } from './types.ts';
+import type { FriendshipParameters, FriendshipSelection } from './types.ts';
 
 import {
 	type DatabaseContext,
@@ -9,7 +9,7 @@ import {
 	InsertionError,
 	orderBy,
 } from '#db/index.ts';
-import { filterUser } from '#modules/relationships/helpers.ts';
+import { createUserFilter, type UserSearchParameters } from '#modules/users/index.ts';
 
 import { isFriendship } from './helpers.ts';
 
@@ -20,16 +20,15 @@ const create = async ({ tx = db, ...values }: DatabaseContext<NewFriendship>) =>
 };
 
 const find = async ({
-	user1Id,
-	user2Id,
+	userId,
 	query: { q, sort, order },
 	tx = db,
-}: DatabaseContext<FriendshipsSelection>) => {
-	const filter = filterUser(user1Id, user2Id, q);
+}: DatabaseContext<UserSearchParameters>) => {
+	const userFilter = createUserFilter(userId, q);
 
 	return await tx.query.friendships.findMany({
-		where: { OR: [{ user1Id }, { user2Id }] },
-		with: { user1: filter, user2: filter },
+		where: { OR: [{ user1Id: userId }, { user2Id: userId }] },
+		with: { user1: userFilter, user2: userFilter },
 		...orderBy(sort, order),
 	});
 };
