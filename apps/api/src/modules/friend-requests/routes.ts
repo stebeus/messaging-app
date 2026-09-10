@@ -30,7 +30,7 @@ friendRequests.post(
 		const { user } = c.var.auth;
 		const { recipientId } = c.req.valid('param');
 
-		const data = await friendRequestRepository.create({ requesterId: user.id, recipientId });
+		const data = await friendRequestService.send({ requesterId: user.id, recipientId });
 
 		return c.json({ data }, 201);
 	},
