@@ -1,6 +1,6 @@
 import type { GroupUpdate, NewGroup } from '@repo/contracts/groups';
 import type { UserScopedQueryParameters } from '#modules/users/types.ts';
-import type { GroupSelection, GroupsSelection, ParticipatedGroup } from './types.ts';
+import type { GroupSelection, GroupsSelection } from './types.ts';
 
 import { eq } from 'drizzle-orm';
 
@@ -46,16 +46,6 @@ const findByMembership = async ({
 		...orderBy(sort, order),
 	});
 
-const findOneByMembership = async ({
-	groupId,
-	userId,
-	tx = db,
-}: DatabaseContext<ParticipatedGroup>) =>
-	await tx.query.groups.findFirst({
-		where: { ...memberOfGroup(userId), conversationId: groupId },
-		with: groupRelations,
-	});
-
 const update = async ({ conversationId, tx = db, ...values }: DatabaseContext<GroupUpdate>) => {
 	const [data] = await tx
 		.update(groups)
@@ -73,6 +63,5 @@ export const groupRepository = {
 	find,
 	findOne,
 	findByMembership,
-	findOneByMembership,
 	update,
 } as const;

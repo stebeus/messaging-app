@@ -28,12 +28,6 @@ const getOne = async ({ groupId }: GroupParameters) => {
 	return group;
 };
 
-const getOneByMembership = async (params: ParticipatedGroup) => {
-	const group = await groupRepository.findOneByMembership(params);
-	if (group == null) throw new NotFoundError({ resource: 'Joined Group' });
-	return group;
-};
-
 const getOneByOwnership = async ({ groupId, userId }: ParticipatedGroup) => {
 	const group = await getOne({ groupId });
 	if (group.ownerId !== userId) throw new ForbiddenError();
@@ -50,4 +44,4 @@ const destroy = async (params: ParticipatedGroup) => {
 	return await conversationRepository.destroy({ id: conversationId });
 };
 
-export const groupService = { create, getOneByMembership, edit, destroy } as const;
+export const groupService = { create, edit, destroy } as const;
