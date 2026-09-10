@@ -33,5 +33,5 @@ export type MemberManagement = Management & {
 };
 
 export type RoleManagement = MemberManagement & {
-	role: ManageableRole;
+	role?: ManageableRole;
 };
