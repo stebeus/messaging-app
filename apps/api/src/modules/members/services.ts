@@ -26,6 +26,11 @@ const getOne = async ({ groupId, ...params }: DatabaseContext<GroupMemberParamet
 	return member;
 };
 
+const leaveGroup = async (params: GroupMemberParameters) => {
+	const { userId, conversationId } = await getOne(params);
+	return memberRepository.destroy({ userId, conversationId });
+};
+
 const requireMembership = async (params: DatabaseContext<MemberParameters>) => {
 	const member = await memberRepository.findOne(params);
 	if (member == null) throw new ForbiddenError();
@@ -81,6 +86,7 @@ const unban = async ({ groupId, actorId, targetId }: MemberManagement) =>
 export const memberService = {
 	joinGroup,
 	getOne,
+	leaveGroup,
 	requireMembership,
 	search,
 	authorizeMemberManagement,
