@@ -37,7 +37,7 @@ friendRequests.post(
 );
 
 friendRequests.post(
-	'/:requesterId',
+	'/:requesterId/accept',
 	validate('param', AcceptFriendRequestParameters),
 	requireAuth,
 	async (c) => {
