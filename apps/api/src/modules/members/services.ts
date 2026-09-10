@@ -37,7 +37,7 @@ const requireMembership = async (params: DatabaseContext<MemberParameters>) => {
 	return member;
 };
 
-const search = async ({ userId, groupId, query }: MemberSearchParameters) => {
+const find = async ({ userId, groupId, query }: MemberSearchParameters) => {
 	const { conversationId } = await requireMembership({ userId, conversationId: groupId });
 	return memberRepository.find({ conversationId, query });
 };
@@ -88,7 +88,7 @@ export const memberService = {
 	getOne,
 	leaveGroup,
 	requireMembership,
-	search,
+	find,
 	authorizeMemberManagement,
 	changeRole,
 	kick,

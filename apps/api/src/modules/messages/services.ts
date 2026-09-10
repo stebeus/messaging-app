@@ -18,7 +18,7 @@ const send = async ({ content, ...params }: SendMessageParameters) => {
 	return await messageRepository.create({ conversationId, senderId: userId, content });
 };
 
-const search = async ({ query, ...params }: MessageSearchParameters) => {
+const find = async ({ query, ...params }: MessageSearchParameters) => {
 	const { conversationId } = await memberService.requireMembership(params);
 	return messageRepository.find({ conversationId, query });
 };
@@ -63,7 +63,7 @@ const destroyWithPermission = async ({ messageId, ...params }: MessageManagement
 
 export const messageService = {
 	send,
-	search,
+	find,
 	edit,
 	destroy,
 	editWithPermission,
