@@ -8,18 +8,6 @@ import { ForbiddenError, NotFoundError } from '#utils/errors.ts';
 
 import { groupRepository } from './repository.ts';
 
-const getOne = async ({ groupId }: GroupParameters) => {
-	const group = await groupRepository.findOne({ conversationId: groupId });
-	if (group == null) throw new NotFoundError({ resource: 'Group' });
-	return group;
-};
-
-const getOneByOwnership = async ({ groupId, userId }: ParticipatedGroup) => {
-	const group = await getOne({ groupId });
-	if (group.ownerId !== userId) throw new ForbiddenError();
-	return group;
-};
-
 const create = async ({ userId, body }: CreateGroupParameters) =>
 	await db.transaction(async (tx) => {
 		const { id } = await conversationRepository.create({ type: 'group', tx });
@@ -34,9 +22,21 @@ const create = async ({ userId, body }: CreateGroupParameters) =>
 		return await groupRepository.create({ ...body, conversationId: id, ownerId, tx });
 	});
 
+const getOne = async ({ groupId }: GroupParameters) => {
+	const group = await groupRepository.findOne({ conversationId: groupId });
+	if (group == null) throw new NotFoundError({ resource: 'Group' });
+	return group;
+};
+
 const getOneByMembership = async (params: ParticipatedGroup) => {
 	const group = await groupRepository.findOneByMembership(params);
 	if (group == null) throw new NotFoundError({ resource: 'Joined Group' });
+	return group;
+};
+
+const getOneByOwnership = async ({ groupId, userId }: ParticipatedGroup) => {
+	const group = await getOne({ groupId });
+	if (group.ownerId !== userId) throw new ForbiddenError();
 	return group;
 };
 

@@ -1,10 +1,6 @@
 import type { GroupUpdate, NewGroup } from '@repo/contracts/groups';
-import type {
-	GroupSelection,
-	GroupsSelection,
-	ParticipatedGroup,
-	ParticipatedGroupsSelection,
-} from './types.ts';
+import type { UserScopedQueryParameters } from '#modules/users/types.ts';
+import type { GroupSelection, GroupsSelection, ParticipatedGroup } from './types.ts';
 
 import { eq } from 'drizzle-orm';
 
@@ -43,7 +39,7 @@ const findByMembership = async ({
 	userId,
 	query: { q, sort, order },
 	tx = db,
-}: DatabaseContext<ParticipatedGroupsSelection>) =>
+}: DatabaseContext<UserScopedQueryParameters>) =>
 	await tx.query.groups.findMany({
 		where: { ...memberOfGroup(userId), ...containsName(q) },
 		with: groupRelations,

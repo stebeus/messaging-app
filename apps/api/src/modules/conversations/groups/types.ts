@@ -12,8 +12,6 @@ export type GroupsSelection = UserParameters & QueryParameters;
 
 export type GroupSelection = Selection<Group>;
 
-export type ParticipatedGroupsSelection = UserParameters & QueryParameters;
-
 export type ParticipatedGroup = GroupParameters & UserParameters;
 
 export type CreateGroupParameters = UserParameters & {

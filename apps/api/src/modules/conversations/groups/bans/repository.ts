@@ -1,5 +1,4 @@
 import type { NewBan } from '@repo/contracts/bans';
-import type { UsersSelection } from '#modules/users/types.ts';
 import type { BanParameters, BanSelection } from './types.ts';
 
 import {
@@ -10,7 +9,7 @@ import {
 	InsertionError,
 	orderBy,
 } from '#db/index.ts';
-import { containsDisplayName } from '#modules/users/helpers.ts';
+import { containsDisplayName, type UsersSelection } from '#modules/users/index.ts';
 
 import { banRelations, isBan } from './helpers.ts';
 
