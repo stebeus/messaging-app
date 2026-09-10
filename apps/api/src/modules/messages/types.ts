@@ -7,12 +7,14 @@ import type {
 } from '@repo/contracts/messages';
 import type { UserParameters } from '@repo/contracts/users';
 import type { Selection } from '#db/types.ts';
-import type { Management } from '#modules/members/types.ts';
-import type { QueryParameters } from '#types.ts';
+import type { Management, MemberParameters } from '#modules/members/types.ts';
+import type { QueryParameters, ScopedQueryParameters } from '#types.ts';
 
 export type MessagesSelection = ConversationParameters & QueryParameters;
 
 export type MessageSelection = Selection<Message>;
+
+export type MessageSearchParameters = ScopedQueryParameters<MemberParameters>;
 
 export type SentMessage = UserParameters & MessageParameters;
 
