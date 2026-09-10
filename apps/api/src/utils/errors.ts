@@ -55,3 +55,9 @@ export class NotFoundError extends HttpError {
 		super(404, { message: `${resource == null ? '' : `${resource} `}Not Found`, ...options });
 	}
 }
+
+export class ConflictError extends HttpError {
+	constructor(options?: HttpErrorOptions) {
+		super(409, options);
+	}
+}
