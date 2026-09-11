@@ -1,11 +1,13 @@
 import type { GroupParams } from '@repo/contracts/groups';
+import type { ListBanArgs } from './bans/types.ts';
 import type { CreateGroupArgs, EditGroupArgs } from './types.ts';
 
 import { db } from '#db/client.ts';
 import { conversationRepository } from '#modules/conversations/repository.ts';
-import { type GroupMember, memberRepository } from '#modules/members/index.ts';
+import { type GroupMember, memberRepository, memberService } from '#modules/members/index.ts';
 import { ForbiddenError, NotFoundError } from '#utils/errors.ts';
 
+import { banRepository } from './bans/repository.ts';
 import { groupRepository } from './repository.ts';
 
 const create = async ({ userId, body }: CreateGroupArgs) =>
@@ -44,4 +46,13 @@ const destroy = async (params: GroupMember) => {
 	return await conversationRepository.destroy({ id: conversationId });
 };
 
-export const groupService = { create, edit, destroy } as const;
+const findBans = async ({ userId, groupId, query }: ListBanArgs) => {
+	const { conversationId } = await memberService.requireMembership({
+		userId,
+		conversationId: groupId,
+	});
+
+	return banRepository.find({ groupId: conversationId, query });
+};
+
+export const groupService = { create, edit, destroy, findBans } as const;
