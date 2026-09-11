@@ -4,6 +4,8 @@ import { STATUS_CODES } from 'node:http';
 
 import { HTTPException } from 'hono/http-exception';
 
+import { toTitleCase } from './formatters.ts';
+
 type HttpErrorOptions = Partial<{
 	res: Response;
 	message: string;
@@ -19,11 +21,6 @@ export class HttpError extends HTTPException {
 		return value instanceof HTTPException;
 	}
 
-	static #toTitleCase(string = 'internal server error') {
-		const capitalize = (char: string) => char.toUpperCase();
-		return string.toLowerCase().replace(/\b\w/g, capitalize);
-	}
-
 	readonly message;
 	readonly cause;
 
@@ -32,7 +29,7 @@ export class HttpError extends HTTPException {
 		{ res, message = STATUS_CODES[status], cause }: HttpErrorOptions = {},
 	) {
 		super(status, { res, message, cause });
-		this.message = HttpError.#toTitleCase(message);
+		this.message = toTitleCase(message ?? 'internal server error');
 		this.cause = cause;
 	}
 }
