@@ -6,7 +6,7 @@ export const Message = z.object({
 	...Base.shape,
 	senderId: id,
 	conversationId: id,
-	content: z.string(),
+	content: z.string().trim().min(1, 'Message cannot be empty'),
 });
 
 export const NewMessage = Message.omit(base);

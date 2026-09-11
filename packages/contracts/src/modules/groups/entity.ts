@@ -8,7 +8,7 @@ export const Group = z.object({
 	...Timestamps.shape,
 	conversationId: id,
 	ownerId: id,
-	name: z.string(),
+	name: z.string().min(1, 'Name is required'),
 	description: z.string().nullable().default(''),
 	avatar: z.httpUrl().normalize().nullable().default(''),
 	visibility: z.enum(visibilities).default('private'),
