@@ -1,10 +1,17 @@
 import { Hono } from 'hono';
 
-import { CreateGroupBody, GroupParams, UpdateGroupBody } from '@repo/contracts/groups';
+import {
+	CreateGroupBody,
+	GroupMessageParams,
+	GroupParams,
+	UpdateGroupBody,
+} from '@repo/contracts/groups';
+import { UpdateMessageBody } from '@repo/contracts/messages';
 import { Query } from '@repo/contracts/shared';
 
 import { requireAuth, validate } from '#middleware/index.ts';
 import { members } from '#modules/members/routes.ts';
+import { messageService } from '#modules/messages/services.ts';
 
 import { bans } from './bans/routes.ts';
 import { groupRepository } from './repository.ts';
@@ -63,6 +70,45 @@ groups.delete('/:groupId', validate('param', GroupParams), requireAuth, async (c
 
 	return c.json({ data });
 });
+
+groups.patch(
+	'/:groupId/messages/:messageId',
+	validate('param', GroupMessageParams),
+	validate('json', UpdateMessageBody),
+	requireAuth,
+	async (c) => {
+		const { groupId, messageId } = c.req.valid('param');
+		const { user } = c.var.auth;
+		const body = c.req.valid('json');
+
+		const data = await messageService.editWithPermission({
+			actorId: user.id,
+			groupId,
+			messageId,
+			body,
+		});
+
+		return c.json({ data });
+	},
+);
+
+groups.delete(
+	'/:groupId/messages/:messageId',
+	validate('param', GroupMessageParams),
+	requireAuth,
+	async (c) => {
+		const { groupId, messageId } = c.req.valid('param');
+		const { user } = c.var.auth;
+
+		const data = await messageService.destroyWithPermission({
+			actorId: user.id,
+			groupId,
+			messageId,
+		});
+
+		return c.json({ data });
+	},
+);
 
 groups.route('/:groupId/bans', bans);
 groups.route('/:groupId/members', members);
