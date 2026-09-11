@@ -26,6 +26,6 @@ export type IdParameters = {
 	id: Id;
 };
 
-export type Base = z.infer<typeof Base>;
-
 export type Timestamps = z.infer<typeof Timestamps>;
+
+export type Base = z.infer<typeof Base>;
