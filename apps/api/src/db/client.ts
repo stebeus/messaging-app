@@ -6,5 +6,5 @@ import { conversationRelations, relationshipRelations, userRelations } from './r
 
 export const db = drizzle({
 	connection: env.DATABASE_URL,
-	relations: { ...conversationRelations, ...userRelations, ...relationshipRelations },
+	relations: { ...conversationRelations, ...relationshipRelations, ...userRelations },
 });
