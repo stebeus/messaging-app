@@ -16,7 +16,7 @@ import { memberRepository } from './repository.ts';
 
 const joinGroup = async ({ userId, groupId }: GroupMember) => {
 	const ban = await banRepository.findOne({ userId, groupId });
-	if (ban != null) throw new ForbiddenError();
+	if (ban != null) throw new ForbiddenError({ message: 'You have been banned from this group' });
 	return await memberRepository.create({ userId, conversationId: groupId });
 };
 
