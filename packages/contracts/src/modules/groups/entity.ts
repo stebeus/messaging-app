@@ -9,8 +9,8 @@ export const Group = z.object({
 	conversationId: id,
 	ownerId: id,
 	name: z.string(),
-	description: z.string().nullable(),
-	avatar: z.httpUrl().normalize().nullable(),
+	description: z.string().nullable().default(''),
+	avatar: z.httpUrl().normalize().nullable().default(''),
 	visibility: z.enum(visibilities).default('private'),
 });
 

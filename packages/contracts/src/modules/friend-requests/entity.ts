@@ -12,4 +12,4 @@ export const NewFriendRequest = FriendRequest.omit({ createdAt: true });
 
 export type FriendRequest = z.infer<typeof FriendRequest>;
 
-export type NewFriendRequest = z.input<typeof NewFriendRequest>;
+export type NewFriendRequest = z.infer<typeof NewFriendRequest>;

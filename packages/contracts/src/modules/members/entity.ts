@@ -4,11 +4,13 @@ import { id, Timestamps, timestamps } from '#shared/entities.js';
 
 export const roles = ['member', 'admin', 'owner'] as const;
 
+const role = z.enum(roles);
+
 export const Member = z.object({
 	...Timestamps.shape,
 	userId: id,
 	conversationId: id,
-	role: z.enum(roles).default('member'),
+	role: role.default('member'),
 });
 
 export const NewMember = Member.omit(timestamps);
@@ -16,7 +18,7 @@ export const NewMember = Member.omit(timestamps);
 export const MemberUpdate = z
 	.object({
 		...Member.shape,
-		role: z.enum(roles).exclude(['owner']).default('member').optional(),
+		role: role.exclude(['owner']).default('member').optional(),
 	})
 	.omit(timestamps);
 
