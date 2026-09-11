@@ -1,6 +1,6 @@
 import type { Id } from '@repo/contracts/shared';
 
-type EntityName = Capitalize<string>;
+import { toTitleCase } from '#utils/formatters.ts';
 
 type RepositoryInput = Record<string, unknown>;
 
@@ -15,37 +15,37 @@ class RepositoryError extends Error {
 
 	constructor(
 		operation: 'insertion' | 'selection' | 'update' | 'deletion',
-		entity: EntityName,
+		entity: string,
 		input: RepositoryInput,
 	) {
 		super(`Entity ${operation} failed`);
 
 		this.operation = operation;
-		this.entity = entity;
+		this.entity = toTitleCase(entity);
 		this.input = input;
 	}
 }
 
 export class InsertionError extends RepositoryError {
-	constructor(entity: EntityName, input: RepositoryInput) {
+	constructor(entity: string, input: RepositoryInput) {
 		super('insertion', entity, input);
 	}
 }
 
 export class SelectionError extends RepositoryError {
-	constructor(entity: EntityName, input: RepositoryInput) {
+	constructor(entity: string, input: RepositoryInput) {
 		super('selection', entity, input);
 	}
 }
 
 export class UpdateError extends RepositoryError {
-	constructor(entity: EntityName, input: RepositoryInput) {
+	constructor(entity: string, input: RepositoryInput) {
 		super('update', entity, input);
 	}
 }
 
 export class DeletionError extends RepositoryError {
-	constructor(entity: EntityName, input: RepositoryInput) {
+	constructor(entity: string, input: RepositoryInput) {
 		super('deletion', entity, input);
 	}
 }
