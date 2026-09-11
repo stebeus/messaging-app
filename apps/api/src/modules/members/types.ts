@@ -15,7 +15,7 @@ export type MemberArgs = Pick<Member, 'userId' | 'conversationId'>;
 
 export type GroupMember = UserParams & GroupParams;
 
-export type ListMembers = GroupMember & UsersSelection;
+export type ListMemberArgs = GroupMember & UsersSelection;
 
 export type Management = GroupParams & {
 	actorId: Id;
