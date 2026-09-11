@@ -1,6 +1,6 @@
 import type { NewFriendRequest } from '@repo/contracts/friend-requests';
-import type { FriendshipParameters } from '#modules/friendships/types.ts';
-import type { FriendRequestParameters } from './types.ts';
+import type { Relationship } from '@repo/contracts/relationships';
+import type { FriendRequestArgs } from './types.ts';
 
 import {
 	type DatabaseContext,
@@ -10,13 +10,13 @@ import {
 	InsertionError,
 	orderBy,
 } from '#db/index.ts';
-import { createUserFilter, type UserSearchParameters } from '#modules/users/index.ts';
+import { createUserFilter, type ListUserArgs } from '#modules/users/index.ts';
 
 import { isFriendRequest } from './helpers.ts';
 
 const create = async ({ tx = db, ...values }: DatabaseContext<NewFriendRequest>) => {
 	const [data] = await tx.insert(friendRequests).values(values).returning();
-	if (data == null) throw new InsertionError('Friend Request', values);
+	if (data == null) throw new InsertionError('friend request', values);
 	return data;
 };
 
@@ -24,7 +24,7 @@ const find = async ({
 	userId,
 	query: { q, sort, order },
 	tx = db,
-}: DatabaseContext<UserSearchParameters>) => {
+}: DatabaseContext<ListUserArgs>) => {
 	const userFilter = createUserFilter(userId, q);
 
 	return await tx.query.friendRequests.findMany({
@@ -34,7 +34,7 @@ const find = async ({
 	});
 };
 
-const findOne = async ({ user1Id, user2Id, tx = db }: DatabaseContext<FriendshipParameters>) =>
+const findOne = async ({ user1Id, user2Id, tx = db }: DatabaseContext<Relationship>) =>
 	await tx.query.friendRequests.findFirst({
 		where: {
 			OR: [
@@ -45,9 +45,9 @@ const findOne = async ({ user1Id, user2Id, tx = db }: DatabaseContext<Friendship
 		with: { requester: true, recipient: true },
 	});
 
-const destroy = async ({ tx = db, ...values }: DatabaseContext<FriendRequestParameters>) => {
+const destroy = async ({ tx = db, ...values }: DatabaseContext<FriendRequestArgs>) => {
 	const [data] = await tx.delete(friendRequests).where(isFriendRequest(values)).returning();
-	if (data == null) throw new DeletionError('Friend Request', values);
+	if (data == null) throw new DeletionError('friend request', values);
 	return data;
 };
 

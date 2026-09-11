@@ -1,10 +1,10 @@
-import type { MessageParameters } from '@repo/contracts/messages';
+import type { MessageParams } from '@repo/contracts/messages';
 import type {
-	EditManagedMessageParameters,
-	EditMessageParameters,
+	EditManagedMessageArgs,
+	EditMessageArgs,
+	ListMessageArgs,
 	MessageManagement,
-	MessageSearchParameters,
-	SendMessageParameters,
+	SendMessageArgs,
 	SentMessage,
 } from './types.ts';
 
@@ -13,19 +13,19 @@ import { ForbiddenError, NotFoundError } from '#utils/errors.ts';
 
 import { messageRepository } from './repository.ts';
 
-const send = async ({ content, ...params }: SendMessageParameters) => {
-	const { conversationId, userId } = await memberService.requireMembership(params);
-	return await messageRepository.create({ conversationId, senderId: userId, content });
+const send = async ({ conversationId, userId, body }: SendMessageArgs) => {
+	await memberService.requireMembership({ conversationId, userId });
+	return await messageRepository.create({ ...body, conversationId, senderId: userId });
 };
 
-const find = async ({ query, ...params }: MessageSearchParameters) => {
+const find = async ({ query, ...params }: ListMessageArgs) => {
 	const { conversationId } = await memberService.requireMembership(params);
 	return messageRepository.find({ conversationId, query });
 };
 
-const getOne = async ({ messageId }: MessageParameters) => {
+const getOne = async ({ messageId }: MessageParams) => {
 	const message = await messageRepository.findOne({ id: messageId });
-	if (message == null) throw new NotFoundError({ resource: 'Message' });
+	if (message == null) throw new NotFoundError({ resource: 'message' });
 	return message;
 };
 
@@ -35,9 +35,9 @@ const getOneBySender = async ({ messageId, userId }: SentMessage) => {
 	return message;
 };
 
-const edit = async ({ content, ...params }: EditMessageParameters) => {
+const edit = async ({ body, ...params }: EditMessageArgs) => {
 	const { id } = await getOneBySender(params);
-	return await messageRepository.update({ id, content });
+	return await messageRepository.update({ ...body, id });
 };
 
 const destroy = async (params: SentMessage) => {
@@ -45,14 +45,10 @@ const destroy = async (params: SentMessage) => {
 	return await messageRepository.destroy({ id });
 };
 
-const editWithPermission = async ({
-	messageId,
-	content,
-	...params
-}: EditManagedMessageParameters) => {
+const editWithPermission = async ({ messageId, body, ...params }: EditManagedMessageArgs) => {
 	const { id, senderId } = await getOne({ messageId });
 	await memberService.authorizeMemberManagement({ ...params, targetId: senderId });
-	return await messageRepository.update({ id, content });
+	return await messageRepository.update({ ...body, id });
 };
 
 const destroyWithPermission = async ({ messageId, ...params }: MessageManagement) => {

@@ -1,12 +1,12 @@
-import type { UserParameters } from '@repo/contracts/users';
+import type { UserParams } from '@repo/contracts/users';
 
 import { NotFoundError } from '#utils/errors.ts';
 
 import { userRepository } from './repository.ts';
 
-const getOne = async ({ userId }: UserParameters) => {
+const getOne = async ({ userId }: UserParams) => {
 	const user = await userRepository.findOne({ id: userId });
-	if (user == null) throw new NotFoundError({ resource: 'User' });
+	if (user == null) throw new NotFoundError({ resource: 'user' });
 	return user;
 };
 

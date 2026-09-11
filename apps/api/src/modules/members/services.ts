@@ -1,9 +1,9 @@
 import type {
-	GroupMemberParameters,
+	GroupMember,
+	ListMemberArgs,
 	Management,
+	MemberArgs,
 	MemberManagement,
-	MemberParameters,
-	MemberSearchParameters,
 	RoleManagement,
 } from './types.ts';
 
@@ -14,30 +14,31 @@ import { ForbiddenError, NotFoundError } from '#utils/errors.ts';
 import { canManage, canManageMember } from './helpers.ts';
 import { memberRepository } from './repository.ts';
 
-const joinGroup = async ({ userId, groupId }: GroupMemberParameters) => {
+const joinGroup = async ({ userId, groupId }: GroupMember) => {
 	const ban = await banRepository.findOne({ userId, groupId });
 	if (ban != null) throw new ForbiddenError();
 	return await memberRepository.create({ userId, conversationId: groupId });
 };
 
-const getOne = async ({ groupId, ...params }: DatabaseContext<GroupMemberParameters>) => {
+const getOne = async ({ groupId, ...params }: DatabaseContext<GroupMember>) => {
 	const member = await memberRepository.findOne({ ...params, conversationId: groupId });
-	if (member == null) throw new NotFoundError({ resource: 'Member' });
+	if (member == null) throw new NotFoundError({ resource: 'member' });
 	return member;
 };
 
-const leaveGroup = async (params: GroupMemberParameters) => {
-	const { userId, conversationId } = await getOne(params);
+const leaveGroup = async (params: GroupMember) => {
+	const { userId, conversationId, role } = await getOne(params);
+	if (role === 'owner') throw new ForbiddenError();
 	return memberRepository.destroy({ userId, conversationId });
 };
 
-const requireMembership = async (params: DatabaseContext<MemberParameters>) => {
+const requireMembership = async (params: DatabaseContext<MemberArgs>) => {
 	const member = await memberRepository.findOne(params);
 	if (member == null) throw new ForbiddenError();
 	return member;
 };
 
-const find = async ({ userId, groupId, query }: MemberSearchParameters) => {
+const find = async ({ userId, groupId, query }: ListMemberArgs) => {
 	const { conversationId } = await requireMembership({ userId, conversationId: groupId });
 	return memberRepository.find({ conversationId, query });
 };
@@ -61,9 +62,9 @@ const authorizeMemberManagement = async ({
 	return target;
 };
 
-const changeRole = async ({ groupId, role, ...params }: RoleManagement) => {
+const changeRole = async ({ groupId, body, ...params }: RoleManagement) => {
 	const { userId } = await authorizeMemberManagement({ ...params, groupId });
-	return await memberRepository.update({ userId, conversationId: groupId, role });
+	return await memberRepository.update({ ...body, userId, conversationId: groupId });
 };
 
 const kick = async ({ groupId, tx, ...params }: DatabaseContext<MemberManagement>) => {
@@ -79,16 +80,16 @@ const ban = async (params: MemberManagement) =>
 
 const unban = async ({ groupId, actorId, targetId }: MemberManagement) =>
 	await db.transaction(async (tx) => {
-		await authorizeManagement({ groupId, actorId, tx });
-		return await banService.destroy({ groupId, userId: targetId, tx });
+		const { conversationId } = await authorizeManagement({ groupId, actorId, tx });
+		return await banService.destroy({ groupId: conversationId, userId: targetId, tx });
 	});
 
 export const memberService = {
 	joinGroup,
-	getOne,
 	leaveGroup,
-	requireMembership,
 	find,
+	getOne,
+	requireMembership,
 	authorizeMemberManagement,
 	changeRole,
 	kick,

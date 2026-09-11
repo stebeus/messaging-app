@@ -1,14 +1,15 @@
-import type { FriendRequestParameters } from './types.ts';
+import type { Relationship } from '@repo/contracts/relationships';
+import type { FriendRequestArgs } from './types.ts';
 
 import { type DatabaseContext, db } from '#db/index.ts';
 import { dmService } from '#modules/conversations/dms/services.ts';
-import { type FriendshipParameters, friendshipService } from '#modules/friendships/index.ts';
+import { friendshipService } from '#modules/friendships/services.ts';
 import { userService } from '#modules/users/services.ts';
 import { ConflictError, NotFoundError } from '#utils/errors.ts';
 
 import { friendRequestRepository } from './repository.ts';
 
-const send = async ({ requesterId, recipientId }: FriendRequestParameters) => {
+const send = async ({ requesterId, recipientId }: FriendRequestArgs) => {
 	const { id } = await userService.getOne({ userId: recipientId });
 	const friendship = await friendshipService.findOne({ user1Id: requesterId, user2Id: id });
 
@@ -17,20 +18,19 @@ const send = async ({ requesterId, recipientId }: FriendRequestParameters) => {
 	return await friendRequestRepository.create({ requesterId, recipientId: id });
 };
 
-const getOne = async ({ requesterId, recipientId }: DatabaseContext<FriendRequestParameters>) => {
-	const friendRequest = await friendRequestRepository.findOne({
-		user1Id: requesterId,
-		user2Id: recipientId,
-	});
-
-	if (friendRequest == null) throw new NotFoundError({ resource: 'Friend Request' });
-
+const getOne = async ({ user1Id, user2Id }: DatabaseContext<Relationship>) => {
+	const friendRequest = await friendRequestRepository.findOne({ user1Id, user2Id });
+	if (friendRequest == null) throw new NotFoundError({ resource: 'friend request' });
 	return friendRequest;
 };
 
-const accept = async (params: FriendRequestParameters) =>
+const accept = async (params: FriendRequestArgs) =>
 	db.transaction(async (tx) => {
-		const { requesterId, recipientId } = await getOne({ ...params, tx });
+		const { requesterId, recipientId } = await getOne({
+			user1Id: params.recipientId,
+			user2Id: params.requesterId,
+			tx,
+		});
 
 		await dmService.create({ user1Id: requesterId, user2Id: recipientId, tx });
 		await friendRequestRepository.destroy({ requesterId, recipientId, tx });
@@ -38,8 +38,8 @@ const accept = async (params: FriendRequestParameters) =>
 		return await friendshipService.create({ user1Id: requesterId, user2Id: recipientId, tx });
 	});
 
-const cancel = async ({ user1Id, user2Id }: FriendshipParameters) => {
-	const { requesterId, recipientId } = await getOne({ requesterId: user1Id, recipientId: user2Id });
+const cancel = async (params: Relationship) => {
+	const { requesterId, recipientId } = await getOne(params);
 	return await friendRequestRepository.destroy({ requesterId, recipientId });
 };
 

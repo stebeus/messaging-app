@@ -1,5 +1,6 @@
 import type { NewBan } from '@repo/contracts/bans';
-import type { BanParameters, BanSelection, BansSelection } from './types.ts';
+import type { GroupMember } from '#modules/members/types.ts';
+import type { BanSelection, BansSelection } from './types.ts';
 
 import {
 	bans,
@@ -15,7 +16,7 @@ import { banRelations, isBan } from './helpers.ts';
 
 const create = async ({ tx = db, ...values }: DatabaseContext<NewBan>) => {
 	const [data] = await tx.insert(bans).values(values).returning();
-	if (data == null) throw new InsertionError('Ban', values);
+	if (data == null) throw new InsertionError('ban', values);
 	return data;
 };
 
@@ -33,9 +34,9 @@ const find = async ({
 const findOne = async ({ tx = db, ...values }: DatabaseContext<BanSelection>) =>
 	await tx.query.bans.findFirst({ where: values, with: banRelations });
 
-const destroy = async ({ tx = db, ...values }: DatabaseContext<BanParameters>) => {
+const destroy = async ({ tx = db, ...values }: DatabaseContext<GroupMember>) => {
 	const [data] = await tx.delete(bans).where(isBan(values)).returning();
-	if (data == null) throw new DeletionError('Ban', values);
+	if (data == null) throw new DeletionError('ban', values);
 	return data;
 };
 

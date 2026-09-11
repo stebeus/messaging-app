@@ -2,7 +2,9 @@ import type { CreateGroupBody, Group, UpdateGroupBody } from '@repo/contracts/gr
 import type { UserParams } from '@repo/contracts/users';
 import type { Selection } from '#db/types.ts';
 import type { GroupMember } from '#modules/members/types.ts';
-import type { BodyDto } from '#types.ts';
+import type { BodyDto, QueryDto } from '#types.ts';
+
+export type GroupsSelection = UserParams & QueryDto;
 
 export type GroupSelection = Selection<Group>;
 

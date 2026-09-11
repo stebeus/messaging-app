@@ -1,5 +1,6 @@
-import type { NewFriendship } from '@repo/contracts/friendships';
-import type { FriendshipParameters, FriendshipSelection } from './types.ts';
+import type { Relationship } from '@repo/contracts/relationships';
+import type { NewFriendship } from '@repo/contracts/relationships/friendships';
+import type { FriendshipSelection } from './types.ts';
 
 import {
 	type DatabaseContext,
@@ -9,13 +10,13 @@ import {
 	InsertionError,
 	orderBy,
 } from '#db/index.ts';
-import { createUserFilter, type UserSearchParameters } from '#modules/users/index.ts';
+import { createUserFilter, type ListUserArgs } from '#modules/users/index.ts';
 
 import { isFriendship } from './helpers.ts';
 
 const create = async ({ tx = db, ...values }: DatabaseContext<NewFriendship>) => {
 	const [data] = await tx.insert(friendships).values(values).returning();
-	if (data == null) throw new InsertionError('Friendship', values);
+	if (data == null) throw new InsertionError('friendship', values);
 	return data;
 };
 
@@ -23,7 +24,7 @@ const find = async ({
 	userId,
 	query: { q, sort, order },
 	tx = db,
-}: DatabaseContext<UserSearchParameters>) => {
+}: DatabaseContext<ListUserArgs>) => {
 	const userFilter = createUserFilter(userId, q);
 
 	return await tx.query.friendships.findMany({
@@ -36,9 +37,9 @@ const find = async ({
 const findOne = async ({ tx = db, ...values }: DatabaseContext<FriendshipSelection>) =>
 	await tx.query.friendships.findFirst({ where: values, with: { user1: true, user2: true } });
 
-const destroy = async ({ tx = db, ...values }: DatabaseContext<FriendshipParameters>) => {
+const destroy = async ({ tx = db, ...values }: DatabaseContext<Relationship>) => {
 	const [data] = await tx.delete(friendships).where(isFriendship(values)).returning();
-	if (data == null) throw new DeletionError('Friendship', values);
+	if (data == null) throw new DeletionError('friendship', values);
 	return data;
 };
 

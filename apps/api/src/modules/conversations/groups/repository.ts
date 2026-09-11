@@ -1,5 +1,4 @@
 import type { GroupUpdate, NewGroup } from '@repo/contracts/groups';
-import type { UserScopedQueryParameters } from '#modules/users/types.ts';
 import type { GroupSelection, GroupsSelection } from './types.ts';
 
 import { eq } from 'drizzle-orm';
@@ -13,7 +12,7 @@ import {
 	UpdateError,
 } from '#db/index.ts';
 
-import { containsName, groupRelations, groupSearchRelations, memberOfGroup } from './helpers.ts';
+import { containsName, groupListRelations, groupRelations, memberOfGroup } from './helpers.ts';
 
 const create = async ({ tx = db, ...values }: DatabaseContext<NewGroup>) => {
 	const [data] = await tx.insert(groups).values(values).returning();
@@ -28,7 +27,7 @@ const find = async ({
 }: DatabaseContext<GroupsSelection>) =>
 	await tx.query.groups.findMany({
 		where: { ...containsName(q), NOT: { bans: { userId } } },
-		with: groupSearchRelations,
+		with: groupListRelations,
 		...orderBy(sort, order),
 	});
 
@@ -39,7 +38,7 @@ const findByMembership = async ({
 	userId,
 	query: { q, sort, order },
 	tx = db,
-}: DatabaseContext<UserScopedQueryParameters>) =>
+}: DatabaseContext<GroupsSelection>) =>
 	await tx.query.groups.findMany({
 		where: { ...memberOfGroup(userId), ...containsName(q) },
 		with: groupRelations,
@@ -53,7 +52,7 @@ const update = async ({ conversationId, tx = db, ...values }: DatabaseContext<Gr
 		.where(eq(groups.conversationId, conversationId))
 		.returning();
 
-	if (data == null) throw new UpdateError('Group', { ...values, conversationId });
+	if (data == null) throw new UpdateError('group', { ...values, conversationId });
 
 	return data;
 };

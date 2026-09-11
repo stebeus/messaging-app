@@ -1,5 +1,5 @@
 import type { MemberUpdate, NewMember } from '@repo/contracts/members';
-import type { MemberParameters, MemberSelection, MembersSelection } from './types.ts';
+import type { MemberArgs, MemberSelection, MembersSelection } from './types.ts';
 
 import {
 	type DatabaseContext,
@@ -16,7 +16,7 @@ import { isMember, memberRelations } from './helpers.ts';
 
 const create = async ({ tx = db, ...values }: DatabaseContext<NewMember>) => {
 	const [data] = await tx.insert(members).values(values).returning();
-	if (data == null) throw new InsertionError('Member', values);
+	if (data == null) throw new InsertionError('member', values);
 	return data;
 };
 
@@ -34,15 +34,21 @@ const find = async ({
 const findOne = async ({ tx = db, ...values }: DatabaseContext<MemberSelection>) =>
 	await tx.query.members.findFirst({ where: values, with: memberRelations });
 
-const update = async ({ role, tx = db, ...values }: DatabaseContext<MemberUpdate>) => {
-	const [data] = await tx.update(members).set({ role }).where(isMember(values)).returning();
-	if (data == null) throw new UpdateError('Member', { ...values, role });
+const update = async ({ userId, conversationId, role, tx = db }: DatabaseContext<MemberUpdate>) => {
+	const [data] = await tx
+		.update(members)
+		.set({ role })
+		.where(isMember({ userId, conversationId }))
+		.returning();
+
+	if (data == null) throw new UpdateError('member', { userId, conversationId, role });
+
 	return data;
 };
 
-const destroy = async ({ tx = db, ...values }: DatabaseContext<MemberParameters>) => {
-	const [data] = await tx.delete(members).where(isMember(values)).returning();
-	if (data == null) throw new DeletionError('Member', values);
+const destroy = async ({ userId, conversationId, tx = db }: DatabaseContext<MemberArgs>) => {
+	const [data] = await tx.delete(members).where(isMember({ userId, conversationId })).returning();
+	if (data == null) throw new DeletionError('member', { userId, conversationId });
 	return data;
 };
 
