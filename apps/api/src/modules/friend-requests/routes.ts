@@ -1,10 +1,7 @@
 import { Hono } from 'hono';
 
-import {
-	AcceptFriendRequestParameters,
-	SendFriendRequestParameters,
-} from '@repo/contracts/friend-requests';
-import { UserParameters, UserQuery } from '@repo/contracts/users';
+import { AcceptFriendRequestParams, FriendRequestParams } from '@repo/contracts/friend-requests';
+import { UserParams, UserQuery } from '@repo/contracts/users';
 
 import { requireAuth, validate } from '#middleware/index.ts';
 
@@ -24,7 +21,7 @@ friendRequests.get('/', validate('query', UserQuery), requireAuth, async (c) => 
 
 friendRequests.post(
 	'/:recipientId',
-	validate('param', SendFriendRequestParameters),
+	validate('param', FriendRequestParams),
 	requireAuth,
 	async (c) => {
 		const { user } = c.var.auth;
@@ -37,8 +34,8 @@ friendRequests.post(
 );
 
 friendRequests.post(
-	'/:requesterId/accept',
-	validate('param', AcceptFriendRequestParameters),
+	'/accept/:requesterId/',
+	validate('param', AcceptFriendRequestParams),
 	requireAuth,
 	async (c) => {
 		const { user } = c.var.auth;
@@ -50,7 +47,7 @@ friendRequests.post(
 	},
 );
 
-friendRequests.delete('/:userId', validate('param', UserParameters), requireAuth, async (c) => {
+friendRequests.delete('/:userId', validate('param', UserParams), requireAuth, async (c) => {
 	const { user } = c.var.auth;
 	const { userId } = c.req.valid('param');
 

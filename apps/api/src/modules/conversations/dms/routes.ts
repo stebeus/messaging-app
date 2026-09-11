@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 
-import { DirectMessageParameters } from '@repo/contracts/conversations';
+import { DirectMessageParams } from '@repo/contracts/conversations';
 import { UserQuery } from '@repo/contracts/users';
 
 import { requireAuth, validate } from '#middleware/index.ts';
@@ -19,7 +19,7 @@ dms.get('/', validate('query', UserQuery), requireAuth, async (c) => {
 	return c.json({ data });
 });
 
-dms.get('/:dmId', validate('param', DirectMessageParameters), requireAuth, async (c) => {
+dms.get('/:dmId', validate('param', DirectMessageParams), requireAuth, async (c) => {
 	const { dmId } = c.req.valid('param');
 	const { user } = c.var.auth;
 

@@ -1,18 +1,18 @@
 import { Hono } from 'hono';
 
-import { GroupParameters } from '@repo/contracts/groups';
-import { MemberParameters, UpdateMemberBody } from '@repo/contracts/members';
+import { GroupParams } from '@repo/contracts/groups';
+import { MemberParams, UpdateMemberBody } from '@repo/contracts/members';
 import { UserQuery } from '@repo/contracts/users';
 
 import { requireAuth, validate } from '#middleware/index.ts';
 
 import { memberService } from './services.ts';
 
-export const members = new Hono().basePath('/:groupId/members');
+export const members = new Hono();
 
 members.get(
 	'/',
-	validate('param', GroupParameters),
+	validate('param', GroupParams),
 	validate('query', UserQuery),
 	requireAuth,
 	async (c) => {
@@ -26,7 +26,7 @@ members.get(
 	},
 );
 
-members.post('/', validate('param', GroupParameters), requireAuth, async (c) => {
+members.post('/', validate('param', GroupParams), requireAuth, async (c) => {
 	const { groupId } = c.req.valid('param');
 	const { user } = c.var.auth;
 
@@ -35,7 +35,7 @@ members.post('/', validate('param', GroupParameters), requireAuth, async (c) => 
 	return c.json({ data }, 201);
 });
 
-members.delete('/me', validate('param', GroupParameters), requireAuth, async (c) => {
+members.delete('/me', validate('param', GroupParams), requireAuth, async (c) => {
 	const { groupId } = c.req.valid('param');
 	const { user } = c.var.auth;
 
@@ -46,37 +46,30 @@ members.delete('/me', validate('param', GroupParameters), requireAuth, async (c)
 
 members.patch(
 	'/:memberId',
-	validate('param', GroupParameters),
-	validate('param', MemberParameters),
+	validate('param', MemberParams),
 	validate('json', UpdateMemberBody),
 	requireAuth,
 	async (c) => {
 		const { groupId, memberId } = c.req.valid('param');
 		const { user } = c.var.auth;
-		const { role } = c.req.valid('json');
+		const body = c.req.valid('json');
 
 		const data = await memberService.changeRole({
 			actorId: user.id,
 			targetId: memberId,
 			groupId,
-			role,
+			body,
 		});
 
 		return c.json({ data });
 	},
 );
 
-members.delete(
-	'/:memberId',
-	validate('param', GroupParameters),
-	validate('param', MemberParameters),
-	requireAuth,
-	async (c) => {
-		const { groupId, memberId } = c.req.valid('param');
-		const { user } = c.var.auth;
+members.delete('/:memberId', validate('param', MemberParams), requireAuth, async (c) => {
+	const { groupId, memberId } = c.req.valid('param');
+	const { user } = c.var.auth;
 
-		const data = await memberService.kick({ actorId: user.id, targetId: memberId, groupId });
+	const data = await memberService.kick({ actorId: user.id, targetId: memberId, groupId });
 
-		return c.json({ data });
-	},
-);
+	return c.json({ data });
+});

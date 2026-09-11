@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 
-import { FriendParameters } from '@repo/contracts/friendships';
+import { FriendParams } from '@repo/contracts/relationships/friendships';
 import { UserQuery } from '@repo/contracts/users';
 
 import { requireAuth, validate } from '#middleware/index.ts';
@@ -18,7 +18,7 @@ friends.get('/', validate('query', UserQuery), requireAuth, async (c) => {
 	return c.json({ data });
 });
 
-friends.delete('/:friendId', validate('param', FriendParameters), requireAuth, async (c) => {
+friends.delete('/:friendId', validate('param', FriendParams), requireAuth, async (c) => {
 	const { user } = c.var.auth;
 	const { friendId } = c.req.valid('param');
 

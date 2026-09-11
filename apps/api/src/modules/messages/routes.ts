@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 
-import { ConversationParameters } from '@repo/contracts/conversations';
-import { CreateMessageBody, MessageParameters, UpdateMessageBody } from '@repo/contracts/messages';
+import { ConversationParams } from '@repo/contracts/conversations';
+import { CreateMessageBody, MessageParams, UpdateMessageBody } from '@repo/contracts/messages';
 import { Query } from '@repo/contracts/shared';
 
 import { requireAuth, validate } from '#middleware/index.ts';
@@ -12,7 +12,7 @@ export const messages = new Hono();
 
 messages.get(
 	'/conversations/:conversationId/messages',
-	validate('param', ConversationParameters),
+	validate('param', ConversationParams),
 	validate('query', Query),
 	requireAuth,
 	async (c) => {
@@ -28,15 +28,15 @@ messages.get(
 
 messages.post(
 	'/conversations/:conversationId/messages',
-	validate('param', ConversationParameters),
+	validate('param', ConversationParams),
 	validate('json', CreateMessageBody),
 	requireAuth,
 	async (c) => {
 		const { conversationId } = c.req.valid('param');
 		const { user } = c.var.auth;
-		const { content } = c.req.valid('json');
+		const body = c.req.valid('json');
 
-		const data = await messageService.send({ conversationId, userId: user.id, content });
+		const data = await messageService.send({ conversationId, userId: user.id, body });
 
 		return c.json({ data }, 201);
 	},
@@ -44,15 +44,15 @@ messages.post(
 
 messages.patch(
 	'/messages/:messageId',
-	validate('param', MessageParameters),
+	validate('param', MessageParams),
 	validate('json', UpdateMessageBody),
 	requireAuth,
 	async (c) => {
 		const { messageId } = c.req.valid('param');
 		const { user } = c.var.auth;
-		const { content } = c.req.valid('json');
+		const body = c.req.valid('json');
 
-		const data = await messageService.edit({ messageId, userId: user.id, content });
+		const data = await messageService.edit({ messageId, userId: user.id, body });
 
 		return c.json({ data });
 	},
@@ -60,7 +60,7 @@ messages.patch(
 
 messages.delete(
 	'/messages/:messageId',
-	validate('param', MessageParameters),
+	validate('param', MessageParams),
 	requireAuth,
 	async (c) => {
 		const { messageId } = c.req.valid('param');

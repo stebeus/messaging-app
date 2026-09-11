@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 
-import { UserParameters, UserQuery } from '@repo/contracts/users';
+import { UserParams, UserQuery } from '@repo/contracts/users';
 
 import { validate } from '#middleware/validator.ts';
 
@@ -15,7 +15,7 @@ users.get('/', validate('query', UserQuery), async (c) => {
 	return c.json({ data });
 });
 
-users.get('/:userId', validate('param', UserParameters), async (c) => {
+users.get('/:userId', validate('param', UserParams), async (c) => {
 	const params = c.req.valid('param');
 	const data = await userService.getOne(params);
 	return c.json({ data });

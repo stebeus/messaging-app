@@ -1,10 +1,12 @@
 import { Hono } from 'hono';
 
-import { CreateGroupBody, GroupParameters, UpdateGroupBody } from '@repo/contracts/groups';
+import { CreateGroupBody, GroupParams, UpdateGroupBody } from '@repo/contracts/groups';
 import { Query } from '@repo/contracts/shared';
 
 import { requireAuth, validate } from '#middleware/index.ts';
+import { members } from '#modules/members/routes.ts';
 
+import { bans } from './bans/routes.ts';
 import { groupRepository } from './repository.ts';
 import { groupService } from './services.ts';
 
@@ -39,7 +41,7 @@ groups.post('/', validate('json', CreateGroupBody), requireAuth, async (c) => {
 
 groups.patch(
 	'/:groupId',
-	validate('param', GroupParameters),
+	validate('param', GroupParams),
 	validate('json', UpdateGroupBody),
 	requireAuth,
 	async (c) => {
@@ -53,7 +55,7 @@ groups.patch(
 	},
 );
 
-groups.delete('/:groupId', validate('param', GroupParameters), requireAuth, async (c) => {
+groups.delete('/:groupId', validate('param', GroupParams), requireAuth, async (c) => {
 	const { groupId } = c.req.valid('param');
 	const { user } = c.var.auth;
 
@@ -61,3 +63,6 @@ groups.delete('/:groupId', validate('param', GroupParameters), requireAuth, asyn
 
 	return c.json({ data });
 });
+
+groups.route('/:groupId/bans', bans);
+groups.route('/:groupId/members', members);
