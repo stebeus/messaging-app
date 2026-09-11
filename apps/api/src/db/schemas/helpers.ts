@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { type SQLWrapper, sql } from 'drizzle-orm';
 import * as p from 'drizzle-orm/pg-core';
 
 const mode = 'string';
@@ -17,6 +17,8 @@ export const updatedAt = p
 export const timestamps = { createdAt, updatedAt } as const;
 
 export const base = { ...timestamps, id } as const;
+
+export const castToBigInt = (column: SQLWrapper) => sql`${column}::bigint`;
 
 export const greatest = (first: unknown, second: unknown) => sql`least(${first}, ${second})`;
 
