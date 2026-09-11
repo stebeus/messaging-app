@@ -4,7 +4,7 @@ import { id } from '#shared/entities.js';
 
 import { MessageUpdate, NewMessage } from './entity.js';
 
-export const MessageParameters = z.object({
+export const MessageParams = z.object({
 	messageId: id,
 });
 
@@ -12,7 +12,7 @@ export const CreateMessageBody = NewMessage.pick({ content: true });
 
 export const UpdateMessageBody = MessageUpdate.pick({ content: true });
 
-export type MessageParameters = z.infer<typeof MessageParameters>;
+export type MessageParams = z.infer<typeof MessageParams>;
 
 export type CreateMessageBody = z.infer<typeof CreateMessageBody>;
 

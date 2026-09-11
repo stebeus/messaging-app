@@ -4,18 +4,16 @@ import { id } from '#shared/entities.js';
 
 import { GroupUpdate, NewGroup } from './entity.js';
 
-export const GroupParameters = z.object({
+export const GroupParams = z.object({
 	groupId: id,
 });
 
-export const CreateGroupBody = NewGroup.omit({ conversationId: true, ownerId: true })
-	.partial()
-	.required({ name: true });
+export const CreateGroupBody = NewGroup.omit({ conversationId: true, ownerId: true });
 
 export const UpdateGroupBody = GroupUpdate.omit({ conversationId: true });
 
-export type GroupParameters = z.infer<typeof GroupParameters>;
+export type GroupParams = z.infer<typeof GroupParams>;
 
-export type CreateGroupBody = z.infer<typeof CreateGroupBody>;
+export type CreateGroupBody = z.input<typeof CreateGroupBody>;
 
 export type UpdateGroupBody = z.infer<typeof UpdateGroupBody>;

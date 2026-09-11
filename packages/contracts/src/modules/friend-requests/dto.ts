@@ -2,14 +2,14 @@ import * as z from 'zod';
 
 import { id } from '#shared/entities.js';
 
-export const AcceptFriendRequestParameters = z.object({
-	requesterId: id,
-});
-
-export const SendFriendRequestParameters = z.object({
+export const FriendRequestParams = z.object({
 	recipientId: id,
 });
 
-export type AcceptFriendRequestParameters = z.infer<typeof AcceptFriendRequestParameters>;
+export const AcceptFriendRequestParams = z.object({
+	requesterId: id,
+});
 
-export type SendFriendRequestParameters = z.infer<typeof SendFriendRequestParameters>;
+export type FriendRequestParams = z.infer<typeof FriendRequestParams>;
+
+export type AcceptFriendRequestParams = z.infer<typeof AcceptFriendRequestParams>;

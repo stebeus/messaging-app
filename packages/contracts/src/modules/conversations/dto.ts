@@ -2,14 +2,14 @@ import * as z from 'zod';
 
 import { id } from '#shared/entities.js';
 
-export const ConversationParameters = z.object({
+export const ConversationParams = z.object({
 	conversationId: id,
 });
 
-export const DirectMessageParameters = z.object({
+export const DirectMessageParams = z.object({
 	dmId: id,
 });
 
-export type ConversationParameters = z.infer<typeof ConversationParameters>;
+export type ConversationParams = z.infer<typeof ConversationParams>;
 
-export type DirectMessageParameters = z.infer<typeof DirectMessageParameters>;
+export type DirectMessageParams = z.infer<typeof DirectMessageParams>;
