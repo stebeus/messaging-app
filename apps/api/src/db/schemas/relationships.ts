@@ -1,8 +1,8 @@
-import { ne, sql } from 'drizzle-orm';
+import { lt, ne } from 'drizzle-orm';
 import { check, snakeCase, unique, uniqueIndex } from 'drizzle-orm/pg-core';
 
 import { users } from './auth.ts';
-import { createdAt, greatest, least, reference } from './helpers.ts';
+import { castToBigInt, createdAt, greatest, least, reference } from './helpers.ts';
 
 export const relationshipSchema = snakeCase.schema('relationship');
 
@@ -31,7 +31,7 @@ export const friendships = relationshipSchema.table(
 	},
 	(t) => [
 		check('no_self_friendship', ne(t.user1Id, t.user2Id)),
-		check('friend_order', sql`${Number(t.user1Id)} < ${Number(t.user2Id)}`),
+		check('friend_order', lt(castToBigInt(t.user1Id), castToBigInt(t.user2Id))),
 		unique().on(t.user1Id, t.user2Id),
 	],
 );
