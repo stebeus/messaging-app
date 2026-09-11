@@ -1,11 +1,11 @@
 import type { Query } from '@repo/contracts/shared';
 
-export type QueryArgs<QueryDto = Query> = {
-	query: QueryDto;
+export type QueryDto<Dto = Query> = {
+	query: Dto;
 };
 
-export type ScopedQueryParameters<Parameters, QueryDto = Query> = Parameters & QueryArgs<QueryDto>;
+export type ScopedQueryParameters<Parameters, Dto = Query> = Parameters & QueryDto<Dto>;
 
-export type BodyArgs<Dto> = {
+export type BodyDto<Dto> = {
 	body: Dto;
 };
