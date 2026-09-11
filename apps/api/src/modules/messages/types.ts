@@ -1,27 +1,29 @@
-import type { ConversationParameters } from '@repo/contracts/conversations';
+import type { ConversationParams } from '@repo/contracts/conversations';
 import type {
 	CreateMessageBody,
 	Message,
-	MessageParameters,
+	MessageParams,
 	UpdateMessageBody,
 } from '@repo/contracts/messages';
-import type { UserParameters } from '@repo/contracts/users';
+import type { UserParams } from '@repo/contracts/users';
 import type { Selection } from '#db/types.ts';
-import type { Management, MemberParameters } from '#modules/members/types.ts';
-import type { QueryParameters, ScopedQueryParameters } from '#types.ts';
+import type { Management, MemberArgs } from '#modules/members/types.ts';
+import type { BodyDto, QueryDto } from '#types.ts';
 
-export type MessagesSelection = ConversationParameters & QueryParameters;
+type UpdateMessageDto = BodyDto<UpdateMessageBody>;
+
+export type MessagesSelection = ConversationParams & QueryDto;
 
 export type MessageSelection = Selection<Message>;
 
-export type MessageSearchParameters = ScopedQueryParameters<MemberParameters>;
+export type ListMessageArgs = MemberArgs & QueryDto;
 
-export type SentMessage = UserParameters & MessageParameters;
+export type SendMessageArgs = MemberArgs & BodyDto<CreateMessageBody>;
 
-export type SendMessageParameters = ConversationParameters & UserParameters & CreateMessageBody;
+export type SentMessage = UserParams & MessageParams;
 
-export type EditMessageParameters = SentMessage & UpdateMessageBody;
+export type EditMessageArgs = SentMessage & UpdateMessageDto;
 
-export type MessageManagement = Management & MessageParameters;
+export type MessageManagement = Management & MessageParams;
 
-export type EditManagedMessageParameters = MessageManagement & UpdateMessageBody;
+export type EditManagedMessageArgs = MessageManagement & UpdateMessageDto;

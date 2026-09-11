@@ -1,4 +1,4 @@
-import type { DirectMessageParameters } from '@repo/contracts/conversations';
-import type { UserParameters } from '@repo/contracts/users';
+import type { DirectMessageParams } from '@repo/contracts/conversations';
+import type { UserParams } from '@repo/contracts/users';
 
-export type ParticipatedDirectMessage = DirectMessageParameters & UserParameters;
+export type DirectMessageMember = DirectMessageParams & UserParams;
