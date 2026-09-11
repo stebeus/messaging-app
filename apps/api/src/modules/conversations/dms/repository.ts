@@ -26,7 +26,7 @@ const findOne = async ({ id, userId, tx = db }: DatabaseContext<ConversationMemb
 
 const findOneByFriendship = async ({ user1Id, user2Id, tx = db }: DatabaseContext<Relationship>) =>
 	await tx.query.conversations.findFirst({
-		where: { members: { AND: [{ userId: user1Id }, { userId: user2Id }] }, type },
+		where: { AND: [{ members: { userId: user1Id } }, { members: { userId: user2Id } }], type },
 	});
 
 export const dmRepository = { find, findOne, findOneByFriendship } as const;
