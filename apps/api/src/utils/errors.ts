@@ -52,7 +52,8 @@ export class ForbiddenError extends HttpError {
 
 export class NotFoundError extends HttpError {
 	constructor({ resource, ...options }: NotFoundErrorOptions = {}) {
-		super(404, { message: `${resource == null ? '' : `${resource} `}Not Found`, ...options });
+		const resourcePrefix = resource == null ? '' : `${resource} `;
+		super(404, { message: `${resourcePrefix}Not Found`, ...options });
 	}
 }
 
