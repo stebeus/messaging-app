@@ -22,7 +22,7 @@ export const Base = z.object({
 
 export type Id = z.infer<typeof id>;
 
-export type IdParameters = {
+export type IdArgs = {
 	id: Id;
 };
 
