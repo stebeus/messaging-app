@@ -1,3 +1,5 @@
+import type { Id } from '@repo/contracts/shared';
+
 type EntityName = Capitalize<string>;
 
 type RepositoryInput = Record<string, unknown>;
@@ -53,3 +55,9 @@ export const contains = (query?: string) =>
 
 export const orderBy = (sort = 'createdAt', order = 'asc') =>
 	({ orderBy: { [sort]: order } }) as const;
+
+export const parseId = (id: Id) => {
+	const parsedId = Number.parseInt(id, 10);
+	if (!Number.isInteger(parsedId)) throw new Error('Parsed ID is not an integer');
+	return parsedId;
+};
