@@ -11,12 +11,17 @@ type HttpErrorOptions = Partial<{
 }>;
 
 type NotFoundErrorOptions = Omit<HttpErrorOptions, 'message'> & {
-	resource?: Capitalize<string>;
+	resource?: string;
 };
 
 export class HttpError extends HTTPException {
 	static isHttpError(value: unknown) {
 		return value instanceof HTTPException;
+	}
+
+	static #toTitleCase(string = 'internal server error') {
+		const capitalize = (char: string) => char.toUpperCase();
+		return string.toLowerCase().replace(/\b\w/g, capitalize);
 	}
 
 	readonly message;
@@ -27,7 +32,7 @@ export class HttpError extends HTTPException {
 		{ res, message = STATUS_CODES[status], cause }: HttpErrorOptions = {},
 	) {
 		super(status, { res, message, cause });
-		this.message = message ?? 'Internal Server Error';
+		this.message = HttpError.#toTitleCase(message);
 		this.cause = cause;
 	}
 }
@@ -53,7 +58,7 @@ export class ForbiddenError extends HttpError {
 export class NotFoundError extends HttpError {
 	constructor({ resource, ...options }: NotFoundErrorOptions = {}) {
 		const resourcePrefix = resource == null ? '' : `${resource} `;
-		super(404, { message: `${resourcePrefix}Not Found`, ...options });
+		super(404, { message: `${resourcePrefix}not found`, ...options });
 	}
 }
 
