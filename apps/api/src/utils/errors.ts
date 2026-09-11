@@ -29,7 +29,7 @@ export class HttpError extends HTTPException {
 		{ res, message = STATUS_CODES[status], cause }: HttpErrorOptions = {},
 	) {
 		super(status, { res, message, cause });
-		this.message = toTitleCase(message ?? 'internal server error');
+		this.message = message ?? 'Internal Server Error';
 		this.cause = cause;
 	}
 }
@@ -55,7 +55,7 @@ export class ForbiddenError extends HttpError {
 export class NotFoundError extends HttpError {
 	constructor({ resource, ...options }: NotFoundErrorOptions = {}) {
 		const resourcePrefix = resource == null ? '' : `${resource} `;
-		super(404, { message: `${resourcePrefix}not found`, ...options });
+		super(404, { message: toTitleCase(`${resourcePrefix}not found`), ...options });
 	}
 }
 
