@@ -5,3 +5,7 @@ export type QueryArgs<QueryDto = Query> = {
 };
 
 export type ScopedQueryParameters<Parameters, QueryDto = Query> = Parameters & QueryArgs<QueryDto>;
+
+export type BodyArgs<Dto> = {
+	body: Dto;
+};
