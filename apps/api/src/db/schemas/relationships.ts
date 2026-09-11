@@ -31,7 +31,7 @@ export const friendships = relationshipSchema.table(
 	},
 	(t) => [
 		check('no_self_friendship', ne(t.user1Id, t.user2Id)),
-		check('friend_order', lt(castToBigInt(t.user1Id), castToBigInt(t.user2Id))),
+		check('friendship_id_order', lt(castToBigInt(t.user1Id), castToBigInt(t.user2Id))),
 		unique().on(t.user1Id, t.user2Id),
 	],
 );
