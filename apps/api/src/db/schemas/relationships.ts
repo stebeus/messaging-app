@@ -16,8 +16,8 @@ export const friendRequests = relationshipSchema.table(
 	(t) => [
 		check('no_self_friend_request', ne(t.requesterId, t.recipientId)),
 		uniqueIndex('friend_request_idx').on(
-			least(t.requesterId, t.recipientId),
-			greatest(t.requesterId, t.recipientId),
+			least(castToBigInt(t.requesterId), castToBigInt(t.recipientId)),
+			greatest(castToBigInt(t.requesterId), castToBigInt(t.recipientId)),
 		),
 	],
 );
