@@ -1,4 +1,5 @@
 import type { Relationship } from '@repo/contracts/relationships';
+import type { ListUserArgs } from '#modules/users/types.ts';
 import type { FriendRequestArgs } from './types.ts';
 
 import { type DatabaseContext, db } from '#db/index.ts';
@@ -7,6 +8,7 @@ import { friendshipService } from '#modules/friendships/services.ts';
 import { userService } from '#modules/users/services.ts';
 import { ConflictError, NotFoundError } from '#utils/errors.ts';
 
+import { groupFriendRequests } from './helpers.ts';
 import { friendRequestRepository } from './repository.ts';
 
 const send = async ({ requesterId, recipientId }: FriendRequestArgs) => {
@@ -16,6 +18,11 @@ const send = async ({ requesterId, recipientId }: FriendRequestArgs) => {
 	if (friendship != null) throw new ConflictError();
 
 	return await friendRequestRepository.create({ requesterId, recipientId: id });
+};
+
+const find = async (params: ListUserArgs) => {
+	const friendRequests = await friendRequestRepository.find(params);
+	return groupFriendRequests(friendRequests);
 };
 
 const getOne = async ({ user1Id, user2Id }: DatabaseContext<Relationship>) => {
@@ -43,4 +50,4 @@ const cancel = async (params: Relationship) => {
 	return await friendRequestRepository.destroy({ requesterId, recipientId });
 };
 
-export const friendRequestService = { send, accept, cancel } as const;
+export const friendRequestService = { send, find, accept, cancel } as const;

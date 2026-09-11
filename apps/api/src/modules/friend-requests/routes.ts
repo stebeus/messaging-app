@@ -5,7 +5,6 @@ import { UserParams, UserQuery } from '@repo/contracts/users';
 
 import { requireAuth, validate } from '#middleware/index.ts';
 
-import { friendRequestRepository } from './repository.ts';
 import { friendRequestService } from './services.ts';
 
 export const friendRequests = new Hono();
@@ -14,7 +13,7 @@ friendRequests.get('/', validate('query', UserQuery), requireAuth, async (c) => 
 	const { user } = c.var.auth;
 	const query = c.req.valid('query');
 
-	const data = await friendRequestRepository.find({ userId: user.id, query });
+	const data = await friendRequestService.find({ userId: user.id, query });
 
 	return c.json({ data });
 });
