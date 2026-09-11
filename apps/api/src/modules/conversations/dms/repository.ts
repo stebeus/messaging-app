@@ -13,7 +13,7 @@ const find = async ({
 	tx = db,
 }: DatabaseContext<ListUserArgs>) =>
 	await tx.query.conversations.findMany({
-		where: { member: { userId, user: containsDisplayName(q) }, type },
+		where: { members: { userId, user: containsDisplayName(q) }, type },
 		with: conversationRelations,
 		...orderBy(sort, order),
 	});
