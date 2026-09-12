@@ -15,8 +15,7 @@ import { Conversation } from '@repo/contracts/conversations';
 import { Group } from '@repo/contracts/groups';
 import { Member } from '@repo/contracts/members';
 
-const defaultId = '1';
-const defaultId2 = '2';
+import { defaultId, defaultId2, user } from './constants.ts';
 
 const { defaultValue: defaultType } = Conversation.shape.type.def;
 const { defaultValue: defaultVisibility } = Group.shape.visibility.def;
@@ -29,12 +28,12 @@ export const createTimestamps = ({ createdAt, updatedAt }: TimestampsOptions) =>
 
 export const createUser = ({
 	id = defaultId,
-	name = 'John Doe',
-	username = 'john_doe',
-	displayName = 'john_doe',
-	email = 'john_doe@email.com',
-	emailIsVerified = false,
-	avatar = '',
+	name = user.name,
+	username = user.username,
+	displayName = user.displayName,
+	email = user.email,
+	emailIsVerified = user.emailIsVerified,
+	avatar = user.avatar,
 	...timestamps
 }: UserOptions = {}) =>
 	({
