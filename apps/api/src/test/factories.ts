@@ -16,7 +16,7 @@ import { Group } from '@repo/contracts/groups';
 import { Member } from '@repo/contracts/members';
 
 import { defaultId, defaultId2, user } from './constants.ts';
-import { generateUniqueString } from './utils.ts';
+import { generateEmail, generateUniqueString } from './utils.ts';
 
 const { defaultValue: defaultType } = Conversation.shape.type.def;
 const { defaultValue: defaultVisibility } = Group.shape.visibility.def;
@@ -32,7 +32,7 @@ export const createUser = ({
 	name = user.name,
 	username = user.username,
 	displayName = username,
-	email = user.email,
+	email = username,
 	emailIsVerified = user.emailIsVerified,
 	avatar = user.avatar,
 	...timestamps
@@ -43,7 +43,7 @@ export const createUser = ({
 		name,
 		username: generateUniqueString(username),
 		displayName,
-		email: generateUniqueString(email),
+		email: generateEmail(email),
 		emailIsVerified,
 		avatar,
 	}) as const;
