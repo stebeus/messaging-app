@@ -1,18 +1,17 @@
-import type { User } from '@repo/contracts/users';
-
 import { betterAuth } from 'better-auth/minimal';
 import { type TestHelpers, testUtils } from 'better-auth/plugins';
 
 import { testDb } from '#db/client.ts';
-import { createAuthConfig, createUsernameConfig } from '#lib/auth.ts';
+import { createAuthConfig } from '#lib/auth.ts';
 
-type AuthUser = Parameters<TestHelpers['createUser']>[0];
+import { user } from './constants.ts';
+import { generateUniqueString } from './utils.ts';
 
-type UserOptions = Partial<AuthUser & Pick<User, 'username' | 'displayName'>>;
+type UserOptions = Parameters<TestHelpers['createUser']>[0];
 
 export const auth = betterAuth({
 	...createAuthConfig(testDb),
-	plugins: [createUsernameConfig(), testUtils()],
+	plugins: [testUtils()],
 });
 
 export const getAuthTestUtils = async () => {
@@ -20,13 +19,18 @@ export const getAuthTestUtils = async () => {
 	return test;
 };
 
-export const createAuthenticatedUser = async (options?: UserOptions) => {
+export const createAuthenticatedUser = async ({
+	name = user.name,
+	email = `${generateUniqueString(user.username)}@email.com`,
+	emailVerified = user.emailIsVerified,
+	image = user.avatar,
+}: UserOptions = {}) => {
 	const test = await getAuthTestUtils();
 
-	const user = test.createUser(options);
+	const user = test.createUser({ name, email, emailVerified, image });
 
 	const savedUser = await test.saveUser(user);
 	const headers = await test.getAuthHeaders({ userId: savedUser.id });
 
-	return { headers, user: savedUser } as const;
+	return { headers, user } as const;
 };

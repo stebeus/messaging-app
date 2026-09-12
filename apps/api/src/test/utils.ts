@@ -1,7 +1,5 @@
 import type { Hono } from 'hono';
 
-import { user } from './constants.ts';
-
 type PostJsonOptions = Omit<RequestInit, 'method' | 'body'>;
 
 export const createEndpoint = (endpoint: string) => `/api/v1/${endpoint}`;
@@ -21,6 +19,3 @@ export const postJson = async (
 
 export const generateUniqueString = (string?: string) =>
 	`${string}_${Temporal.Now.instant().epochNanoseconds}`;
-
-export const generateEmail = (email: string = user.username) =>
-	generateUniqueString(`${email}@email.com`);

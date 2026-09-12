@@ -12,11 +12,14 @@ describe('mergeFriend', () => {
 		({ ...createFriendship(), user1, user2 }) as const;
 
 	const createExpectedMerge = (id?: Id) =>
-		({ ...createFriendship(), friend: createUser({ id }) }) as const;
+		({
+			...createFriendship(),
+			friend: createUser({ id, username: 'john_doe', email: 'john_doe@email.com' }),
+		}) as const;
 
 	it('merges user 1 as a friend when user 2 is empty', () => {
 		// Arrange
-		const user = createUser({ id: '1' });
+		const user = createUser({ id: '1', username: 'john_doe', email: 'john_doe@email.com' });
 
 		const friendship = createFriendshipResult(user);
 		const expected = createExpectedMerge(user.id);
@@ -30,7 +33,7 @@ describe('mergeFriend', () => {
 
 	it('merges user 2 as a friend when user 1 is empty', () => {
 		// Arrange
-		const user = createUser({ id: '1' });
+		const user = createUser({ id: '1', username: 'john_doe', email: 'john_doe@email.com' });
 
 		const friendship = createFriendshipResult(undefined, user);
 		const expected = createExpectedMerge(user.id);

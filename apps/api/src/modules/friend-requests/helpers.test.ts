@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import { groupFriendRequests } from '#modules/friend-requests/helpers.ts';
 import { createTimestamp, createUser } from '#test/factories.ts';
-
-import { groupFriendRequests } from './helpers.ts';
 
 describe('groupFriendRequests', () => {
 	it('groups friend requests by direction', () => {

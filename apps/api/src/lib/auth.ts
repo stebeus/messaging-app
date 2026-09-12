@@ -30,10 +30,17 @@ export const createAuthConfig = (database = db) =>
 		},
 	}) as const;
 
-export const createUsernameConfig = () =>
-	username({ schema: { user: { fields: { displayUsername: 'displayName' } } } });
-
 export const auth = betterAuth({
 	...createAuthConfig(),
-	plugins: [createUsernameConfig()],
+	plugins: [
+		username({
+			schema: {
+				user: {
+					fields: {
+						displayUsername: 'displayName',
+					},
+				},
+			},
+		}),
+	],
 });
