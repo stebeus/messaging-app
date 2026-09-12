@@ -8,6 +8,8 @@ type TimestampsOptions = Partial<Timestamps>;
 
 type UserOptions = Partial<User>;
 
+export const defineEndpoint = (endpoint: string) => `/api/v1/${endpoint}`;
+
 export const postJson = async (
 	app: Hono,
 	url: string | Request | URL,
