@@ -10,7 +10,7 @@ import {
 	InsertionError,
 	orderBy,
 } from '#db/index.ts';
-import { containsDisplayName } from '#modules/users/helpers.ts';
+import { containsName } from '#modules/users/helpers.ts';
 
 import { banRelations, isBan } from './helpers.ts';
 
@@ -26,7 +26,7 @@ const find = async ({
 	tx = db,
 }: DatabaseContext<BansSelection>) =>
 	await tx.query.bans.findMany({
-		where: { groupId, user: containsDisplayName(q) },
+		where: { groupId, user: containsName(q) },
 		with: banRelations,
 		...orderBy(sort, order),
 	});

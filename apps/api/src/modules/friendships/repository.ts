@@ -10,7 +10,7 @@ import {
 	InsertionError,
 	orderBy,
 } from '#db/index.ts';
-import { containsDisplayName, createUserFilter, type ListUserArgs } from '#modules/users/index.ts';
+import { containsName, createUserFilter, type ListUserArgs } from '#modules/users/index.ts';
 
 import { isFriendship } from './helpers.ts';
 
@@ -25,7 +25,7 @@ const find = async ({
 	query: { q, sort, order },
 	tx = db,
 }: DatabaseContext<ListUserArgs>) => {
-	const displayName = containsDisplayName(q);
+	const displayName = containsName(q);
 	const userFilter = createUserFilter(userId);
 
 	return await tx.query.friendships.findMany({

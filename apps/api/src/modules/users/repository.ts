@@ -2,11 +2,11 @@ import type { UserSelection, UsersSelection } from './types.ts';
 
 import { type DatabaseContext, db, orderBy } from '#db/index.ts';
 
-import { containsDisplayName, userRelations } from './helpers.ts';
+import { containsName, userRelations } from './helpers.ts';
 
 const find = async ({ query: { q, sort, order }, tx = db }: DatabaseContext<UsersSelection>) =>
 	await tx.query.users.findMany({
-		where: containsDisplayName(q),
+		where: containsName(q),
 		with: userRelations,
 		...orderBy(sort, order),
 	});

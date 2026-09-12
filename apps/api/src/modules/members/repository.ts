@@ -10,7 +10,7 @@ import {
 	orderBy,
 	UpdateError,
 } from '#db/index.ts';
-import { containsDisplayName } from '#modules/users/helpers.ts';
+import { containsName } from '#modules/users/helpers.ts';
 
 import { isMember, memberRelations } from './helpers.ts';
 
@@ -26,7 +26,7 @@ const find = async ({
 	tx = db,
 }: DatabaseContext<MembersSelection>) =>
 	await tx.query.members.findMany({
-		where: { conversationId, user: containsDisplayName(q) },
+		where: { conversationId, user: containsName(q) },
 		with: memberRelations,
 		...orderBy(sort, order),
 	});
