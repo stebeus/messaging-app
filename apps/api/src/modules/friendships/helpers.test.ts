@@ -56,8 +56,8 @@ describe('orderFriendshipIds', () => {
 
 	it('sorts IDs in ascending order', () => {
 		// Arrange
-
 		const friendshipId = { user1Id: '2', user2Id: '1' } as const;
+
 		//  Act
 		const orderedFriendshipId = orderFriendshipIds(friendshipId);
 
