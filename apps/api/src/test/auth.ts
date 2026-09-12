@@ -1,10 +1,14 @@
+import type { User } from '@repo/contracts/users';
+
 import { betterAuth } from 'better-auth/minimal';
 import { type TestHelpers, testUtils } from 'better-auth/plugins';
 
 import { testDb } from '#db/client.ts';
 import { createAuthConfig, createUsernameConfig } from '#lib/auth.ts';
 
-type UserOptions = Parameters<TestHelpers['createUser']>[0];
+type AuthUser = Parameters<TestHelpers['createUser']>[0];
+
+type UserOptions = Partial<AuthUser & Pick<User, 'username' | 'displayName'>>;
 
 export const auth = betterAuth({
 	...createAuthConfig(testDb),
