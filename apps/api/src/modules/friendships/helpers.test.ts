@@ -1,37 +1,25 @@
+import type { User } from '@repo/contracts/users';
+
 import { describe, expect, it } from 'vitest';
+
+import { createTimestamps, createUser } from '#utils/test.ts';
 
 import { mergeFriend, orderFriendshipIds } from './helpers.ts';
 
 describe('mergeFriend', () => {
-	const date = new Date();
+	const { createdAt } = createTimestamps();
 
-	const createUser = (id: number) =>
-		({
-			id: id.toString(),
-			name: 'John Doe',
-			username: 'john_doe',
-			displayName: null,
-			email: 'john_doe@email.com',
-			emailIsVerified: false,
-			avatar: null,
-			createdAt: date,
-			updatedAt: date,
-		}) as const;
+	const createFriendship = (user1?: User, user2?: User) =>
+		({ user1Id: '1', user2Id: '2', createdAt, user1, user2 }) as const;
 
-	const createExpectedMerge = (id: number) =>
-		({ user1Id: '1', user2Id: '2', createdAt: date, friend: createUser(id) }) as const;
+	const createExpectedMerge = (id: string) =>
+		({ user1Id: '1', user2Id: '2', createdAt, friend: createUser({ id }) }) as const;
 
 	it('merges user 1 as a friend when user 2 is empty', () => {
 		// Arrange
-		const friendship = {
-			user1Id: '1',
-			user2Id: '2',
-			createdAt: date,
-			user1: createUser(1),
-			user2: undefined,
-		} as const;
-
-		const expected = createExpectedMerge(1);
+		const id = '1';
+		const friendship = createFriendship(createUser({ id }));
+		const expected = createExpectedMerge(id);
 
 		// Act
 		const merged = mergeFriend(friendship);
@@ -42,15 +30,9 @@ describe('mergeFriend', () => {
 
 	it('merges user 2 as a friend when user 1 is empty', () => {
 		// Arrange
-		const friendship = {
-			user1Id: '1',
-			user2Id: '2',
-			createdAt: date,
-			user1: undefined,
-			user2: createUser(2),
-		} as const;
-
-		const expected = createExpectedMerge(2);
+		const id = '2';
+		const friendship = createFriendship(undefined, createUser({ id }));
+		const expected = createExpectedMerge(id);
 
 		// Act
 		const merged = mergeFriend(friendship);
