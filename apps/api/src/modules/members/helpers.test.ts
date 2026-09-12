@@ -1,17 +1,12 @@
-import type { Role } from '@repo/contracts/members';
-
 import { describe, expect, it } from 'vitest';
 
-import { createTimestamps } from '#utils/test.ts';
+import { createMember } from '#test/factories.ts';
 
 import { canManage, canManageMember } from './helpers.ts';
 
-const createMember = (userId: string, role: Role) =>
-	({ ...createTimestamps(), userId, conversationId: '1', role }) as const;
-
-const member = createMember('1', 'member');
-const admin = createMember('2', 'admin');
-const owner = createMember('3', 'owner');
+const member = createMember();
+const admin = createMember({ userId: '2', role: 'admin' });
+const owner = createMember({ userId: '3', role: 'owner' });
 
 describe('canManage', () => {
 	it('confirms that members are unauthorized', () => {
