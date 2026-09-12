@@ -44,12 +44,24 @@ describe('mergeFriend', () => {
 
 describe('orderFriendshipIds', () => {
 	it('preserves ordered IDs ', () => {
+		// Arrange
 		const friendshipId = { user1Id: '1', user2Id: '2' } as const;
-		expect(orderFriendshipIds(friendshipId)).toStrictEqual({ user1Id: '1', user2Id: '2' });
+
+		//  Act
+		const orderedFriendshipId = orderFriendshipIds(friendshipId);
+
+		// Assert
+		expect(orderedFriendshipId).toStrictEqual({ user1Id: '1', user2Id: '2' });
 	});
 
 	it('sorts IDs in ascending order', () => {
+		// Arrange
+
 		const friendshipId = { user1Id: '2', user2Id: '1' } as const;
-		expect(orderFriendshipIds(friendshipId)).toStrictEqual({ user1Id: '1', user2Id: '2' });
+		//  Act
+		const orderedFriendshipId = orderFriendshipIds(friendshipId);
+
+		// Assert
+		expect(orderedFriendshipId).toStrictEqual({ user1Id: '1', user2Id: '2' });
 	});
 });
