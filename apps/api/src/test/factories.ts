@@ -103,8 +103,8 @@ export const createMember = ({
 
 export const createMessage = ({
 	id = defaultId,
-	conversationId = id,
-	senderId = id,
+	conversationId = defaultId,
+	senderId = defaultId,
 	content = 'Hello, world!',
 	...timestamps
 }: MessageOptions = {}) =>
