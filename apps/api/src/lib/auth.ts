@@ -1,41 +1,52 @@
-import { drizzleAdapter } from '@better-auth/drizzle-adapter/relations-v2';
-import { betterAuth } from 'better-auth/minimal';
-import { username } from 'better-auth/plugins';
+import { type DB, drizzleAdapter } from '@better-auth/drizzle-adapter/relations-v2';
+import { type BetterAuthPlugin, betterAuth } from 'better-auth';
+import { testUtils, username } from 'better-auth/plugins';
 
-import { db } from '#db/client.ts';
+import { db } from '#db/index.ts';
 import * as schema from '#db/schemas/auth.ts';
 
-export const auth = betterAuth({
-	database: drizzleAdapter(db, {
-		provider: 'pg',
-		schema,
-		schemaName: 'auth',
-		usePlural: true,
-	}),
-	advanced: {
-		database: {
-			generateId: 'serial',
+type AuthOptions = Partial<{
+	database: DB;
+	plugins: BetterAuthPlugin[];
+}>;
+
+const createAuth = ({ database = db, plugins = [] }: AuthOptions = {}) =>
+	betterAuth({
+		database: drizzleAdapter(database, {
+			provider: 'pg',
+			schema,
+			schemaName: 'auth',
+			usePlural: true,
+		}),
+		advanced: {
+			database: {
+				generateId: 'serial',
+			},
 		},
-	},
-	emailAndPassword: {
-		autoSignIn: true,
-		enabled: true,
-	},
-	plugins: [
-		username({
-			schema: {
-				user: {
-					fields: {
-						displayUsername: 'displayName',
+		emailAndPassword: {
+			autoSignIn: true,
+			enabled: true,
+		},
+		plugins: [
+			...plugins,
+			username({
+				schema: {
+					user: {
+						fields: {
+							displayUsername: 'displayName',
+						},
 					},
 				},
+			}),
+		],
+		user: {
+			fields: {
+				emailVerified: 'emailIsVerified',
+				image: 'avatar',
 			},
-		}),
-	],
-	user: {
-		fields: {
-			emailVerified: 'emailIsVerified',
-			image: 'avatar',
 		},
-	},
-});
+	});
+
+export const auth = createAuth();
+
+export const testAuth = createAuth({ plugins: [testUtils()] });
