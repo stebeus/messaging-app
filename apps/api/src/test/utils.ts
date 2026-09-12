@@ -16,3 +16,6 @@ export const postJson = async (
 		body: JSON.stringify(body),
 		...rest,
 	});
+
+export const generateUniqueString = (string?: string) =>
+	`${string}_${Temporal.Now.instant().epochNanoseconds}`;
