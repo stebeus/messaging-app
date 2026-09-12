@@ -17,7 +17,10 @@ const dbUrlRegex = /(postgres(?:ql)?):\/\/(?:([^@\s]+)@)?([^/\s]+)(?:\/(\w+))?(?
 export const env = createEnv(process.env, {
 	CLIENT_URL: z.url().default('*'),
 	DATABASE_URL: z.url().regex(dbUrlRegex),
+	TEST_DATABASE_URL: z.url().regex(dbUrlRegex),
 	PORT: z.coerce.number().int().positive().default(3000),
+
+	// Better Auth
 	BETTER_AUTH_SECRET: z.string(),
 	BETTER_AUTH_URL: z.url(),
 });

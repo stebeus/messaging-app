@@ -1,12 +1,14 @@
 import { betterAuth } from 'better-auth/minimal';
 import { type TestHelpers, testUtils } from 'better-auth/plugins';
 
+import { testDb } from '#db/client.ts';
 import { createAuthConfig, createUsernameConfig } from '#lib/auth.ts';
 
 type UserOptions = Parameters<TestHelpers['createUser']>[0];
 
 export const auth = betterAuth({
 	...createAuthConfig(),
+	database: testDb,
 	plugins: [createUsernameConfig(), testUtils()],
 });
 
