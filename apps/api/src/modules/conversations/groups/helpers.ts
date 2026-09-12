@@ -15,6 +15,7 @@ export const groupRelations = createGroupRelations(conversationRelations);
 
 export const groupListRelations = createGroupRelations({ members: true });
 
-export const containsName = (name?: string) => ({ name: contains(name) }) as const;
+export const containsName = (name?: string) =>
+	name == null ? undefined : ({ name: contains(name) } as const);
 
 export const memberOfGroup = (userId: Id) => ({ conversation: { ...memberOf(userId) } }) as const;
