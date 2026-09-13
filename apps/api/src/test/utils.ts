@@ -2,8 +2,6 @@ import type { Hono } from 'hono';
 
 type PostJsonOptions = Omit<RequestInit, 'method' | 'body'>;
 
-export const createEndpoint = (endpoint: string) => `/api/v1/${endpoint}`;
-
 export const postJson = async (
 	app: Hono,
 	url: string | Request | URL,

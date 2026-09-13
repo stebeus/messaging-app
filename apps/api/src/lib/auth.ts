@@ -5,33 +5,22 @@ import { username } from 'better-auth/plugins';
 import { db } from '#db/client.ts';
 import * as schema from '#db/schemas/auth.ts';
 
-export const createAuthConfig = (database = db) =>
-	({
-		database: drizzleAdapter(database, {
-			provider: 'pg',
-			schema,
-			schemaName: 'auth',
-			usePlural: true,
-		}),
-		advanced: {
-			database: {
-				generateId: 'serial',
-			},
-		},
-		emailAndPassword: {
-			autoSignIn: true,
-			enabled: true,
-		},
-		user: {
-			fields: {
-				emailVerified: 'emailIsVerified',
-				image: 'avatar',
-			},
-		},
-	}) as const;
-
 export const auth = betterAuth({
-	...createAuthConfig(),
+	database: drizzleAdapter(db, {
+		provider: 'pg',
+		schema,
+		schemaName: 'auth',
+		usePlural: true,
+	}),
+	advanced: {
+		database: {
+			generateId: 'serial',
+		},
+	},
+	emailAndPassword: {
+		autoSignIn: true,
+		enabled: true,
+	},
 	plugins: [
 		username({
 			schema: {
@@ -43,4 +32,10 @@ export const auth = betterAuth({
 			},
 		}),
 	],
+	user: {
+		fields: {
+			emailVerified: 'emailIsVerified',
+			image: 'avatar',
+		},
+	},
 });
