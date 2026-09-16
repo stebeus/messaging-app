@@ -4,6 +4,8 @@ import { createSafeContext } from '#hooks/context.tsx';
 
 export type ButtonProps = ComponentPropsWithoutRef<'button'>;
 
+export type InvokerButtonProps = Omit<ButtonProps, 'commandFor'>;
+
 export type CommandProps = Omit<ButtonProps, 'command'>;
 
 export type SubmitButtonProps = Omit<ButtonProps, 'type'>;
@@ -14,7 +16,7 @@ export const Button = ({ type = 'button', ...props }: ButtonProps) => (
 
 export const [InvokerProvider, useInvoker] = createSafeContext('Invoker', () => ({ id: useId() }));
 
-export const InvokerButton = (props: ButtonProps) => {
+export const InvokerButton = (props: InvokerButtonProps) => {
 	const { id } = useInvoker();
 	return <Button {...props} commandFor={id} />;
 };
