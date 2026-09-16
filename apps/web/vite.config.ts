@@ -3,6 +3,16 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
+const routeTemplate = `
+import { createFileRoute } from '@tanstack/react-router';
+
+const Page = () => <></>;
+
+export const Route = createFileRoute('%%tsrpath%%')({
+	component: Page
+});
+`;
+
 // https://vite.dev/config/
 export default defineConfig({
 	plugins: [
@@ -13,6 +23,9 @@ export default defineConfig({
 			quoteStyle: 'single',
 			semicolons: true,
 			target: 'react',
+			customScaffolding: {
+				routeTemplate,
+			},
 		}),
 		react(),
 	],
