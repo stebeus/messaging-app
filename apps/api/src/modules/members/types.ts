@@ -1,6 +1,6 @@
 import type { ConversationParams } from '@repo/contracts/conversations';
 import type { GroupParams } from '@repo/contracts/groups';
-import type { Member, Role, UpdateMemberBody } from '@repo/contracts/members';
+import type { Member, Role, UpdateMemberBodyRequest } from '@repo/contracts/members';
 import type { Id } from '@repo/contracts/shared';
 import type { UserParams } from '@repo/contracts/users';
 import type { Selection } from '#db/types.ts';
@@ -25,6 +25,6 @@ export type MemberManagement = Management & {
 	targetId: Id;
 };
 
-export type RoleManagement = MemberManagement & BodyDto<UpdateMemberBody>;
+export type RoleManagement = MemberManagement & BodyDto<UpdateMemberBodyRequest>;
 
 export type Hierarchy = Readonly<Record<Role, number>>;

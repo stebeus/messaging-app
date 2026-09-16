@@ -1,16 +1,16 @@
 import type { ConversationParams } from '@repo/contracts/conversations';
 import type {
-	CreateMessageBody,
+	CreateMessageBodyRequest,
 	Message,
 	MessageParams,
-	UpdateMessageBody,
+	UpdateMessageBodyRequest,
 } from '@repo/contracts/messages';
 import type { UserParams } from '@repo/contracts/users';
 import type { Selection } from '#db/types.ts';
 import type { Management, MemberArgs } from '#modules/members/types.ts';
 import type { BodyDto, QueryDto } from '#types.ts';
 
-type UpdateMessageDto = BodyDto<UpdateMessageBody>;
+type UpdateMessageDto = BodyDto<UpdateMessageBodyRequest>;
 
 export type MessagesSelection = ConversationParams & QueryDto;
 
@@ -18,7 +18,7 @@ export type MessageSelection = Selection<Message>;
 
 export type ListMessageArgs = MemberArgs & QueryDto;
 
-export type SendMessageArgs = MemberArgs & BodyDto<CreateMessageBody>;
+export type SendMessageArgs = MemberArgs & BodyDto<CreateMessageBodyRequest>;
 
 export type SentMessage = UserParams & MessageParams;
 

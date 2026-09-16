@@ -1,7 +1,11 @@
 import { Hono } from 'hono';
 
 import { ConversationParams } from '@repo/contracts/conversations';
-import { CreateMessageBody, MessageParams, UpdateMessageBody } from '@repo/contracts/messages';
+import {
+	CreateMessageBodyRequest,
+	MessageParams,
+	UpdateMessageBodyRequest,
+} from '@repo/contracts/messages';
 import { Query } from '@repo/contracts/shared';
 
 import { requireAuth, validate } from '#middleware/index.ts';
@@ -29,7 +33,7 @@ messages.get(
 messages.post(
 	'/conversations/:conversationId/messages',
 	validate('param', ConversationParams),
-	validate('json', CreateMessageBody),
+	validate('json', CreateMessageBodyRequest),
 	requireAuth,
 	async (c) => {
 		const { conversationId } = c.req.valid('param');
@@ -45,7 +49,7 @@ messages.post(
 messages.patch(
 	'/messages/:messageId',
 	validate('param', MessageParams),
-	validate('json', UpdateMessageBody),
+	validate('json', UpdateMessageBodyRequest),
 	requireAuth,
 	async (c) => {
 		const { messageId } = c.req.valid('param');

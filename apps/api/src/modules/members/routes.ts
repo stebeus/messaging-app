@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 
 import { GroupParams } from '@repo/contracts/groups';
-import { MemberParams, UpdateMemberBody } from '@repo/contracts/members';
+import { MemberParams, UpdateMemberBodyRequest } from '@repo/contracts/members';
 import { UserQuery } from '@repo/contracts/users';
 
 import { requireAuth, validate } from '#middleware/index.ts';
@@ -47,7 +47,7 @@ members.delete('/me', validate('param', GroupParams), requireAuth, async (c) => 
 members.patch(
 	'/:memberId',
 	validate('param', MemberParams),
-	validate('json', UpdateMemberBody),
+	validate('json', UpdateMemberBodyRequest),
 	requireAuth,
 	async (c) => {
 		const { groupId, memberId } = c.req.valid('param');

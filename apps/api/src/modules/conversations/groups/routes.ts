@@ -1,12 +1,12 @@
 import { Hono } from 'hono';
 
 import {
-	CreateGroupBody,
+	CreateGroupBodyRequest,
 	GroupMessageParams,
 	GroupParams,
-	UpdateGroupBody,
+	UpdateGroupBodyRequest,
 } from '@repo/contracts/groups';
-import { UpdateMessageBody } from '@repo/contracts/messages';
+import { UpdateMessageBodyRequest } from '@repo/contracts/messages';
 import { Query } from '@repo/contracts/shared';
 
 import { requireAuth, validate } from '#middleware/index.ts';
@@ -37,7 +37,7 @@ groups.get('/me', validate('query', Query), requireAuth, async (c) => {
 	return c.json({ data });
 });
 
-groups.post('/', validate('json', CreateGroupBody), requireAuth, async (c) => {
+groups.post('/', validate('json', CreateGroupBodyRequest), requireAuth, async (c) => {
 	const { user } = c.var.auth;
 	const body = c.req.valid('json');
 
@@ -49,7 +49,7 @@ groups.post('/', validate('json', CreateGroupBody), requireAuth, async (c) => {
 groups.patch(
 	'/:groupId',
 	validate('param', GroupParams),
-	validate('json', UpdateGroupBody),
+	validate('json', UpdateGroupBodyRequest),
 	requireAuth,
 	async (c) => {
 		const { groupId } = c.req.valid('param');
@@ -74,7 +74,7 @@ groups.delete('/:groupId', validate('param', GroupParams), requireAuth, async (c
 groups.patch(
 	'/:groupId/messages/:messageId',
 	validate('param', GroupMessageParams),
-	validate('json', UpdateMessageBody),
+	validate('json', UpdateMessageBodyRequest),
 	requireAuth,
 	async (c) => {
 		const { groupId, messageId } = c.req.valid('param');

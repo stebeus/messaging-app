@@ -8,12 +8,12 @@ export const MessageParams = z.object({
 	messageId: id,
 });
 
-export const CreateMessageBody = NewMessage.pick({ content: true });
+export const CreateMessageBodyRequest = NewMessage.pick({ content: true });
 
-export const UpdateMessageBody = MessageUpdate.pick({ content: true });
+export const UpdateMessageBodyRequest = MessageUpdate.pick({ content: true });
 
 export type MessageParams = z.infer<typeof MessageParams>;
 
-export type CreateMessageBody = z.infer<typeof CreateMessageBody>;
+export type CreateMessageBodyRequest = z.infer<typeof CreateMessageBodyRequest>;
 
-export type UpdateMessageBody = z.infer<typeof UpdateMessageBody>;
+export type UpdateMessageBodyRequest = z.infer<typeof UpdateMessageBodyRequest>;
