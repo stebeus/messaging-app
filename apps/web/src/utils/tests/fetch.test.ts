@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { FetchError } from './fetch.ts';
+import { FetchError } from '#utils/fetch.ts';
 
 describe('FetchError.isFetchError', () => {
 	it('confirms that it is not a fetch error', () => {
