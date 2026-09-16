@@ -6,7 +6,7 @@ export type ButtonProps = ComponentPropsWithoutRef<'button'>;
 
 export type InvokerButtonProps = Omit<ButtonProps, 'commandFor'>;
 
-export type CommandProps = Omit<ButtonProps, 'command'>;
+export type CommandProps = Omit<InvokerButtonProps, 'command'>;
 
 export type SubmitButtonProps = Omit<ButtonProps, 'type'>;
 
