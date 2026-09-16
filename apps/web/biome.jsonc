@@ -1,6 +1,10 @@
 {
 	"$schema": "https://biomejs.dev/schemas/2.5.11/schema.json",
 	"extends": "//",
+	"files": {
+		"ignoreUnknown": false,
+		"includes": ["**", "!!**/dist", "!!**/*.gen.{js,ts}"]
+	},
 	"linter": {
 		"rules": {
 			"correctness": {
@@ -13,6 +17,7 @@
 			"style": {
 				"noHexColors": "on",
 				"useConsistentCurlyBraces": "on",
+				"useConsistentTypeDefinitions": "off",
 				"useSelfClosingElements": {
 					"level": "on",
 					"fix": "unsafe"
