@@ -22,14 +22,14 @@ type FormOptions = Partial<{
 
 type FieldErrors = [string, ...string[]];
 
-type FormErrorCause = {
+type FormErrorDetails = {
 	formErrors: string[];
 	fieldErrors: Record<string, FieldErrors>;
 };
 
-type FormError = FetchError<FormErrorCause>;
+type FormError = FetchError<FormErrorDetails>;
 
-const isFormError = (value: unknown) => FetchError.isFetchError<FormErrorCause>(value);
+const isFormError = (value: unknown) => FetchError.isFetchError<FormErrorDetails>(value);
 
 const getFieldError = ([message]: FieldErrors) => message;
 
