@@ -1,12 +1,20 @@
+import { TanStackDevtools } from '@tanstack/react-devtools';
+import { formDevtoolsPlugin } from '@tanstack/react-form-devtools';
 import { createRootRoute, Outlet } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 
 import '#index.css';
 
 const Root = () => (
 	<>
 		<Outlet />
-		<TanStackRouterDevtools position="bottom-right" />
+		<TanStackDevtools
+			config={{ position: 'bottom-right' }}
+			plugins={[
+				formDevtoolsPlugin(),
+				{ name: 'TanStack Router', render: <TanStackRouterDevtoolsPanel /> },
+			]}
+		/>
 	</>
 );
 

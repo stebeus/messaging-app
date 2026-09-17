@@ -63,7 +63,7 @@
 									{
 										"formats": ["camelCase", "PascalCase"],
 										"selector": {
-											"kind": "objectLiteralProperty"
+											"kind": "objectLiteralMember"
 										}
 									}
 								]
