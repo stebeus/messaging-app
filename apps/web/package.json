@@ -14,6 +14,7 @@
 		"test": "vitest"
 	},
 	"dependencies": {
+		"@repo/contracts": "workspace:*",
 		"@repo/env": "workspace:*",
 		"@repo/errors": "workspace:*",
 		"@tailwindcss/vite": "^4.3.3",
